@@ -206,4 +206,17 @@ The Library Communications Framework (LCF) is a set of library interoperability 
     </plugins>
   </build>
 
+  <modules>
+    <module>lcfserver-core</module>
+    <module>lcfserver-backend-hashmap</module>
+    <module>lcfserver-frontend-restlet-core</module>
+    <module>lcfserver-frontend-restlet-cli</module>
+    <module>lcfserver-frontend-restlet-webapp</module>
+    <module>lcfserver-frontend-restlet-module-raml</module>
+    <module>lcfserver-frontend-restlet-module-swagger</module>
+    <module>lcfserver-frontend-servlet-webapp</module>
+    <module>lcfserver-frontend-jaxrs-webapp</module>
+    <module>lcfserver-assembly</module>
+  </modules>
+
 </project>
