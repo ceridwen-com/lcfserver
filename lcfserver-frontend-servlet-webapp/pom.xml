@@ -22,4 +22,23 @@
   </parent>
   <artifactId>lcfserver-frontend-servlet-webapp</artifactId>
   <packaging>war</packaging>
+  
+  <dependencies>
+    <dependency>
+      <groupId>${project.parent.groupId}</groupId>
+      <artifactId>lcfserver-core</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
+    </dependency>   
+    <dependency>
+      <groupId>${lcfserver.backend.groupId}</groupId>
+      <artifactId>${lcfserver.backend.artifactId}</artifactId>
+      <version>${lcfserver.backend.version}</version>
+    </dependency>
+  </dependencies>
+  
 </project>
