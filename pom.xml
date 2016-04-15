@@ -18,7 +18,7 @@
 
   <groupId>com.ceridwen.lcf.server</groupId>
   <artifactId>lcfserver</artifactId>
-  <version>0.7-SNAPSHOT</version>
+  <version>0.7</version>
   <packaging>pom</packaging>
 
   <name>lcfserver</name>
@@ -55,6 +55,11 @@ The Library Communications Framework (LCF) is a set of library interoperability 
     <project.scm.id>git</project.scm.id>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.build.timestamp.format>EEE, d MMMM, yyyy - HH:mm:ss zzz</maven.build.timestamp.format>
+    <lcf.schema.version>1.0.1-SNAPSHOT</lcf.schema.version>
+    <lcfserver.backend.groupId>${project.groupId}</lcfserver.backend.groupId>
+    <lcfserver.backend.artifactId>lcfserver-backend-hashmap</lcfserver.backend.artifactId>
+    <lcfserver.backend.version>${project.version}</lcfserver.backend.version> 
+    <restlet-version>2.3.7</restlet-version>    
   </properties>
 
   <repositories>
@@ -161,6 +166,20 @@ The Library Communications Framework (LCF) is a set of library interoperability 
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
           <version>2.6</version>
+          <executions>
+            <execution>
+              <id>distro-assembly</id>
+              <phase>package</phase>
+              <goals>
+                <goal>single</goal>
+              </goals>
+              <configuration>
+                <descriptors>
+                  <descriptor>src/assembly/bin.xml</descriptor>
+                </descriptors>
+              </configuration>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -175,7 +194,7 @@ The Library Communications Framework (LCF) is a set of library interoperability 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.5.1</version>
+          <version>3.5</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -205,5 +224,18 @@ The Library Communications Framework (LCF) is a set of library interoperability 
       </plugin>
     </plugins>
   </build>
+
+  <modules>
+    <module>lcfserver-core</module>
+    <module>lcfserver-backend-hashmap</module>
+    <module>lcfserver-frontend-restlet-core</module>
+    <module>lcfserver-frontend-restlet-cli</module>
+    <module>lcfserver-frontend-restlet-webapp</module>
+    <module>lcfserver-frontend-restlet-module-raml</module>
+    <module>lcfserver-frontend-restlet-module-swagger</module>
+    <module>lcfserver-frontend-servlet-webapp</module>
+    <module>lcfserver-frontend-jaxrs-webapp</module>
+    <module>lcfserver-assembly</module>
+  </modules>
 
 </project>

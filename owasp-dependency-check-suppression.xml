@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://www.owasp.org/index.php/OWASP_Dependency_Check_Suppression">
+  <suppress>
+    <notes><![CDATA[
+      Applies to restlet prior to 2.1.4 but still being detected despite using restlet 2.3.x
+    ]]></notes>
+    <cve>CVE-2013-4221</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+      Applies to restlet prior to 2.1.4 but still being detected despite using restlet 2.3.x
+    ]]></notes>
+    <cve>CVE-2013-4271</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+      Disputed, and javax.mail-api not actively used but loaded by raml and swagger dependencies.
+    ]]></notes>
+    <cve>CVE-2007-6059</cve>
+  </suppress>
+</suppressions>
