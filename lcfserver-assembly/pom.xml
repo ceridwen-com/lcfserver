@@ -26,7 +26,7 @@
   <parent>
     <groupId>com.ceridwen.lcf.server</groupId>
     <artifactId>lcfserver</artifactId>
-    <version>0.7-SNAPSHOT</version>
+    <version>0.7</version>
   </parent>
   <artifactId>lcfserver-assembly</artifactId>
   <packaging>pom</packaging>
