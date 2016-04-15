@@ -21,4 +21,43 @@
     <version>0.7-SNAPSHOT</version>
   </parent>
   <artifactId>lcfserver-frontend-restlet-module-raml</artifactId>
+  
+  <dependencies>
+    <dependency>
+      <groupId>${project.parent.groupId}</groupId>
+      <artifactId>lcfserver-frontend-restlet-core</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.restlet.jee</groupId>
+      <artifactId>org.restlet.ext.raml</artifactId>
+      <version>${restlet-version}</version>
+      <exclusions>
+        <!-- exclude transitive dependency (version 0.8.7) -->
+        <exclusion>
+          <groupId>org.raml</groupId>
+          <artifactId>raml-parser</artifactId>
+        </exclusion>
+        <!-- exclude transitive dependency (version 2.1) -->
+        <exclusion>
+          <groupId>commons-collections</groupId>
+          <artifactId>commons-collections</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!-- explicitly define dependency to version 0.8.13 -->
+    <dependency>
+      <groupId>org.raml</groupId>
+      <artifactId>raml-parser</artifactId>
+      <version>0.8.13</version>
+    </dependency>   
+    <!-- explicitly define dependency to version 3.2.2 -->
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.2.2</version>
+    </dependency>   
+  </dependencies>
+ 
+  
 </project>
