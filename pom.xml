@@ -59,6 +59,7 @@ The Library Communications Framework (LCF) is a set of library interoperability 
     <lcfserver.backend.groupId>${project.groupId}</lcfserver.backend.groupId>
     <lcfserver.backend.artifactId>lcfserver-backend-hashmap</lcfserver.backend.artifactId>
     <lcfserver.backend.version>${project.version}</lcfserver.backend.version> 
+    <restlet-version>2.3.7</restlet-version>
   </properties>
 
   <repositories>

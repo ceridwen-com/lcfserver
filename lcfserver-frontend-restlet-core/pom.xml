@@ -21,4 +21,23 @@
     <version>0.7-SNAPSHOT</version>
   </parent>
   <artifactId>lcfserver-frontend-restlet-core</artifactId>
+  
+  <dependencies>
+    <dependency>
+      <groupId>${project.parent.groupId}</groupId>
+      <artifactId>lcfserver-core</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.restlet.jee</groupId>
+      <artifactId>org.restlet</artifactId>
+      <version>${restlet-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.restlet.jee</groupId>
+      <artifactId>org.restlet.ext.jaxb</artifactId>
+      <version>${restlet-version}</version>
+    </dependency>
+  </dependencies>
+  
 </project>
