@@ -55,6 +55,7 @@ The Library Communications Framework (LCF) is a set of library interoperability 
     <project.scm.id>git</project.scm.id>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.build.timestamp.format>EEE, d MMMM, yyyy - HH:mm:ss zzz</maven.build.timestamp.format>
+    <lcf.schema.version>1.0.1-SNAPSHOT</lcf.schema.version>
   </properties>
 
   <repositories>
