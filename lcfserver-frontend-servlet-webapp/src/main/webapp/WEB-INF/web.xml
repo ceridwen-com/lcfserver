@@ -29,9 +29,5 @@
   <servlet>
     <servlet-name>lcfserver</servlet-name>
     <servlet-class>com.ceridwen.lcf.server.frontend.servlet.Servlet</servlet-class>
-    <init-param>
-      <param-name>publicURL</param-name>
-      <param-value>http://localhost:8000/lcfserver/</param-value>
-    </init-param>
   </servlet>
 </web-app>

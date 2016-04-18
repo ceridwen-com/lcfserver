@@ -47,6 +47,7 @@ import com.ceridwen.lcf.server.core.referencing.editor.ReferenceEditor;
 import com.ceridwen.lcf.server.core.responses.LCFResponse;
 import com.ceridwen.lcf.server.frontend.servlet.errors.ServletExceptionMapper;
 import com.ceridwen.util.xml.XmlUtilities;
+import java.util.Optional;
 
 
 /**
@@ -54,10 +55,7 @@ import com.ceridwen.util.xml.XmlUtilities;
  */
 @WebServlet(
 	name = "lcfserver",
-	urlPatterns = "/*",
-	initParams = {
-            @WebInitParam(name = "publicURL", value = "http://localhost:8080/lcfserver/"),
-	}
+	urlPatterns = "/*"
 )
 
 // TODO Implement JSON 
@@ -65,8 +63,8 @@ public class Servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private boolean debug = false;
-	private String banner = null;
-	private String baseUrl;
+	private Optional<String> banner = null;
+	private Optional<String> overrideBaseUrl;
 
     /**
      * Default constructor. 
@@ -79,11 +77,8 @@ public class Servlet extends HttpServlet {
 		super.init();
 
 		debug = new String("true").equalsIgnoreCase(this.getInitParameter("debug"));
-		baseUrl = this.getInitParameter("publicURL");
-		banner = this.getInitParameter("banner");
-		if (banner == null) {
-			banner = this.getClass().getAnnotation(WebServlet.class).displayName();
-		}			
+		overrideBaseUrl = Optional.ofNullable(this.getInitParameter("publicURL"));
+		banner = Optional.ofNullable(this.getInitParameter("banner"));
 	}
 
 	@Override
@@ -97,15 +92,16 @@ public class Servlet extends HttpServlet {
         @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			if (request.getRequestURI().endsWith("/lcf/1.0") ||
+			if (!request.getRequestURI().contains("/lcf/1.0") ||
+        request.getRequestURI().endsWith("/lcf/1.0") ||
 				request.getRequestURI().endsWith("/lcf/1.0/") || 
 				request.getRequestURI().endsWith("/lcf/1.0/*")) {
 				
-				doBanner(request, response);
+				doFrontPage(request, response);
 				return;
 			}
 			
-			RestCommand command = new RestCommand(request, response, this.baseUrl);
+			RestCommand command = new RestCommand(request, response, this.overrideBaseUrl);
 			
 			if (command.getResource() == null) {
 				throw new EXC05_InvalidEntityReference("Entity type not found", "Entity type not found", request.getRequestURI(), null);
@@ -149,7 +145,7 @@ public class Servlet extends HttpServlet {
         @Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			RestCommand command = new RestCommand(request, response, this.baseUrl);
+			RestCommand command = new RestCommand(request, response, this.overrideBaseUrl);
 	
 			if (command.getResource() == null) {
 				throw new EXC05_InvalidEntityReference("Entity type not found", "Entity type not found", request.getRequestURI(), null);
@@ -198,7 +194,7 @@ public class Servlet extends HttpServlet {
         @Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			RestCommand command = new RestCommand(request, response, this.baseUrl);
+			RestCommand command = new RestCommand(request, response, this.overrideBaseUrl);
 			
 			if (command.getResource() == null) {
 				throw new EXC05_InvalidEntityReference("Entity type not found", "Entity type not found", request.getRequestURI(), null);
@@ -239,7 +235,7 @@ public class Servlet extends HttpServlet {
         @Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			RestCommand command = new RestCommand(request, response, this.baseUrl);
+			RestCommand command = new RestCommand(request, response, this.overrideBaseUrl);
 				
 			if (command.getResource() == null) {
 				throw new EXC05_InvalidEntityReference("Entity type not found", "Entity type not found", request.getRequestURI(), null);
@@ -279,7 +275,7 @@ public class Servlet extends HttpServlet {
 			resp = ((LCFResponse)exception).getLCFResponse();
 			ReferenceEditor referenceEditor = ConfigurationLoader.getConfiguration().getReferenceEditor();
 			if (referenceEditor != null) {
-				referenceEditor.init(this.baseUrl + EntityTypes.LCF_PREFIX + "/");
+				referenceEditor.init(this.overrideBaseUrl + EntityTypes.LCF_PREFIX + "/");
 				resp = Referencer.factory(resp, referenceEditor).reference();
 			}			
 		}
@@ -294,39 +290,53 @@ public class Servlet extends HttpServlet {
     }  
 	
 	void setDefaultHeaders(HttpServletResponse response) {
-		if (StringUtils.isNotEmpty(banner)) {
-			response.setHeader("X-Powered-By", banner);
-		}
+    if (banner.isPresent()) {
+			response.setHeader("X-Powered-By", banner.get());
+		} else {
+      response.setHeader("X-Powered-By", this.getClass().getAnnotation(WebServlet.class).displayName());
+    }
 	}
 
-	private void doBanner(HttpServletRequest request, HttpServletResponse response) {
+	private void doFrontPage(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			String banner =   "<html>"
-							+ "<body>"
-							+ "<h1>" + this.getClass().getAnnotation(WebServlet.class).displayName() + "</h1>"
-							+ "<h2>To do</h2>"
-							+ "<ul>"
-							+ "<li>Referential integrity - partial implementation</li>"
-							+ "<li>Client authentication - not implemented</li>"
-							+ "<li>User authentication - not implemented</li>"
-							+ "<li>Selection criteria - not implemented</li>"
-							+ "</ul></p>";
+			String page;
+      page = "<html>"
+              + "<body>"
+              + "<h1>" + this.getClass().getAnnotation(WebServlet.class).displayName() + "</h1>"
+              + "<h2>BIC LCF Server</h2>"
+              + "<ul>";
+
+      String baseUrl;
+      if (overrideBaseUrl.isPresent()) {
+        baseUrl = overrideBaseUrl.get();
+      } else {
+        String url = request.getRequestURL().toString();
+        baseUrl = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath();
+      }
+      
+      for (EntityTypes.Type entity: EntityTypes.Type.values()) {
+        String href = baseUrl + "/lcf/1.0/" + entity.getEntityTypeCodeValue() +"/";
+        page += "<li><a href=\"" + href + "\">" + href + "</a></li>";
+      }
+      
+      page += "</ul>"
+              + "</p>";
 			
 			if (debug) {
-				banner += "<h2>Configuration</h2>"
+				page += "<h2>Configuration</h2>"
 						+ "<p><ul>";
 				Enumeration<String> names = this.getInitParameterNames();
 				while (names.hasMoreElements()) {
 					String name = names.nextElement();
-					banner += "<li>" + name + " = " + this.getInitParameter(name) + "</li>";
+					page += "<li>" + name + " = " + this.getInitParameter(name) + "</li>";
 				}
-				banner += "</ul></p>";
+				page += "</ul></p>";
 			}
-			banner += "</body>"
+			page += "</body>"
 					+ "</html>";
 			
 			response.setStatus(200);
-			response.getWriter().append(banner);
+			response.getWriter().append(page);
 		} catch (IOException e) {
 			response.setStatus(404);
 			e.printStackTrace();
