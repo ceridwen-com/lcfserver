@@ -15,14 +15,12 @@
  */
 package com.ceridwen.lcf.server.core;
 
-import java.util.Enumeration;
-
 /**
  *
  * @author Matthew.Dovey
  */
 public class DescriptionWebPage {
-  static public String getHtml(String baseUrl) {
+  public static String getHtml(String baseUrl) {
     String page =
 "<html>\n" +
 "<head>\n" +

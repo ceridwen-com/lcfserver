@@ -63,8 +63,8 @@ import java.util.Optional;
 public class Servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	private boolean debug = false;
-	private Optional<String> banner = null;
+	private boolean debug;
+	private Optional<String> banner;
 	private Optional<String> overrideBaseUrl;
 
     /**
