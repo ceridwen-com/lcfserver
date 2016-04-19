@@ -99,6 +99,8 @@ public class BicLcfServerApplication extends Application {
        
         Map<EntityTypes.Type, Routes<?>> routeMap = this.getRouteMapping();
 
+        router.attach(EntityTypes.LCF_PREFIX, DescriptionWebPageResource.class);
+        router.attach(EntityTypes.LCF_PREFIX + "/", DescriptionWebPageResource.class);
         for (EntityTypes.Type type: EntityTypes.Type.values()) {
         	// attach router for list\creation
         	router.attach(EntityTypes.LCF_PREFIX + "/" + type.getEntityTypeCodeValue(), routeMap.get(type).getList());

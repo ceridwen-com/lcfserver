@@ -21,6 +21,7 @@
  *******************************************************************************/
 package com.ceridwen.lcf.server.frontend.servlet;
 
+import com.ceridwen.lcf.server.core.DescriptionWebPage;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.ServiceConfigurationError;
@@ -97,7 +98,7 @@ public class Servlet extends HttpServlet {
 				request.getRequestURI().endsWith("/lcf/1.0/") || 
 				request.getRequestURI().endsWith("/lcf/1.0/*")) {
 				
-				doFrontPage(request, response);
+				getDescriptionWebPage(request, response);
 				return;
 			}
 			
@@ -297,15 +298,8 @@ public class Servlet extends HttpServlet {
     }
 	}
 
-	private void doFrontPage(HttpServletRequest request, HttpServletResponse response) {
-		try {
-			String page;
-      page = "<html>"
-              + "<body>"
-              + "<h1>" + this.getClass().getAnnotation(WebServlet.class).displayName() + "</h1>"
-              + "<h2>BIC LCF Server</h2>"
-              + "<ul>";
-
+	private void getDescriptionWebPage(HttpServletRequest request, HttpServletResponse response) {
+    try {
       String baseUrl;
       if (overrideBaseUrl.isPresent()) {
         baseUrl = overrideBaseUrl.get();
@@ -313,30 +307,8 @@ public class Servlet extends HttpServlet {
         String url = request.getRequestURL().toString();
         baseUrl = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath();
       }
-      
-      for (EntityTypes.Type entity: EntityTypes.Type.values()) {
-        String href = baseUrl + "/lcf/1.0/" + entity.getEntityTypeCodeValue() +"/";
-        page += "<li><a href=\"" + href + "\">" + href + "</a></li>";
-      }
-      
-      page += "</ul>"
-              + "</p>";
-			
-			if (debug) {
-				page += "<h2>Configuration</h2>"
-						+ "<p><ul>";
-				Enumeration<String> names = this.getInitParameterNames();
-				while (names.hasMoreElements()) {
-					String name = names.nextElement();
-					page += "<li>" + name + " = " + this.getInitParameter(name) + "</li>";
-				}
-				page += "</ul></p>";
-			}
-			page += "</body>"
-					+ "</html>";
-			
 			response.setStatus(200);
-			response.getWriter().append(page);
+			response.getWriter().append(DescriptionWebPage.getHtml(baseUrl));
 		} catch (IOException e) {
 			response.setStatus(404);
 			e.printStackTrace();
