@@ -41,4 +41,26 @@
     </dependency>
   </dependencies>
   
+  <profiles>
+    <profile>
+      <activation>
+        <property>
+          <name>lcf.server.frontend</name>
+          <value>jaxrs</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-maven-plugin</artifactId>
+            <configuration>
+              <skip>false</skip>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>    
+  </profiles>
+  
 </project>

@@ -34,6 +34,11 @@ import com.ceridwen.lcf.server.core.EntityTypes;
 import com.ceridwen.lcf.server.core.exceptions.EXC04_UnableToProcessRequest;
 import com.ceridwen.lcf.server.frontend.servlet.resources.ServletResource;
 import com.ceridwen.lcf.server.frontend.servlet.resources.ServletResourceFactory;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 class RestCommand {
 	private String id;
@@ -44,10 +49,19 @@ class RestCommand {
 	private int count;
 	private int startIndex;
 
-	public RestCommand(HttpServletRequest request, HttpServletResponse response, String baseUrl) {	
+	public RestCommand(HttpServletRequest request, HttpServletResponse response, Optional<String> overrideBaseUrl) {	
 		
 		Map<String, String> query = new HashMap<>();
 
+    String baseUrl;
+    
+    if (overrideBaseUrl.isPresent()) {
+      baseUrl = overrideBaseUrl.get();
+    } else {
+      String url = request.getRequestURL().toString();
+      baseUrl = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath();
+    }
+    
 		if (StringUtils.isNotEmpty(request.getQueryString())) {
 	    	String[] params = request.getQueryString().split("&");  
 	        for (String param : params)  
@@ -70,9 +84,10 @@ class RestCommand {
 		} catch (NumberFormatException ex) {}
 
 		
-		StringTokenizer st = new StringTokenizer(request.getRequestURI(),"/");
-    	while (!(st.nextToken().matches("lcf"))) {    		
-    	}
+		StringTokenizer st = new StringTokenizer(request.getRequestURI().substring(request.getContextPath().length()),"/");
+    if (!(st.nextToken().matches("lcf"))) {    		
+			throw new EXC04_UnableToProcessRequest("Invalid URL: " + request.getRequestURI(), "Invalid URL: " + request.getRequestURI(), request.getRequestURI(), null);
+    }
 		if (!st.hasMoreTokens()) {
 			throw new EXC04_UnableToProcessRequest("Invalid URL: " + request.getRequestURI(), "Invalid URL: " + request.getRequestURI(), request.getRequestURI(), null);
 		}

@@ -39,6 +39,39 @@
       <version>${lcfserver.backend.version}</version>
     </dependency>
   </dependencies>
+
+  <profiles>
+    <profile>
+      <id>lcf.server.frontend.restlet.module.raml</id>
+      <activation>
+        <property>
+          <name>lcf.server.frontend.restlet.module.raml</name>
+        </property>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>${project.parent.groupId}</groupId>
+          <artifactId>lcfserver-frontend-restlet-module-raml</artifactId>
+          <version>${project.parent.version}</version>
+        </dependency>   
+      </dependencies>
+    </profile>    
+    <profile>
+      <id>lcf.server.frontend.restlet.module.swagger</id>
+      <activation>
+        <property>
+          <name>lcf.server.frontend.restlet.module.swagger</name>
+        </property>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>${project.parent.groupId}</groupId>
+          <artifactId>lcfserver-frontend-restlet-module-swagger</artifactId>
+          <version>${project.parent.version}</version>
+        </dependency>   
+      </dependencies>
+    </profile>    
+  </profiles>
  
   <build>
     <plugins>
