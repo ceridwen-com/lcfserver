@@ -66,12 +66,12 @@ The Library Communications Framework (LCF) is a set of library interoperability 
     <repository>
       <id>ceridwen-libs-release</id>
       <name>Ceridwen Release Repository</name>
-      <url>https://software.ceridwen.com/artifactory/libs-release-local</url>
+      <url>https://software.ceridwen.com/artifactory/libs-release</url>
     </repository>
     <repository>
       <id>ceridwen-libs-snapshot</id>
       <name>Ceridwen Snapshot Repository</name>
-      <url>https://software.ceridwen.com/artifactory/libs-snapshot-local</url>
+      <url>https://software.ceridwen.com/artifactory/libs-snapshot</url>
     </repository>
     <repository>
       <id>maven-restlet</id>
@@ -79,6 +79,19 @@ The Library Communications Framework (LCF) is a set of library interoperability 
       <url>https://maven.restlet.com</url>
     </repository>
   </repositories>
+  
+  <pluginRepositories>
+    <pluginRepository>
+      <id>ceridwen-plugins-release</id>
+      <name>Ceridwen Release Plugin Repository</name>
+      <url>https://software.ceridwen.com/artifactory/plugins-release</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>ceridwen-plugins-snapshot</id>
+      <name>Ceridwen Snapshot Plugin Repository</name>
+      <url>https://software.ceridwen.com/artifactory/plugins-snapshot</url>
+    </pluginRepository>
+  </pluginRepositories>
 
   <dependencies>
     <dependency>
@@ -228,6 +241,7 @@ The Library Communications Framework (LCF) is a set of library interoperability 
           <allowSnapshots>true</allowSnapshots>
           <keepBranch>true</keepBranch>
           <noDeploy>true</noDeploy>
+          <suppressFastForward>true</suppressFastForward>
         </configuration>
       </plugin>
     </plugins>
