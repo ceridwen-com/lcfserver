@@ -37,7 +37,6 @@ import org.bic.ns.lcf.v1_0.Item;
 import org.bic.ns.lcf.v1_0.LcfCheckInResponse;
 import org.bic.ns.lcf.v1_0.LcfCheckOutResponse;
 import org.bic.ns.lcf.v1_0.LcfEntityListResponse;
-import org.bic.ns.lcf.v1_0.LcfReservationResponse;
 import org.bic.ns.lcf.v1_0.Loan;
 import org.bic.ns.lcf.v1_0.Location;
 import org.bic.ns.lcf.v1_0.Manifestation;
@@ -56,7 +55,6 @@ import com.ceridwen.lcf.server.core.referencing.modifier.ItemModifier;
 import com.ceridwen.lcf.server.core.referencing.modifier.LcfCheckInResponseModifier;
 import com.ceridwen.lcf.server.core.referencing.modifier.LcfCheckOutResponseModifier;
 import com.ceridwen.lcf.server.core.referencing.modifier.LcfEntityListResponseModifier;
-import com.ceridwen.lcf.server.core.referencing.modifier.LcfReservationResponseModifier;
 import com.ceridwen.lcf.server.core.referencing.modifier.LoanModifier;
 import com.ceridwen.lcf.server.core.referencing.modifier.LocationModifier;
 import com.ceridwen.lcf.server.core.referencing.modifier.ManifestationModifier;
@@ -182,9 +180,6 @@ public abstract class Referencer<EntityType> {
                 } 
 		if (entity instanceof LcfCheckOutResponse) {
                     return new LcfCheckOutResponseModifier((LcfCheckOutResponse)deepJasbClone(entity), editor);
-                } 
-		if (entity instanceof LcfReservationResponse) {
-                    return new LcfReservationResponseModifier((LcfReservationResponse)deepJasbClone(entity), editor);
                 } 
 	
 		return new NullModifier(entity, editor);
