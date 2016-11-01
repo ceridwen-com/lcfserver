@@ -21,6 +21,7 @@
  *******************************************************************************/
 package com.ceridwen.lcf.server.frontend.restlet.core.errors;
 
+import com.ceridwen.lcf.server.core.EntityTypes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -89,14 +90,14 @@ public class LcfStatusService extends StatusService {
 		} else if (throwable instanceof LCFResponse) {
 			ReferenceEditor referenceEditor = ConfigurationLoader.getConfiguration().getReferenceEditor();
 			if (referenceEditor != null) {
-				referenceEditor.init(resource.getRootRef().toString() + "/");
+				referenceEditor.init(resource.getRootRef().toString() + EntityTypes.LCF_PREFIX + "/");
 				((LCFResponse)throwable).setLCFResponse(Referencer.factory(((LCFResponse)throwable).getLCFResponse(), referenceEditor).reference());
 			}			
 			return new Status(((LCFResponse)throwable).getHTTPStatus(), throwable);			
 		} else if (throwable.getCause() instanceof LCFResponse) {
 			ReferenceEditor referenceEditor = ConfigurationLoader.getConfiguration().getReferenceEditor();
 			if (referenceEditor != null) {
-				referenceEditor.init(resource.getRootRef().toString() + "/");
+				referenceEditor.init(resource.getRootRef().toString() + EntityTypes.LCF_PREFIX + "/");
 				((LCFResponse)throwable.getCause()).setLCFResponse(Referencer.factory(((LCFResponse)throwable.getCause()).getLCFResponse(), referenceEditor).reference());
 			}			
 			return new Status(((LCFResponse)throwable.getCause()).getHTTPStatus(), throwable.getCause());
