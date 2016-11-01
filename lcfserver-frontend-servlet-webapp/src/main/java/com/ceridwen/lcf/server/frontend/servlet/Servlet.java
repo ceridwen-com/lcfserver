@@ -132,7 +132,7 @@ public class Servlet extends HttpServlet {
 			response.setStatus(200);
 			setDefaultHeaders(response);
 			response.getWriter().append(body);	
-		} catch (EXC00_LCF_Exception e) {
+		} catch (EXC00_LCF_Exception | LCFResponse e) {
 			handleException(response, e);
 		} catch (Exception |  AssertionError | LinkageError | ServiceConfigurationError e) {
 			handleUncaughtException(response, e);
@@ -223,7 +223,7 @@ public class Servlet extends HttpServlet {
 			response.setStatus(200);
 			setDefaultHeaders(response);
 			response.getWriter().append(body);
-		} catch (EXC00_LCF_Exception e) {
+		} catch (EXC00_LCF_Exception | LCFResponse e) {
 			handleException(response, e);
 		} catch (Exception |  AssertionError | LinkageError | ServiceConfigurationError e) {
 			handleUncaughtException(response, e);
@@ -250,7 +250,7 @@ public class Servlet extends HttpServlet {
 			
 			response.setStatus(204);
 			setDefaultHeaders(response);
-		} catch (EXC00_LCF_Exception e) {
+		} catch (EXC00_LCF_Exception | LCFResponse e) {
 			handleException(response, e);
 		} catch (Exception |  AssertionError | LinkageError | ServiceConfigurationError e) {
 			handleUncaughtException(response, e);
