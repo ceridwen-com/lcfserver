@@ -49,5 +49,10 @@ public class LCFResponse_CheckIn extends LCFResponse {
 		return 200;
 	}
 
+  @Override
+  public String getIdentifier() {
+    return response.getLoanRef();
+  }
+
 
 }

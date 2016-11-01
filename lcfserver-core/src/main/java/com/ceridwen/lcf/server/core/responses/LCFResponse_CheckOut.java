@@ -49,4 +49,9 @@ public class LCFResponse_CheckOut extends LCFResponse {
 		return 201;
 	}
 
+  @Override
+  public String getIdentifier() {
+    return response.getLoanRef();
+  }
+
 }
