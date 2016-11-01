@@ -91,7 +91,7 @@ public class CheckInOutFilter implements EntitySourcesFilter {
 				response.setMediaWarning(MediaWarningFlag.VALUE_1);
 				response.setSecurityDesensitize(SecurityDesensitize.VALUE_1);
 
-				throw new LCFResponse_CheckOut(response);
+				throw new LCFResponse_CheckOut(201, response);
 			}
 		}
 		
@@ -118,7 +118,7 @@ public class CheckInOutFilter implements EntitySourcesFilter {
 				response.setSpecialAttentionNote("No special attention");
 				
 				response.getChargeRef().addAll(data.getChargeRef());
-				throw new LCFResponse_CheckIn(response);
+				throw new LCFResponse_CheckIn(200, response);
 			}
 		}	
 

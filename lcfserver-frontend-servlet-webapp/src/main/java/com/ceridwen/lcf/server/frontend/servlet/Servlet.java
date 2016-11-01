@@ -178,7 +178,7 @@ public class Servlet extends HttpServlet {
 				throw new EXC01_ServiceUnavailable("Error generating response", "Error generating response", request.getRequestURI(), e);						
 			}
 	
-//			response.setStatus(201);
+			response.setStatus(201);
 			setDefaultHeaders(response);
 			response.getWriter().append(body);
 		} catch (EXC00_LCF_Exception | LCFResponse e) {
@@ -268,11 +268,11 @@ public class Servlet extends HttpServlet {
     
 		if (exception instanceof EXC00_LCF_Exception) {
 			status = ((EXC00_LCF_Exception)exception).getHTTPErrorCode();
-			response.setStatus(status);
 			resp = ((EXC00_LCF_Exception)exception).getLcfException();
 		}
 
 		if (exception instanceof LCFResponse) {
+			status = ((LCFResponse)exception).getHTTPStatus();
 			resp = ((LCFResponse)exception).getLCFResponse();
 			ReferenceEditor referenceEditor = ConfigurationLoader.getConfiguration().getReferenceEditor();
 			if (referenceEditor != null) {
@@ -283,6 +283,7 @@ public class Servlet extends HttpServlet {
 		
 		try {
 			String body = XmlUtilities.generateXML(resp);
+			response.setStatus(status);
 			response.getWriter().append(body);
 		} catch (JAXBException | IOException e) {
 			response.setStatus(status);

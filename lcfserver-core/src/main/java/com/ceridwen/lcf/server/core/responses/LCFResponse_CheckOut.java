@@ -30,7 +30,8 @@ public class LCFResponse_CheckOut extends LCFResponse {
 	private static final long serialVersionUID = -5335981038192006972L;
 	private transient LcfCheckOutResponse response;
 
-	public LCFResponse_CheckOut(LcfCheckOutResponse response) {
+	public LCFResponse_CheckOut(int httpStatus, LcfCheckOutResponse response) {
+    super(httpStatus);
 		this.response = response;
 	}
 
@@ -42,11 +43,6 @@ public class LCFResponse_CheckOut extends LCFResponse {
 	@Override
 	public void setResponse(Object response) {
 		this.response = (LcfCheckOutResponse)response;
-	}
-
-	@Override
-	public int getHTTPStatus() {
-		return 201;
 	}
 
   @Override
