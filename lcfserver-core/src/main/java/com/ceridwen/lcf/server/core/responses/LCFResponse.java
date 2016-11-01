@@ -26,11 +26,23 @@ public abstract class LCFResponse extends RuntimeException {
 	 * 
 	 */
 	private static final long serialVersionUID = -3104537015001297384L;
-
+  private int httpStatus;
+  
+  public abstract String getIdentifier();
 	public abstract Object getLCFResponse();
-	public abstract int getHTTPStatus();
 	protected abstract void setResponse(Object response);
-	public void setLCFResponse(Object response) {
+
+  public LCFResponse(int httpStatus)
+  {
+    this.httpStatus = httpStatus;
+  }
+  
+  public int getHTTPStatus()
+  {
+    return httpStatus;
+  }
+
+  public void setLCFResponse(Object response) {
 		try {
 			this.setResponse(response);
 		} catch(Exception e) {}

@@ -31,6 +31,7 @@ import com.ceridwen.lcf.server.core.exceptions.EXC05_InvalidEntityReference;
 import com.ceridwen.lcf.server.core.persistence.EntitySourceInterface;
 import com.ceridwen.lcf.server.core.referencing.Referencer;
 import com.ceridwen.lcf.server.core.referencing.editor.ReferenceEditor;
+import com.ceridwen.lcf.server.core.responses.LCFResponse;
 
 public abstract class AbstractResourceHandler<E> {
 
@@ -161,11 +162,17 @@ public abstract class AbstractResourceHandler<E> {
 		
 		String newidentifier;
 		
-		if (parent == null) {
-			newidentifier = this.getEntitySource(this.entityType).Create(entity);
-		} else {
-			newidentifier = this.getEntitySource(this.entityType).Create(parent, entity);			
-		}
+    try {
+      if (parent == null) {
+        newidentifier = this.getEntitySource(this.entityType).Create(entity);
+      } else {
+        newidentifier = this.getEntitySource(this.entityType).Create(parent, entity);			
+      }
+    } catch (LCFResponse e) {
+      this.setLocation(this.entityType.getEntityTypeCodeValue() + "/" + e.getIdentifier());
+      this.setStatusCreated();
+      throw e;
+    }   
 		
 		entity = this.getEntitySource(this.entityType).Retrieve(newidentifier);
 

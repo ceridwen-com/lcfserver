@@ -7,3 +7,4 @@ dependency-reduced-pom.xml
 *.iml
 .sonar_lock
 /lcfserver-frontend-servlet-webapp/src/main/webapp/META-INF/context.xml
+nb-configuration.xml

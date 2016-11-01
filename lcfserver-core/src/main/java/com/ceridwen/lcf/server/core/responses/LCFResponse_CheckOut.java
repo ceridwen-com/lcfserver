@@ -30,7 +30,8 @@ public class LCFResponse_CheckOut extends LCFResponse {
 	private static final long serialVersionUID = -5335981038192006972L;
 	private transient LcfCheckOutResponse response;
 
-	public LCFResponse_CheckOut(LcfCheckOutResponse response) {
+	public LCFResponse_CheckOut(int httpStatus, LcfCheckOutResponse response) {
+    super(httpStatus);
 		this.response = response;
 	}
 
@@ -44,9 +45,9 @@ public class LCFResponse_CheckOut extends LCFResponse {
 		this.response = (LcfCheckOutResponse)response;
 	}
 
-	@Override
-	public int getHTTPStatus() {
-		return 201;
-	}
+  @Override
+  public String getIdentifier() {
+    return response.getLoanRef();
+  }
 
 }
