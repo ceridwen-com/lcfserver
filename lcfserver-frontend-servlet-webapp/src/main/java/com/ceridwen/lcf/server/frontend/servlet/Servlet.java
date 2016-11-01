@@ -102,7 +102,7 @@ public class Servlet extends HttpServlet {
 				return;
 			}
 			
-			RestCommand command = new RestCommand(request, response, this.overrideBaseUrl);
+			RestCommand command = new RestCommand(request, response, this.getBaseUrl(request));
 			
 			if (command.getResource() == null) {
 				throw new EXC05_InvalidEntityReference("Entity type not found", "Entity type not found", request.getRequestURI(), null);
@@ -133,9 +133,9 @@ public class Servlet extends HttpServlet {
 			setDefaultHeaders(response);
 			response.getWriter().append(body);	
 		} catch (EXC00_LCF_Exception | LCFResponse e) {
-			handleException(response, e);
+			handleException(request, response, e);
 		} catch (Exception |  AssertionError | LinkageError | ServiceConfigurationError e) {
-			handleUncaughtException(response, e);
+			handleUncaughtException(request, response, e);
 		}
 	}
 	
@@ -146,7 +146,7 @@ public class Servlet extends HttpServlet {
         @Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			RestCommand command = new RestCommand(request, response, this.overrideBaseUrl);
+			RestCommand command = new RestCommand(request, response, this.getBaseUrl(request));
 	
 			if (command.getResource() == null) {
 				throw new EXC05_InvalidEntityReference("Entity type not found", "Entity type not found", request.getRequestURI(), null);
@@ -182,9 +182,9 @@ public class Servlet extends HttpServlet {
 			setDefaultHeaders(response);
 			response.getWriter().append(body);
 		} catch (EXC00_LCF_Exception | LCFResponse e) {
-			handleException(response, e);
+			handleException(request, response, e);
 		} catch (Exception |  AssertionError | LinkageError | ServiceConfigurationError e) {
-			handleUncaughtException(response, e);
+			handleUncaughtException(request, response, e);
 		}
 	}
 
@@ -195,7 +195,7 @@ public class Servlet extends HttpServlet {
         @Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			RestCommand command = new RestCommand(request, response, this.overrideBaseUrl);
+			RestCommand command = new RestCommand(request, response, this.getBaseUrl(request));
 			
 			if (command.getResource() == null) {
 				throw new EXC05_InvalidEntityReference("Entity type not found", "Entity type not found", request.getRequestURI(), null);
@@ -224,9 +224,9 @@ public class Servlet extends HttpServlet {
 			setDefaultHeaders(response);
 			response.getWriter().append(body);
 		} catch (EXC00_LCF_Exception | LCFResponse e) {
-			handleException(response, e);
+			handleException(request, response, e);
 		} catch (Exception |  AssertionError | LinkageError | ServiceConfigurationError e) {
-			handleUncaughtException(response, e);
+			handleUncaughtException(request, response, e);
 		}
 	}
 
@@ -236,7 +236,7 @@ public class Servlet extends HttpServlet {
         @Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			RestCommand command = new RestCommand(request, response, this.overrideBaseUrl);
+			RestCommand command = new RestCommand(request, response, this.getBaseUrl(request));
 				
 			if (command.getResource() == null) {
 				throw new EXC05_InvalidEntityReference("Entity type not found", "Entity type not found", request.getRequestURI(), null);
@@ -251,21 +251,21 @@ public class Servlet extends HttpServlet {
 			response.setStatus(204);
 			setDefaultHeaders(response);
 		} catch (EXC00_LCF_Exception | LCFResponse e) {
-			handleException(response, e);
+			handleException(request, response, e);
 		} catch (Exception |  AssertionError | LinkageError | ServiceConfigurationError e) {
-			handleUncaughtException(response, e);
+			handleUncaughtException(request, response, e);
 		}
 	}
 
-	private void handleUncaughtException(HttpServletResponse response, Throwable e) {
+	private void handleUncaughtException(HttpServletRequest request, HttpServletResponse response, Throwable e) {
 		ServletExceptionMapper mapper = new ServletExceptionMapper();
-		this.handleException(response, mapper.mapToLcfException(e));
+		this.handleException(request, response, mapper.mapToLcfException(e));
 	}
 
-	void handleException(HttpServletResponse response, Object exception) {
+	void handleException(HttpServletRequest request, HttpServletResponse response, Object exception) {
 		int status = 500;
 		Object resp = null;
-		
+    
 		if (exception instanceof EXC00_LCF_Exception) {
 			status = ((EXC00_LCF_Exception)exception).getHTTPErrorCode();
 			resp = ((EXC00_LCF_Exception)exception).getLcfException();
@@ -276,7 +276,7 @@ public class Servlet extends HttpServlet {
 			resp = ((LCFResponse)exception).getLCFResponse();
 			ReferenceEditor referenceEditor = ConfigurationLoader.getConfiguration().getReferenceEditor();
 			if (referenceEditor != null) {
-				referenceEditor.init(this.overrideBaseUrl + EntityTypes.LCF_PREFIX + "/");
+				referenceEditor.init(this.getBaseUrl(request) + EntityTypes.LCF_PREFIX + "/");
 				resp = Referencer.factory(resp, referenceEditor).reference();
 			}			
 		}
@@ -288,7 +288,7 @@ public class Servlet extends HttpServlet {
 		} catch (JAXBException | IOException e) {
 			response.setStatus(status);
 		}    	
-    }  
+  }  
 	
 	void setDefaultHeaders(HttpServletResponse response) {
     if (banner.isPresent()) {
@@ -300,18 +300,23 @@ public class Servlet extends HttpServlet {
 
 	private void getDescriptionWebPage(HttpServletRequest request, HttpServletResponse response) {
     try {
-      String baseUrl;
-      if (overrideBaseUrl.isPresent()) {
-        baseUrl = overrideBaseUrl.get();
-      } else {
-        String url = request.getRequestURL().toString();
-        baseUrl = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath();
-      }
 			response.setStatus(200);
-			response.getWriter().append(DescriptionWebPage.getHtml(baseUrl));
+			response.getWriter().append(DescriptionWebPage.getHtml(this.getBaseUrl(request)));
 		} catch (IOException e) {
 			response.setStatus(404);
 			e.printStackTrace();
 		}
 	}
+  
+  private String getBaseUrl(HttpServletRequest request) {
+    String baseUrl;
+    
+    if (overrideBaseUrl.isPresent()) {
+      baseUrl = overrideBaseUrl.get();
+    } else {
+      String url = request.getRequestURL().toString();
+      baseUrl = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath();
+    }
+    return baseUrl;    
+  }
 }

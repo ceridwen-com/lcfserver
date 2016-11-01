@@ -49,19 +49,10 @@ class RestCommand {
 	private int count;
 	private int startIndex;
 
-	public RestCommand(HttpServletRequest request, HttpServletResponse response, Optional<String> overrideBaseUrl) {	
+	public RestCommand(HttpServletRequest request, HttpServletResponse response, String baseUrl) {	
 		
 		Map<String, String> query = new HashMap<>();
 
-    String baseUrl;
-    
-    if (overrideBaseUrl.isPresent()) {
-      baseUrl = overrideBaseUrl.get();
-    } else {
-      String url = request.getRequestURL().toString();
-      baseUrl = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath();
-    }
-    
 		if (StringUtils.isNotEmpty(request.getQueryString())) {
 	    	String[] params = request.getQueryString().split("&");  
 	        for (String param : params)  
