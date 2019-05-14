@@ -33,7 +33,7 @@ import org.bic.ns.lcf.v1_0.CirculationStatusCode;
 import org.bic.ns.lcf.v1_0.CommunicationType;
 import org.bic.ns.lcf.v1_0.Contact;
 import org.bic.ns.lcf.v1_0.Item;
-import org.bic.ns.lcf.v1_0.LanguageCode;
+import org.bic.ns.lcf.v1_0.Iso639LanguageCode;
 import org.bic.ns.lcf.v1_0.Location;
 import org.bic.ns.lcf.v1_0.LocationAssociationType;
 import org.bic.ns.lcf.v1_0.LocationType;
@@ -128,7 +128,7 @@ public class DefaultDataLoaderFilter implements EntitySourcesFilter {
 	private void populatePatrons(EntitySourceInterface<Patron> patronSource, EntitySourceInterface<Contact> contactSource, AssociatedLocation defaultLocation) {
 		Patron patron = new Patron();
 		patron.setName("A Patron");	
-		patron.setLanguage(LanguageCode.ENG);
+		patron.setLanguage(Iso639LanguageCode.ENG);
 		patron.getAssociatedLocation().add(defaultLocation);
 		CardStatusInfo csi = new CardStatusInfo();
 		csi.setCardStatus(CardStatus.VALUE_1);
@@ -145,7 +145,7 @@ public class DefaultDataLoaderFilter implements EntitySourcesFilter {
 		patron = new Patron();
 		patron.setIdentifier(UUID.randomUUID().toString());
 		patron.setName("Boe Rower");
-		patron.setLanguage(LanguageCode.ENG);
+		patron.setLanguage(Iso639LanguageCode.ENG);
 		patron.getAssociatedLocation().add(defaultLocation);
 		csi = new CardStatusInfo();
 		csi.setCardStatus(CardStatus.VALUE_1);

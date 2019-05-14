@@ -62,8 +62,6 @@ public class ServletResourceFactory {
 			return new ServletResource<>(EntityTypes.Type.Patron, baseUrl, response);
 		case Payment:
 			return new ServletResource<>(EntityTypes.Type.Payment, baseUrl, response);
-		case Property:
-			return new ServletResource<>(EntityTypes.Type.Property, baseUrl, response);
 		case Reservation:
 			return new ServletResource<>(EntityTypes.Type.Reservation, baseUrl, response);
 		default:

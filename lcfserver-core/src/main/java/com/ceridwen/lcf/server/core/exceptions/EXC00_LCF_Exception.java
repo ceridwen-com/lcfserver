@@ -28,7 +28,7 @@ import org.bic.ns.lcf.v1_0.ExceptionCondition;
 import org.bic.ns.lcf.v1_0.ExceptionConditionType;
 import org.bic.ns.lcf.v1_0.LcfException;
 import org.bic.ns.lcf.v1_0.Message;
-import org.bic.ns.lcf.v1_0.MessageType;
+import org.bic.ns.lcf.v1_0.MessageAlertType; // CONCERNED ABOUT TYPE HERE
 import org.bic.ns.lcf.v1_0.ReasonDeniedType;
 
 public abstract class EXC00_LCF_Exception extends RuntimeException {
@@ -59,15 +59,16 @@ public abstract class EXC00_LCF_Exception extends RuntimeException {
 		LcfException exc = new LcfException();
 		
 		if (longMessage != null) {
+                    
 			Message m = new Message();
-			m.setMessageType(MessageType.VALUE_1);
+			m.setMessageType(MessageAlertType.VALUE_1);
 			m.getMessageText().add(longMessage);
 			exc.getMessage().add(m);
 		};
 
 		if (shortMessage != null) {
 			Message m = new Message();
-			m.setMessageType(MessageType.VALUE_2);
+			m.setMessageType(MessageAlertType.VALUE_2);
 			m.getMessageText().add(shortMessage);
 			exc.getMessage().add(m);
 		};
@@ -77,7 +78,7 @@ public abstract class EXC00_LCF_Exception extends RuntimeException {
 			PrintWriter out = new PrintWriter(stack);
 			this.getCause().printStackTrace(out);
 			Message m = new Message();
-			m.setMessageType(MessageType.VALUE_3);
+			m.setMessageType(MessageAlertType.VALUE_3);
 			m.getMessageText().add(stack.toString());
 			exc.getMessage().add(m);						
 		}
@@ -85,7 +86,7 @@ public abstract class EXC00_LCF_Exception extends RuntimeException {
 		ExceptionCondition c = new ExceptionCondition();
 		c.setConditionType(this.getExceptionConditionType());
 		if (ref != null) {
-			c.setElementRef(ref);
+			c.setElementId(ref);
 		}
 		if (this.getReasonDenied() != null) {
 			c.setReasonDenied(this.getReasonDenied());
