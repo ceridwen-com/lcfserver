@@ -84,8 +84,6 @@ public class HashMapEntitySources implements EntitySourcesInterface {
 			return (EntitySourceInterface<T>) new HashMapEntitySource<>(patrons);
 		case Payment:
 			return (EntitySourceInterface<T>) new HashMapEntitySource<>(payments);
-		case Property:
-			return (EntitySourceInterface<T>) new HashMapEntitySource<>(properties);
 		case Reservation:
 			return (EntitySourceInterface<T>) new HashMapEntitySource<>(reservations);
 		default:

@@ -47,8 +47,7 @@ public class EntityTypes {
 		Payment(EntityType.PAYMENTS, org.bic.ns.lcf.v1_0.Payment.class, o->o.getIdentifier(), (o,s)->o.setIdentifier(s)),
 		Contact(EntityType.CONTACTS, org.bic.ns.lcf.v1_0.Contact.class, o->o.getIdentifier(), (o,s)->o.setIdentifier(s)),
 		ClassScheme(EntityType.CLASS_SCHEMES, org.bic.ns.lcf.v1_0.ClassScheme.class, o->o.getIdentifier(), (o,s)->o.setIdentifier(s)),
-		ClassTerm(EntityType.CLASS_TERMS, org.bic.ns.lcf.v1_0.ClassTerm.class, o->o.getIdentifier(), (o,s)->o.setIdentifier(s)),
-		Property(EntityType.PROPERTIES, org.bic.ns.lcf.v1_0.Property.class, o->o.getIdentifier(), (o,s)->o.setIdentifier(s));
+		ClassTerm(EntityType.CLASS_TERMS, org.bic.ns.lcf.v1_0.ClassTerm.class, o->o.getIdentifier(), (o,s)->o.setIdentifier(s));
 
                 private final EntityType typeCode;
                 private final Class typeClass;

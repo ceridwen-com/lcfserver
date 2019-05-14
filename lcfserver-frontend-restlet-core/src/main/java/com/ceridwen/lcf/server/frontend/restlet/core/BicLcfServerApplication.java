@@ -56,8 +56,6 @@ import com.ceridwen.lcf.server.frontend.restlet.core.resources.PatronEditor;
 import com.ceridwen.lcf.server.frontend.restlet.core.resources.PatronList;
 import com.ceridwen.lcf.server.frontend.restlet.core.resources.PaymentEditor;
 import com.ceridwen.lcf.server.frontend.restlet.core.resources.PaymentList;
-import com.ceridwen.lcf.server.frontend.restlet.core.resources.PropertyEditor;
-import com.ceridwen.lcf.server.frontend.restlet.core.resources.PropertyList;
 import com.ceridwen.lcf.server.frontend.restlet.core.resources.ReservationEditor;
 import com.ceridwen.lcf.server.frontend.restlet.core.resources.ReservationList;
 
@@ -76,7 +74,6 @@ public class BicLcfServerApplication extends Application {
 		map.put(EntityTypes.Type.Manifestation, new Routes<>(ManifestationList.class, ManifestationEditor.class) );
 		map.put(EntityTypes.Type.Patron, new Routes<>(PatronList.class, PatronEditor.class) );
 		map.put(EntityTypes.Type.Payment, new Routes<>(PaymentList.class, PaymentEditor.class) );
-		map.put(EntityTypes.Type.Property, new Routes<>(PropertyList.class, PropertyEditor.class) );
 		map.put(EntityTypes.Type.Reservation, new Routes<>(ReservationList.class, ReservationEditor.class) );
 		
 		return map;
