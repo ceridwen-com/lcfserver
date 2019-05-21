@@ -226,18 +226,22 @@ The Library Communications Framework (LCF) is a set of library interoperability 
     </pluginManagement>
     <plugins>
       <plugin>
-        <groupId>external.atlassian.jgitflow</groupId>
-        <artifactId>jgitflow-maven-plugin</artifactId>
-        <version>1.0-m5.1</version>
+        <groupId>com.amashchenko.maven.plugin</groupId>
+        <artifactId>gitflow-maven-plugin</artifactId>
+        <version>1.12.0</version>
         <configuration>
-          <flowInitContext>
-            <masterBranchName>master</masterBranchName>
-            <developBranchName>develop</developBranchName>
-            <featureBranchPrefix>feature/</featureBranchPrefix>
-            <releaseBranchPrefix>release/${project.artifactId}-</releaseBranchPrefix>
-            <hotfixBranchPrefix>hotfix/${project.artifactId}-</hotfixBranchPrefix>
-            <versionTagPrefix>version/${project.artifactId}-</versionTagPrefix>
-          </flowInitContext>
+            <installProject>false</installProject>
+            <verbose>false</verbose>
+            <gitFlowConfig>
+                <productionBranch>master</productionBranch>
+                <developmentBranch>develop</developmentBranch>
+                <featureBranchPrefix>feature/</featureBranchPrefix>
+                <releaseBranchPrefix>release/${project.artifactId}-</releaseBranchPrefix>
+                <hotfixBranchPrefix>hotfix/${project.artifactId}-</hotfixBranchPrefix>
+                <supportBranchPrefix>support//${project.artifactId}-</supportBranchPrefix>
+                <versionTagPrefix>version/${project.artifactId}-</versionTagPrefix>
+                <origin>origin</origin>
+            </gitFlowConfig>            
           <allowSnapshots>true</allowSnapshots>
           <keepBranch>true</keepBranch>
           <noDeploy>true</noDeploy>
