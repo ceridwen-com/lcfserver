@@ -5,6 +5,8 @@
  */
 package com.ceridwen.lcf.server;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
 import java.util.Set;
 import javax.ws.rs.core.Application;
 
@@ -12,6 +14,7 @@ import javax.ws.rs.core.Application;
  *
  * @author Matthew
  */
+@OpenAPIDefinition(info = @Info(description = "LCF", version = "1.1.0", title = "LCF"))
 @javax.ws.rs.ApplicationPath("lcf/1.0")
 public class ApplicationConfig extends Application {
 
