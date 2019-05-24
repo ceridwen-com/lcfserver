@@ -5,7 +5,7 @@
     <groupId>com.ceridwen.lcf</groupId>
     <artifactId>lcfserver</artifactId>
     <version>1.1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>pom</packaging>
 
     <name>lcfserver</name>
 
@@ -15,7 +15,6 @@
         <maven.min-version>3.0</maven.min-version>
         <java.compiler.source>12</java.compiler.source>
         <java.compiler.target>12</java.compiler.target>
-        <lcf.schema.version>1.1.0</lcf.schema.version>
         <java.ee.version>7.0</java.ee.version>
         <openapi.swagger.version>2.0.8</openapi.swagger.version>
     </properties>
@@ -23,31 +22,14 @@
     <prerequisites>
         <maven>${maven.min-version}</maven>
     </prerequisites>  
+ 
+    <modules>
+        <module>lcfserver-server</module>
+        <module>lcfserver-resources</module>
+        <module>lcfserver-resources-jpa</module>
+        <module>bic-lcf/lcf-schema</module>
+    </modules>
     
-    <dependencies>
-        <dependency>
-            <groupId>org.bic.ns.lcf</groupId>
-            <artifactId>lcf-schema</artifactId>
-            <version>${lcf.schema.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
-            <version>${java.ee.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.swagger.core.v3</groupId>
-            <artifactId>swagger-jaxrs2</artifactId>
-            <version>${openapi.swagger.version}</version>
-        </dependency>        
-        <dependency>
-            <groupId>io.swagger.core.v3</groupId>
-            <artifactId>swagger-jaxrs2-servlet-initializer</artifactId>
-            <version>${openapi.swagger.version}</version>
-        </dependency>              
-    </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -115,6 +97,26 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+              <groupId>org.wildfly.plugins</groupId>
+              <artifactId>wildfly-maven-plugin</artifactId>
+              <version>2.0.1.Final</version>    
+              <configuration>
+                <jboss-home>${basedir}/../../../wildfly-17.0.0.Alpha1</jboss-home>
+                <server-config>standalone-full.xml</server-config>
+                <java-home>${basedir}/../../../jdk-12.0.1</java-home>
+                <java-opts>-Xms1024m -Xmx1024m -XX:MetaspaceSize=256M -XX:MaxMetaspaceSize=512m -Djava.net.preferIPv4Stack=true</java-opts>
+              </configuration>          
+            </plugin>
+            <plugin>
+                <groupId>org.carlspring.maven</groupId>
+                <artifactId>derby-maven-plugin</artifactId>
+                <version>1.10</version>
+                <configuration>
+                    <basedir>${project.build.directory}/derby</basedir>
+                    <port>1527</port>
+                </configuration>
+            </plugin>            
         </plugins>
     </build>
 
