@@ -5,6 +5,7 @@
  */
 package com.ceridwen.lcf.server;
 
+import com.ceridwen.lcf.lcfserver.model.EntityTypes;
 import com.fasterxml.jackson.databind.AnnotationIntrospector;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,6 +30,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import javax.xml.bind.annotation.XmlEnumValue;
@@ -37,8 +40,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
  *
  * @author Matthew
  */
-@OpenAPIDefinition( info = @Info(description = "LCF", version = "1.1.0", title = "LCF"), 
-                    servers =  @Server(url = "/lcfserver/lcf/1.0"))
+@OpenAPIDefinition( info = @Info(description = "LCF", version = "1.1.0", title = "LCF"))
 public class ApplicationConfig extends Application {
     
     public ApplicationConfig() {        
@@ -76,29 +78,19 @@ public class ApplicationConfig extends Application {
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> resources = new java.util.HashSet<>();
-//        addRestResourceClasses(resources);
         resources.add(OpenApiResource.class);
         resources.add(AcceptHeaderOpenApiResource.class);
-        resources.add(com.ceridwen.lcf.server.webservice.PatronContainerWebservice.class);
-        resources.add(com.ceridwen.lcf.server.webservice.LoanContainerWebservice.class);
         
+        for (EntityTypes.Type type: EntityTypes.Type.values()) {
+            try {
+                String clazzName = "com.ceridwen.lcf.server.webservice." + type.name() + "ContainerWebservice";
+                Class webservice = Class.forName(clazzName);
+                resources.add(webservice);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ApplicationConfig.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         
         return resources;
     }
-
-    /**
-     * Do not modify addRestResourceClasses() method.
-     * It is automatically populated with
-     * all resources defined in the project.
-     * If required, comment out calling this method in getClasses().
-     */
-//    private void addRestResourceClasses(Set<Class<?>> resources) {
-//        resources.add(com.ceridwen.lcf.server.webservice.LoanWebservice.class);
-//        resources.add(com.ceridwen.lcf.server.webservice.LoansListWebservice.class);
-//        resources.add(com.ceridwen.lcf.server.webservice.LoansWebservice.class);
-//        resources.add(com.ceridwen.lcf.server.webservice.PatronWebservice.class);
-//        resources.add(com.ceridwen.lcf.server.webservice.PatronsListWebservice.class);
-//        resources.add(com.ceridwen.lcf.server.webservice.PatronsWebservice.class);
-//    }
-    
 }

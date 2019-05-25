@@ -23,17 +23,11 @@
   
   <artifactId>lcfserver-server</artifactId>
   <packaging>war</packaging>
-
   
    <dependencies>
       <dependency>
          <groupId>${project.groupId}</groupId>
          <artifactId>lcfserver-resources</artifactId>
-         <version>${project.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>${project.groupId}</groupId>
-         <artifactId>lcfserver-resources-jpa</artifactId>
          <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -46,6 +40,22 @@
          <groupId>org.bic.ns.lcf</groupId>
          <artifactId>lcf-schema</artifactId>
          <version>1.1.0</version>
+      </dependency>
+      <dependency>
+         <groupId>${project.groupId}</groupId>
+         <artifactId>lcfserver-model</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>${project.groupId}</groupId>
+         <artifactId>lcfserver-codegen</artifactId>
+         <version>${project.version}</version>
+         <scope>compile</scope>
+      </dependency>
+      <dependency>
+         <groupId>${project.groupId}</groupId>
+         <artifactId>lcfserver-resources-memory</artifactId>
+         <version>${project.version}</version>
       </dependency>
       <dependency>
             <groupId>javax</groupId>
@@ -79,193 +89,32 @@
             <version>2.9.8</version>
         </dependency>
     </dependencies>
-    
-    <build>
-        <plugins>
-               <plugin>
-                <groupId>com.webguys</groupId>
-                <artifactId>string-template-maven-plugin</artifactId>
-                <version>1.1</version>
-                <configuration>
-                    <templates>
-                        <!-- Patron -->
-                        <template>
-                            <directory>${basedir}/src/main/string-template</directory>
-                            <name>EntityContainerWebservice</name>
-                            <target>${basedir}/target/generated-sources/string-template/com/ceridwen/lcf/server/webservice/PatronContainerWebservice.java</target>
-                            <controller>
-                                <className>com.ceridwen.lcf.server.StringTemplateHelper</className>
-                                <method>getPatronProperties</method>
-                            </controller>
-                        </template>
-                        <template>
-                            <directory>${basedir}/src/main/string-template</directory>
-                            <name>EntityListWebservice</name>
-                            <target>${basedir}/target/generated-sources/string-template/com/ceridwen/lcf/server/webservice/PatronListWebservice.java</target>
-                            <controller>
-                                <className>com.ceridwen.lcf.server.StringTemplateHelper</className>
-                                <method>getPatronProperties</method>
-                            </controller>                        
-                        </template>
-                        <template>
-                            <directory>${basedir}/src/main/string-template</directory>
-                            <name>EntityWebservice</name>
-                            <target>${basedir}/target/generated-sources/string-template/com/ceridwen/lcf/server/webservice/PatronWebservice.java</target>
-                            <controller>
-                                <className>com.ceridwen.lcf.server.StringTemplateHelper</className>
-                                <method>getPatronProperties</method>
-                            </controller>
-                        </template>
 
-                        <!-- Loan -->
-                        <template>
-                            <directory>${basedir}/src/main/string-template</directory>
-                            <name>EntityContainerWebservice</name>
-                            <target>${basedir}/target/generated-sources/string-template/com/ceridwen/lcf/server/webservice/LoanContainerWebservice.java</target>
-                            <controller>
-                                <className>com.ceridwen.lcf.server.StringTemplateHelper</className>
-                                <method>getLoanProperties</method>
-                            </controller>
-                        </template>
-                        <template>
-                            <directory>${basedir}/src/main/string-template</directory>
-                            <name>EntityListWebservice</name>
-                            <target>${basedir}/target/generated-sources/string-template/com/ceridwen/lcf/server/webservice/LoanListWebservice.java</target>
-                            <controller>
-                                <className>com.ceridwen.lcf.server.StringTemplateHelper</className>
-                                <method>getLoanProperties</method>
-                            </controller>                        
-                        </template>
-                        <template>
-                            <directory>${basedir}/src/main/string-template</directory>
-                            <name>EntityWebservice</name>
-                            <target>${basedir}/target/generated-sources/string-template/com/ceridwen/lcf/server/webservice/LoanWebservice.java</target>
-                            <controller>
-                                <className>com.ceridwen.lcf.server.StringTemplateHelper</className>
-                                <method>getLoanProperties</method>
-                            </controller>
-                        </template>
-                        
-                        <!-- Contact -->
-                        <template>
-                            <directory>${basedir}/src/main/string-template</directory>
-                            <name>EntityContainerWebservice</name>
-                            <target>${basedir}/target/generated-sources/string-template/com/ceridwen/lcf/server/webservice/ContactContainerWebservice.java</target>
-                            <controller>
-                                <className>com.ceridwen.lcf.server.StringTemplateHelper</className>
-                                <method>getContactProperties</method>
-                            </controller>
-                        </template>
-                        <template>
-                            <directory>${basedir}/src/main/string-template</directory>
-                            <name>EntityListWebservice</name>
-                            <target>${basedir}/target/generated-sources/string-template/com/ceridwen/lcf/server/webservice/ContactListWebservice.java</target>
-                            <controller>
-                                <className>com.ceridwen.lcf.server.StringTemplateHelper</className>
-                                <method>getContactProperties</method>
-                            </controller>                        
-                        </template>
-                        <template>
-                            <directory>${basedir}/src/main/string-template</directory>
-                            <name>EntityWebservice</name>
-                            <target>${basedir}/target/generated-sources/string-template/com/ceridwen/lcf/server/webservice/ContactWebservice.java</target>
-                            <controller>
-                                <className>com.ceridwen.lcf.server.StringTemplateHelper</className>
-                                <method>getContactProperties</method>
-                            </controller>
-                        </template>
-
-                        <!-- Charge -->
-                        <template>
-                            <directory>${basedir}/src/main/string-template</directory>
-                            <name>EntityContainerWebservice</name>
-                            <target>${basedir}/target/generated-sources/string-template/com/ceridwen/lcf/server/webservice/ChargeContainerWebservice.java</target>
-                            <controller>
-                                <className>com.ceridwen.lcf.server.StringTemplateHelper</className>
-                                <method>getChargeProperties</method>
-                            </controller>
-                        </template>
-                        <template>
-                            <directory>${basedir}/src/main/string-template</directory>
-                            <name>EntityListWebservice</name>
-                            <target>${basedir}/target/generated-sources/string-template/com/ceridwen/lcf/server/webservice/ChargeListWebservice.java</target>
-                            <controller>
-                                <className>com.ceridwen.lcf.server.StringTemplateHelper</className>
-                                <method>getChargeProperties</method>
-                            </controller>                        
-                        </template>
-                        <template>
-                            <directory>${basedir}/src/main/string-template</directory>
-                            <name>EntityWebservice</name>
-                            <target>${basedir}/target/generated-sources/string-template/com/ceridwen/lcf/server/webservice/ChargeWebservice.java</target>
-                            <controller>
-                                <className>com.ceridwen.lcf.server.StringTemplateHelper</className>
-                                <method>getChargeProperties</method>
-                            </controller>
-                        </template>
-                  
-                        <!-- Reservation -->
-                        <template>
-                            <directory>${basedir}/src/main/string-template</directory>
-                            <name>EntityContainerWebservice</name>
-                            <target>${basedir}/target/generated-sources/string-template/com/ceridwen/lcf/server/webservice/ReservationContainerWebservice.java</target>
-                            <controller>
-                                <className>com.ceridwen.lcf.server.StringTemplateHelper</className>
-                                <method>getReservationProperties</method>
-                            </controller>
-                        </template>
-                        <template>
-                            <directory>${basedir}/src/main/string-template</directory>
-                            <name>EntityListWebservice</name>
-                            <target>${basedir}/target/generated-sources/string-template/com/ceridwen/lcf/server/webservice/ReservationListWebservice.java</target>
-                            <controller>
-                                <className>com.ceridwen.lcf.server.StringTemplateHelper</className>
-                                <method>getReservationProperties</method>
-                            </controller>                        
-                        </template>
-                        <template>
-                            <directory>${basedir}/src/main/string-template</directory>
-                            <name>EntityWebservice</name>
-                            <target>${basedir}/target/generated-sources/string-template/com/ceridwen/lcf/server/webservice/ReservationWebservice.java</target>
-                            <controller>
-                                <className>com.ceridwen.lcf.server.StringTemplateHelper</className>
-                                <method>getReservationProperties</method>
-                            </controller>
-                        </template>
-
-                        <!-- Payment -->
-                        <template>
-                            <directory>${basedir}/src/main/string-template</directory>
-                            <name>EntityContainerWebservice</name>
-                            <target>${basedir}/target/generated-sources/string-template/com/ceridwen/lcf/server/webservice/PaymentContainerWebservice.java</target>
-                            <controller>
-                                <className>com.ceridwen.lcf.server.StringTemplateHelper</className>
-                                <method>getPaymentProperties</method>
-                            </controller>
-                        </template>
-                        <template>
-                            <directory>${basedir}/src/main/string-template</directory>
-                            <name>EntityListWebservice</name>
-                            <target>${basedir}/target/generated-sources/string-template/com/ceridwen/lcf/server/webservice/PaymentListWebservice.java</target>
-                            <controller>
-                                <className>com.ceridwen.lcf.server.StringTemplateHelper</className>
-                                <method>getPaymentProperties</method>
-                            </controller>                        
-                        </template>
-                        <template>
-                            <directory>${basedir}/src/main/string-template</directory>
-                            <name>EntityWebservice</name>
-                            <target>${basedir}/target/generated-sources/string-template/com/ceridwen/lcf/server/webservice/PaymentWebservice.java</target>
-                            <controller>
-                                <className>com.ceridwen.lcf.server.StringTemplateHelper</className>
-                                <method>getPaymentProperties</method>
-                            </controller>
-                        </template>
-                    </templates>
-                </configuration>
-
-            </plugin>            
-        </plugins>
-    </build>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>java</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>com.ceridwen.lcf.server.codegen.GenerateWebservices</mainClass>
+          <arguments>
+            <argument>${basedir}/src/main/string-template</argument>
+            <argument>${basedir}/target/generated-sources/string-template</argument>
+          </arguments>
+          <sourceRoot>${basedir}/target/generated-sources/string-template</sourceRoot>
+          <classpathScope>compile</classpathScope>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>

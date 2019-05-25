@@ -19,19 +19,32 @@
  *
  *     
  *******************************************************************************/
-package com.ceridwen.lcf.server;
+package com.ceridwen.lcf.lcfserver.model.exceptions;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
+import org.bic.ns.lcf.v1_0.ExceptionConditionType;
 
-import com.ceridwen.lcf.lcfserver.model.exceptions.EXC00_LCF_Exception;
+public class EXC01_ServiceUnavailable extends EXC00_LCF_Exception {
 
-@Provider
-public class LCFExceptionHandler implements ExceptionMapper<EXC00_LCF_Exception>{
-    @Override
-	public Response toResponse(final EXC00_LCF_Exception exception) {
-		// TODO need to check how data is marshalled
-    	return Response.status(exception.getHTTPErrorCode()).entity(exception.getLcfException()).build(); //type(MediaType.APPLICATIOn_XML?
-    }
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1769027119532791427L;
+
+	private EXC01_ServiceUnavailable() {
+		super(null, null, null, null);
+	}
+	public EXC01_ServiceUnavailable(String shortMessage, String longMessage, String ref, Throwable cause) {
+		super(shortMessage, longMessage, ref, cause);
+	}
+
+	@Override
+	protected ExceptionConditionType getExceptionConditionType() {
+		return ExceptionConditionType.VALUE_1;
+	}
+
+	@Override
+	public int getHTTPErrorCode() {
+		return 503;
+	}
+
 }

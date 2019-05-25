@@ -26,8 +26,10 @@
     <modules>
         <module>lcfserver-server</module>
         <module>lcfserver-resources</module>
-        <module>lcfserver-resources-jpa</module>
         <module>bic-lcf/lcf-schema</module>
+        <module>lcfserver-codegen</module>
+        <module>lcfserver-model</module>
+        <module>lcfserver-resources-memory</module>
     </modules>
     
     <build>

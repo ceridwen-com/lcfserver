@@ -21,7 +21,7 @@
  *******************************************************************************/
 package com.ceridwen.lcf.server.resources;
 
-import com.ceridwen.lcf.server.authentication.AbstractAuthenticationToken;
+import com.ceridwen.lcf.lcfserver.model.authentication.AbstractAuthenticationToken;
 import java.util.List;
 import java.util.Map;
 import org.bic.ns.lcf.v1_0.SelectionCriterion;

@@ -5,9 +5,9 @@
  */
 package com.ceridwen.lcf.server.webservice;
 
-import com.ceridwen.lcf.server.EntityTypes;
-import com.ceridwen.lcf.server.authentication.AbstractAuthenticationToken;
-import com.ceridwen.lcf.server.authentication.BasicAuthenticationToken;
+import com.ceridwen.lcf.lcfserver.model.EntityTypes;
+import com.ceridwen.lcf.lcfserver.model.authentication.AbstractAuthenticationToken;
+import com.ceridwen.lcf.lcfserver.model.authentication.BasicAuthenticationToken;
 import com.ceridwen.lcf.server.resources.AbstractResourceManagerInterface;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -97,7 +97,7 @@ public class WebserviceHelper<E> {
             rm.Delete(getAuthenticationTokens(authorization, lcfPatronCredential), identifier);
         }
 
-        LcfEntityListResponse Query(Object parent, int startIndex, int count, MultivaluedMap<String, String> queryParameters, String authorization, String lcfPatronCredential) {
+        LcfEntityListResponse Query(Object parent, int startIndex, int count, List<SelectionCriterion> selectionCriterion, String authorization, String lcfPatronCredential) {
             LcfEntityListResponse response = new LcfEntityListResponse();
 
             EntityTypes.Type et = EntityTypes.lookUpByClass(clazz);
@@ -105,21 +105,12 @@ public class WebserviceHelper<E> {
                 response.setEntityType(et.getEntityTypeCode());
             }
             
-            queryParameters.forEach((k, v) -> {
-                try {
-                    if (!v.isEmpty()) {
-                        SelectionCriteria criteria = SelectionCriteria.fromValue(k);
-                        SelectionCriterion criterion = new SelectionCriterion();
-                        criterion.setCode(criteria);
-                        criterion.setValue(v.get(0));
-                        response.getSelectionCriterion().add(criterion);
-                    }
-                } catch (IllegalArgumentException ex) {
-                }
-            });
+            for (SelectionCriterion criterion: selectionCriterion) {
+               response.getSelectionCriterion().add(criterion); 
+            }
             
+            List<E> results = rm.Query(getAuthenticationTokens(authorization, lcfPatronCredential), parent, startIndex, count, selectionCriterion);
             
-            List<E> results = rm.Query(getAuthenticationTokens(authorization, lcfPatronCredential), parent, startIndex, count, response.getSelectionCriterion());
             for (E e: results) {
                 try {
                     Field field = e.getClass().getDeclaredField("identifier");
@@ -139,4 +130,17 @@ public class WebserviceHelper<E> {
 
             return response;        
         }
+        
+    public void addSelectionCriterion(List<SelectionCriterion> selectionCriterion, String parameter, String variable) {
+        try {
+            if (variable != null && !variable.isEmpty()) {
+                SelectionCriteria criteria = SelectionCriteria.fromValue(parameter);
+                SelectionCriterion criterion = new SelectionCriterion();
+                criterion.setCode(criteria);
+                criterion.setValue(variable);
+                selectionCriterion.add(criterion);
+            }
+        } catch (IllegalArgumentException ex) {
+        }
+    }
 }

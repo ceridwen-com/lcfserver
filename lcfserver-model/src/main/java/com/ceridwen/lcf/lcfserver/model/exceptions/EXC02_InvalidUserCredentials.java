@@ -19,19 +19,32 @@
  *
  *     
  *******************************************************************************/
-package com.ceridwen.lcf.server;
+package com.ceridwen.lcf.lcfserver.model.exceptions;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
+import org.bic.ns.lcf.v1_0.ExceptionConditionType;
 
-import com.ceridwen.lcf.lcfserver.model.exceptions.EXC00_LCF_Exception;
+public class EXC02_InvalidUserCredentials extends EXC00_LCF_Exception {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4809302434767801752L;
 
-@Provider
-public class LCFExceptionHandler implements ExceptionMapper<EXC00_LCF_Exception>{
-    @Override
-	public Response toResponse(final EXC00_LCF_Exception exception) {
-		// TODO need to check how data is marshalled
-    	return Response.status(exception.getHTTPErrorCode()).entity(exception.getLcfException()).build(); //type(MediaType.APPLICATIOn_XML?
-    }
+	private EXC02_InvalidUserCredentials() {
+		super(null, null, null, null);
+	}
+	
+	public EXC02_InvalidUserCredentials(String shortMessage, String longMessage, String ref, Throwable cause) {
+		super(shortMessage, longMessage, ref, cause);
+	}
+
+	@Override
+	protected ExceptionConditionType getExceptionConditionType() {
+		return ExceptionConditionType.VALUE_2;
+	}
+
+	@Override
+	public int getHTTPErrorCode() {
+		return 403;
+	}
+
 }

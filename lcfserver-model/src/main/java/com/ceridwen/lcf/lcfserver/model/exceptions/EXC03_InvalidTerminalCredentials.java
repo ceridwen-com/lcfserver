@@ -19,19 +19,33 @@
  *
  *     
  *******************************************************************************/
-package com.ceridwen.lcf.server;
+package com.ceridwen.lcf.lcfserver.model.exceptions;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
+import org.bic.ns.lcf.v1_0.ExceptionConditionType;
 
-import com.ceridwen.lcf.lcfserver.model.exceptions.EXC00_LCF_Exception;
+public class EXC03_InvalidTerminalCredentials extends EXC00_LCF_Exception {
 
-@Provider
-public class LCFExceptionHandler implements ExceptionMapper<EXC00_LCF_Exception>{
-    @Override
-	public Response toResponse(final EXC00_LCF_Exception exception) {
-		// TODO need to check how data is marshalled
-    	return Response.status(exception.getHTTPErrorCode()).entity(exception.getLcfException()).build(); //type(MediaType.APPLICATIOn_XML?
-    }
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8635187518663576610L;
+
+	private EXC03_InvalidTerminalCredentials() {
+		super(null, null, null, null);
+	}
+	
+	public EXC03_InvalidTerminalCredentials(String shortMessage, String longMessage, String ref, Throwable cause) {
+		super(shortMessage, longMessage, ref, cause);
+	}
+
+	@Override
+	protected ExceptionConditionType getExceptionConditionType() {
+		return ExceptionConditionType.VALUE_3;
+	}
+
+	@Override
+	public int getHTTPErrorCode() {
+		return 401;
+	}
+
 }

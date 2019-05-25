@@ -19,19 +19,41 @@
  *
  *     
  *******************************************************************************/
-package com.ceridwen.lcf.server;
+package com.ceridwen.lcf.lcfserver.model.exceptions;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
+import org.bic.ns.lcf.v1_0.ExceptionConditionType;
+import org.bic.ns.lcf.v1_0.ReasonDeniedType;
 
-import com.ceridwen.lcf.lcfserver.model.exceptions.EXC00_LCF_Exception;
+public class EXC07_RequestDenied extends EXC00_LCF_Exception {
 
-@Provider
-public class LCFExceptionHandler implements ExceptionMapper<EXC00_LCF_Exception>{
-    @Override
-	public Response toResponse(final EXC00_LCF_Exception exception) {
-		// TODO need to check how data is marshalled
-    	return Response.status(exception.getHTTPErrorCode()).entity(exception.getLcfException()).build(); //type(MediaType.APPLICATIOn_XML?
-    }
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8483322867344634031L;
+	
+	private ReasonDeniedType reasonDenied;
+	
+	private EXC07_RequestDenied() {
+		super(null, null, null, null);
+	}
+	public EXC07_RequestDenied(String shortMessage, String longMessage, String ref, ReasonDeniedType reasonDenied, Throwable cause) {
+		super(shortMessage, longMessage, ref, cause);
+		this.reasonDenied = reasonDenied;
+	}
+
+	@Override
+	protected ExceptionConditionType getExceptionConditionType() {
+		return ExceptionConditionType.VALUE_7;
+	}
+	
+	@Override
+	protected ReasonDeniedType getReasonDenied() {
+		return this.reasonDenied;
+	}
+
+	@Override
+	public int getHTTPErrorCode() {
+		return 403;
+	}
+
 }

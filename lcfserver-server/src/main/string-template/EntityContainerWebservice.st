@@ -1,4 +1,4 @@
-EntityContainerWebservice(LCFPath, Entity, EntityPath, SubEntity) ::= <<
+EntityContainerWebservice(LCFPath, Entity, EntityPath, SubEntity, SelectionCriteria) ::= <<
 package com.ceridwen.lcf.server.webservice;
 
 import io.swagger.v3.oas.annotations.Parameter;
@@ -8,7 +8,7 @@ import javax.ws.rs.PathParam;
 import org.bic.ns.lcf.v1_0.<Entity>;
 
 @Path("<LCFPath>/<EntityPath>")
-public class <Entity>ContainerWebservice extends <Entity>ListWebservice implements EntityListInterface\<<Entity>\>, EntityLocatorInterface\<<Entity>\> {
+public class <Entity>ContainerWebservice extends <Entity>ListWebservice implements EntityLocatorInterface\<<Entity>\> {
     
     @Path("{identifier}")
     @Override

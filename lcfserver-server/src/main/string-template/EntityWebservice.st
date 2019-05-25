@@ -1,4 +1,4 @@
-EntityWebservice(LCFPath, Entity, EntityPath, SubEntity) ::= <<
+EntityWebservice(LCFPath, Entity, EntityPath, SubEntity, SelectionCriteria) ::= <<
 package com.ceridwen.lcf.server.webservice;
 
 import com.ceridwen.lcf.server.resources.<Entity>ResourceManagerInterface;
@@ -28,7 +28,7 @@ public class <Entity>Webservice implements EntityInterface\<<Entity>\>
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Override
     public <Entity> Retrieve(@Parameter(hidden=true) @HeaderParam("Authorization") String authorization, @Parameter(hidden=true) @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
         return helper.Retrieve(identifier, authorization, lcfPatronCredential);
