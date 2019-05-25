@@ -2,6 +2,7 @@ EntityWebservice(LCFPath, Entity, EntityPath, SubEntity) ::= <<
 package com.ceridwen.lcf.server.webservice;
 
 import com.ceridwen.lcf.server.resources.<Entity>ResourceManagerInterface;
+import io.swagger.v3.oas.annotations.Parameter;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -29,7 +30,7 @@ public class <Entity>Webservice implements EntityInterface\<<Entity>\>
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Override
-    public <Entity> Retrieve(@HeaderParam("Authorization") String authorization, @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
+    public <Entity> Retrieve(@Parameter(hidden=true) @HeaderParam("Authorization") String authorization, @Parameter(hidden=true) @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
         return helper.Retrieve(identifier, authorization, lcfPatronCredential);
     }
 
@@ -37,20 +38,20 @@ public class <Entity>Webservice implements EntityInterface\<<Entity>\>
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Override
-    public <Entity> Modify(<Entity> data, @HeaderParam("Authorization") String authorization, @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
+    public <Entity> Modify(<Entity> data, @Parameter(hidden=true) @HeaderParam("Authorization") String authorization, @Parameter(hidden=true) @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
         return helper.Modify(identifier, data, authorization, lcfPatronCredential);
     }
 
     @DELETE
     @Override
-    public void Delete(@HeaderParam("Authorization") String authorization, @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
+    public void Delete(@Parameter(hidden=true) @HeaderParam("Authorization") String authorization, @Parameter(hidden=true) @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
         helper.Delete(identifier, authorization, lcfPatronCredential);
     }
 <SubEntity: {subentity |
 
 
     @Path("<subentity.EntityPath>")
-    public <subentity.Entity>ListWebservice Locate<subentity.Entity>(@HeaderParam("Authorization") String authorization, @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
+    public <subentity.Entity>ListWebservice Locate<subentity.Entity>(@Parameter(hidden=true) @HeaderParam("Authorization") String authorization, @Parameter(hidden=true) @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
         return new <subentity.Entity>ListWebservice(helper.Retrieve(identifier, authorization, lcfPatronCredential));
     \}
 }>}

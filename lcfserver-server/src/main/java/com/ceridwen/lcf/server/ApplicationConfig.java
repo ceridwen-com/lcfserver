@@ -37,7 +37,6 @@ import javax.xml.bind.annotation.XmlEnumValue;
  *
  * @author Matthew
  */
-@ApplicationPath(EntityTypes.LCF_PREFIX)
 @OpenAPIDefinition( info = @Info(description = "LCF", version = "1.1.0", title = "LCF"), 
                     servers =  @Server(url = "/lcfserver/lcf/1.0"))
 public class ApplicationConfig extends Application {

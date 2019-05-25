@@ -1,6 +1,7 @@
 EntityContainerWebservice(LCFPath, Entity, EntityPath, SubEntity) ::= <<
 package com.ceridwen.lcf.server.webservice;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -11,7 +12,7 @@ public class <Entity>ContainerWebservice extends <Entity>ListWebservice implemen
     
     @Path("{identifier}")
     @Override
-    public <Entity>Webservice Locate(@PathParam("identifier") String identifier, @HeaderParam("Authorization") String authorization, @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
+    public <Entity>Webservice Locate(@PathParam("identifier") String identifier, @Parameter(hidden=true) @HeaderParam("Authorization") String authorization, @Parameter(hidden=true) @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
         return new <Entity>Webservice(identifier, authorization, lcfPatronCredential);
     }
 } 

@@ -5,6 +5,7 @@ import com.ceridwen.lcf.server.resources.<Entity>ResourceManagerInterface;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.Parameter;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -35,7 +36,7 @@ public class <Entity>ListWebservice implements EntityListInterface\<<Entity>\> {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Override
-    public LcfEntityListResponse List(@DefaultValue("0") @QueryParam("os:startIndex") int startIndex, @DefaultValue("0") @QueryParam("os:count") int count, @Context UriInfo uriInfo, @HeaderParam("Authorization") String authorization, @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
+    public LcfEntityListResponse List(@DefaultValue("0") @QueryParam("os:startIndex") int startIndex, @DefaultValue("0") @QueryParam("os:count") int count, @Context UriInfo uriInfo, @Parameter(hidden=true) @HeaderParam("Authorization") String authorization, @Parameter(hidden=true) @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
         return helper.Query(parent, startIndex, count, uriInfo.getQueryParameters(true), authorization, lcfPatronCredential);
     }
 
@@ -50,7 +51,7 @@ public class <Entity>ListWebservice implements EntityListInterface\<<Entity>\> {
         description = "With echoed content",
         content = @Content(schema = @Schema(implementation = <Entity>.class)))    
     @Override
-    public Response Create(<Entity> data, @Context UriInfo uriInfo, @HeaderParam("Authorization") String authorization, @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
+    public Response Create(<Entity> data, @Context UriInfo uriInfo, @Parameter(hidden=true) @HeaderParam("Authorization") String authorization, @Parameter(hidden=true) @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
         return helper.Create(parent, data, uriInfo, authorization, lcfPatronCredential);
     }
 }
