@@ -1,58 +1,44 @@
-<!--
-  Copyright 2016 Matthew J. Dovey (www.ceridwen.com)
-  
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-  
-    http://www.apache.org/licenses/LICENSE-2.0
-  
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
--->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.ceridwen.lcf</groupId>
-    <artifactId>lcfserver</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
-  </parent>
-  
-  <artifactId>lcfserver-server</artifactId>
-  <packaging>war</packaging>
-  
-   <dependencies>
-      <dependency>
-         <groupId>${project.groupId}</groupId>
-         <artifactId>lcfserver-resources</artifactId>
-         <version>${project.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>${project.groupId}</groupId>
-         <artifactId>lcfserver-resources-memory</artifactId>
-         <version>${project.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>${project.groupId}</groupId>
-         <artifactId>lcfserver-codegen</artifactId>
-         <version>${project.version}</version>
-         <scope>compile</scope>
-      </dependency>
-        <dependency>
-         <groupId>javax.ws.rs</groupId>
-         <artifactId>javax.ws.rs-api</artifactId>
-         <version>2.1.1</version>
-      </dependency>
+    <modelVersion>4.0.0</modelVersion>
 
-      <dependency>
-         <groupId>io.swagger.core.v3</groupId>
-         <artifactId>swagger-core</artifactId>
-         <version>2.0.8</version>
-         <type>jar</type>
-      </dependency>
+    <parent>
+        <groupId>com.ceridwen.lcf</groupId>
+        <artifactId>lcfserver</artifactId>
+        <version>1.1.0-SNAPSHOT</version>
+    </parent>  
+    <artifactId>lcfserver-server</artifactId>
+    <packaging>war</packaging>
+  
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>lcfserver-resources</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${lcfserver.resourcemanager.groupid}</groupId>
+            <artifactId>${lcfserver.resourcemanager.artifactid}</artifactId>
+            <version>${lcfserver.resourcemanager.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>lcfserver-codegen</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-core</artifactId>
+            <version>2.0.8</version>
+            <type>jar</type>
+        </dependency>
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-jaxrs2</artifactId>
@@ -64,60 +50,51 @@
             <version>${openapi.swagger.version}</version>
         </dependency>   
 
-      <dependency>
-         <groupId>org.glassfish.jersey.containers</groupId>
-         <artifactId>jersey-container-jetty-servlet</artifactId>
-         <version>2.28</version>
-      </dependency>
-      <dependency>
-         <groupId>javax.activation</groupId>
-         <artifactId>activation</artifactId>
-         <version>1.1.1</version>
-      </dependency>
-      <dependency>
-         <groupId>org.glassfish.jersey.inject</groupId>
-         <artifactId>jersey-hk2</artifactId>
-         <version>2.28</version>
-      </dependency>
-      <dependency>
-         <groupId>org.glassfish.jaxb</groupId>
-         <artifactId>jaxb-core</artifactId>
-         <version>2.3.0</version>
-      </dependency>
-   </dependencies>
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-jetty-servlet</artifactId>
+            <version>2.28</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+            <version>2.28</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>2.4.0-b180830.0438</version>
+        </dependency>
+    </dependencies>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>1.6.0</version>
-        <executions>
-          <execution>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>java</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <mainClass>com.ceridwen.lcf.server.codegen.GenerateWebservices</mainClass>
-          <arguments>
-            <argument>${basedir}/src/main/string-template</argument>
-            <argument>${basedir}/target/generated-sources/string-template</argument>
-          </arguments>
-          <sourceRoot>${basedir}/target/generated-sources/string-template</sourceRoot>
-          <classpathScope>compile</classpathScope>
-        </configuration>
-      </plugin>
-        <plugin>
-          <groupId>org.eclipse.jetty</groupId>
-          <artifactId>jetty-maven-plugin</artifactId>
-          <configuration>
-            <skip>false</skip>
-          </configuration>
-    </plugin>
-    </plugins>
-  </build>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <configuration>
+                    <skip>false</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.ceridwen.lcf.server.codegen.GenerateWebservices</mainClass>
+                    <arguments>
+                        <argument>${basedir}/src/main/string-template</argument>
+                        <argument>${basedir}/target/generated-sources/string-template</argument>
+                    </arguments>
+                    <sourceRoot>${basedir}/target/generated-sources/string-template</sourceRoot>
+                    <classpathScope>compile</classpathScope>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+  
 </project>

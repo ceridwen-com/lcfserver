@@ -6,6 +6,7 @@
 package com.ceridwen.lcf.server;
 
 import com.ceridwen.lcf.lcfserver.model.EntityTypes;
+import com.ceridwen.lcf.server.webservice.WebserviceHelper;
 import com.fasterxml.jackson.databind.AnnotationIntrospector;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -83,11 +84,18 @@ public class ApplicationConfig extends Application {
         
         for (EntityTypes.Type type: EntityTypes.Type.values()) {
             try {
-                String clazzName = "com.ceridwen.lcf.server.webservice." + type.name() + "ContainerWebservice";
-                Class webservice = Class.forName(clazzName);
-                resources.add(webservice);
+                Class entity = Class.forName("org.bic.ns.lcf.v1_0." + type.name());
+                Class rmi = Class.forName("com.ceridwen.lcf.server.resources." + type.name() + "ResourceManagerInterface");
+                WebserviceHelper helper = new WebserviceHelper(entity, rmi);
+                if (helper.hasResourceManager()) {
+                    Class webservice = Class.forName("com.ceridwen.lcf.server.webservice." + type.name() + "ContainerWebservice");
+                    resources.add(webservice);
+                    Logger.getLogger(ApplicationConfig.class.getName()).log(Level.INFO, type.name() + ": Resource Manager loaded");
+                } else {
+                    Logger.getLogger(ApplicationConfig.class.getName()).log(Level.INFO, type.name() + ": No Resource Manager available");                    
+                }
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(ApplicationConfig.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ApplicationConfig.class.getName()).log(Level.SEVERE, type.name() + ": Error loading Resource Manager", ex);
             }
         }
         

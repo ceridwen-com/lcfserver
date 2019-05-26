@@ -10,7 +10,6 @@ import com.ceridwen.lcf.lcfserver.model.authentication.AbstractAuthenticationTok
 import com.ceridwen.lcf.lcfserver.model.authentication.BasicAuthenticationToken;
 import com.ceridwen.lcf.server.resources.AbstractResourceManagerInterface;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +17,6 @@ import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -51,10 +48,14 @@ public class WebserviceHelper<E> {
              }
 
             if (rm == null) {
-                System.out.println("Unable to load resource manager for " + clazz.getName() );
+                Logger.getLogger(WebserviceHelper.class.getName()).log(Level.FINE, clazz.getName() + ": Resource Manager not available");
             } else {
-                System.out.println("Loaded resource manager " + rm.getClass().getName() + " for " + clazz.getName() );       
+                Logger.getLogger(WebserviceHelper.class.getName()).log(Level.FINE, clazz.getName() + ": Resource Manager loaded");
             }
+        }
+        
+        public boolean hasResourceManager() {
+            return (rm != null);
         }
         
         private Map<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken> getAuthenticationTokens(String authorization, String lcfPatronCredential) {
