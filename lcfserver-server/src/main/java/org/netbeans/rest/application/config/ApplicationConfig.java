@@ -39,7 +39,6 @@ public class ApplicationConfig extends Application {
         resources.add(com.ceridwen.lcf.server.webservice.AuthorityWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.ChargeContainerWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.ChargeListWebservice.class);
-        resources.add(com.ceridwen.lcf.server.webservice.ChargeWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.ClassSchemeContainerWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.ClassSchemeListWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.ClassSchemeWebservice.class);
