@@ -25,27 +25,17 @@
   <packaging>jar</packaging>
 
   
-   <dependencies>
-      <dependency>
-         <groupId>${project.groupId}</groupId>
-         <artifactId>lcfserver-resources</artifactId>
-         <version>${project.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.bic.ns.lcf</groupId>
-         <artifactId>lcf-schema</artifactId>
-         <version>1.1.0</version>
-      </dependency>
-      <dependency>
-         <groupId>${project.groupId}</groupId>
-         <artifactId>lcfserver-model</artifactId>
-         <version>${project.version}</version>
-      </dependency>
+   <dependencies> 
       <dependency>
          <groupId>${project.groupId}</groupId>
          <artifactId>lcfserver-codegen</artifactId>
          <version>${project.version}</version>
          <scope>compile</scope>
+      </dependency>
+      <dependency>
+         <groupId>${project.groupId}</groupId>
+         <artifactId>lcfserver-resources</artifactId>
+         <version>${project.version}</version>
       </dependency>
    </dependencies>
     <name>lcfserver-resources-memory</name>

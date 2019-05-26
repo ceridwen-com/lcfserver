@@ -113,17 +113,6 @@
                 </executions>
             </plugin>
             <plugin>
-              <groupId>org.wildfly.plugins</groupId>
-              <artifactId>wildfly-maven-plugin</artifactId>
-              <version>2.0.1.Final</version>    
-              <configuration>
-                <jboss-home>${basedir}/../../../wildfly-17.0.0.Alpha1</jboss-home>
-                <server-config>standalone-full.xml</server-config>
-                <java-home>${basedir}/../../../jdk-12.0.1</java-home>
-                <java-opts>-Xms1024m -Xmx1024m -XX:MetaspaceSize=256M -XX:MaxMetaspaceSize=512m -Djava.net.preferIPv4Stack=true</java-opts>
-              </configuration>          
-            </plugin>
-            <plugin>
                 <groupId>org.carlspring.maven</groupId>
                 <artifactId>derby-maven-plugin</artifactId>
                 <version>1.10</version>

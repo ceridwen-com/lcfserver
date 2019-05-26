@@ -38,7 +38,6 @@ public class ApplicationConfig extends Application {
         resources.add(com.ceridwen.lcf.server.webservice.AuthorityListWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.AuthorityWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.ChargeContainerWebservice.class);
-        resources.add(com.ceridwen.lcf.server.webservice.ChargeListWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.ClassSchemeContainerWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.ClassSchemeListWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.ClassSchemeWebservice.class);
@@ -46,14 +45,10 @@ public class ApplicationConfig extends Application {
         resources.add(com.ceridwen.lcf.server.webservice.ClassTermListWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.ClassTermWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.ContactContainerWebservice.class);
-        resources.add(com.ceridwen.lcf.server.webservice.ContactListWebservice.class);
-        resources.add(com.ceridwen.lcf.server.webservice.ContactWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.ItemContainerWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.ItemListWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.ItemWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.LoanContainerWebservice.class);
-        resources.add(com.ceridwen.lcf.server.webservice.LoanListWebservice.class);
-        resources.add(com.ceridwen.lcf.server.webservice.LoanWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.LocationContainerWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.LocationListWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.LocationWebservice.class);
@@ -64,14 +59,9 @@ public class ApplicationConfig extends Application {
         resources.add(com.ceridwen.lcf.server.webservice.MessageAlertListWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.MessageAlertWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.PatronContainerWebservice.class);
-        resources.add(com.ceridwen.lcf.server.webservice.PatronListWebservice.class);
-        resources.add(com.ceridwen.lcf.server.webservice.PatronWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.PaymentContainerWebservice.class);
-        resources.add(com.ceridwen.lcf.server.webservice.PaymentListWebservice.class);
-        resources.add(com.ceridwen.lcf.server.webservice.PaymentWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.ReservationContainerWebservice.class);
         resources.add(com.ceridwen.lcf.server.webservice.ReservationListWebservice.class);
-        resources.add(com.ceridwen.lcf.server.webservice.ReservationWebservice.class);
     }
     
 }
