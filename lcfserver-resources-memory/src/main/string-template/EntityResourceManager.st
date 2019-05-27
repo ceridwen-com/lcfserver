@@ -14,6 +14,11 @@ import org.bic.ns.lcf.v1_0.<Entity>;
 public class <Entity>ResourceManager implements <Entity>ResourceManagerInterface {
 
     @Override
+    public Class getEntityClass() {
+        return <Entity>.class;
+    }
+
+    @Override
     public String Create(Map\<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken\> authTokens, Object parent, <Entity> entity) {
         if (entity.getIdentifier() == null || entity.getIdentifier().isBlank()) {
             entity.setIdentifier(UUID.randomUUID().toString());

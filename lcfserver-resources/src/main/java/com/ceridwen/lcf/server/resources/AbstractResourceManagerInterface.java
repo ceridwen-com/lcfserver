@@ -28,6 +28,7 @@ import org.bic.ns.lcf.v1_0.SelectionCriterion;
 
 
 public abstract interface AbstractResourceManagerInterface<E> {
+        Class getEntityClass();
 	String Create(Map<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken> authTokens, Object parent, E entity);
 	E Retrieve(Map<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken> authTokens, String identifier);
 	E Modify(Map<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken> authTokens, String identifier, E entity);

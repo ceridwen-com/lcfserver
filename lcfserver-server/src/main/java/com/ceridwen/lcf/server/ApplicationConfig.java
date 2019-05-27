@@ -81,6 +81,7 @@ public class ApplicationConfig extends Application {
         Set<Class<?>> resources = new java.util.HashSet<>();
         resources.add(OpenApiResource.class);
         resources.add(AcceptHeaderOpenApiResource.class);
+        resources.add(LCFExceptionHandler.class);
         
         for (EntityTypes.Type type: EntityTypes.Type.values()) {
             try {

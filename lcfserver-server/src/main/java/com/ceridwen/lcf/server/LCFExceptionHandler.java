@@ -21,6 +21,7 @@
  *******************************************************************************/
 package com.ceridwen.lcf.server;
 
+import com.ceridwen.lcf.lcfserver.model.ReferenceHandler;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -31,7 +32,7 @@ import com.ceridwen.lcf.lcfserver.model.exceptions.EXC00_LCF_Exception;
 public class LCFExceptionHandler implements ExceptionMapper<EXC00_LCF_Exception>{
     @Override
 	public Response toResponse(final EXC00_LCF_Exception exception) {
-		// TODO need to check how data is marshalled
+	ReferenceHandler.processReferences(exception.getLcfException(), "<expandurl>");	// TODO need to check how data is marshalled
     	return Response.status(exception.getHTTPErrorCode()).entity(exception.getLcfException()).build(); //type(MediaType.APPLICATIOn_XML?
     }
 }

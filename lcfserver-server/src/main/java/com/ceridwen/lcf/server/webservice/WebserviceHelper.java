@@ -6,10 +6,14 @@
 package com.ceridwen.lcf.server.webservice;
 
 import com.ceridwen.lcf.lcfserver.model.EntityTypes;
+import com.ceridwen.lcf.lcfserver.model.ReferenceHandler;
 import com.ceridwen.lcf.lcfserver.model.authentication.AbstractAuthenticationToken;
 import com.ceridwen.lcf.lcfserver.model.authentication.BasicAuthenticationToken;
+import com.ceridwen.lcf.lcfserver.model.exceptions.EXC05_InvalidEntityReference;
 import com.ceridwen.lcf.server.resources.AbstractResourceManagerInterface;
 import java.lang.reflect.Field;
+import java.net.URI;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,16 +82,20 @@ public class WebserviceHelper<E> {
             return authenticationTokens;
         } 
     
-	Response Create(Object parent, E entity, UriInfo uriInfo, String authorization, String lcfPatronCredential) {
+	Response Create(Object parent, E entity, String authorization, String lcfPatronCredential, String baseUri) {
             String identifier = rm.Create(getAuthenticationTokens(authorization, lcfPatronCredential), parent, entity);
         
-            UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-            builder.path(identifier);
-            return Response.created(builder.build()).entity(entity).build();
+            return Response.created(URI.create(baseUri + EntityTypes.LCF_PREFIX + "/" + EntityTypes.lookUpByClass(rm.getEntityClass()).getEntityTypeCodeValue())).entity(entity).build();
         }
                     
 	E Retrieve(String identifier, String authorization, String lcfPatronCredential) {
-            return rm.Retrieve(getAuthenticationTokens(authorization, lcfPatronCredential), identifier);            
+            E entity = rm.Retrieve(getAuthenticationTokens(authorization, lcfPatronCredential), identifier);
+            
+            if (entity == null) {
+                throw new EXC05_InvalidEntityReference("Entity not found", "Entity not found", identifier, null);
+            }
+            
+            return entity;         
         }
         
 	E Modify(String identifier, E entity, String authorization, String lcfPatronCredential) {
@@ -98,7 +106,7 @@ public class WebserviceHelper<E> {
             rm.Delete(getAuthenticationTokens(authorization, lcfPatronCredential), identifier);
         }
 
-        LcfEntityListResponse Query(Object parent, int startIndex, int count, List<SelectionCriterion> selectionCriterion, String authorization, String lcfPatronCredential) {
+        LcfEntityListResponse Query(Object parent, int startIndex, int count, List<SelectionCriterion> selectionCriterion, String authorization, String lcfPatronCredential, String baseUri) {
             LcfEntityListResponse response = new LcfEntityListResponse();
 
             EntityTypes.Type et = EntityTypes.lookUpByClass(clazz);
@@ -129,6 +137,8 @@ public class WebserviceHelper<E> {
             response.setStartIndex(startIndex);
             response.setItemsPerPage(count);
 
+            ReferenceHandler.processReferences(response, baseUri + EntityTypes.LCF_PREFIX + "/");
+            
             return response;        
         }
         

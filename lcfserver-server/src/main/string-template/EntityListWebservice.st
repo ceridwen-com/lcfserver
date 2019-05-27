@@ -29,6 +29,9 @@ public class <Entity>ListWebservice {
     private final Object parent;
     WebserviceHelper\<<Entity>\> helper = new WebserviceHelper\<\>(<Entity>.class, <Entity>ResourceManagerInterface.class);
 
+    @Context
+    UriInfo uri;
+
     public <Entity>ListWebservice() {
         this.parent = null;
     }
@@ -51,7 +54,7 @@ public class <Entity>ListWebservice {
 <SelectionCriteria: {criterion | 
         helper.addSelectionCriterion(selectionCriterion, "<criterion.Parameter>", <criterion.Variable>);}>
 
-        return helper.Query(parent, startIndex, count, selectionCriterion, authorization, lcfPatronCredential);
+        return helper.Query(parent, startIndex, count, selectionCriterion, authorization, lcfPatronCredential, uri.getBaseUri().toString());
     }
 
     @POST
@@ -64,8 +67,8 @@ public class <Entity>ListWebservice {
         responseCode = "201",
         description = "With echoed content",
         content = @Content(schema = @Schema(implementation = <Entity>.class)))    
-    public Response Create(<Entity> data, @Context UriInfo uriInfo, @Parameter(hidden=true) @HeaderParam("Authorization") String authorization, @Parameter(hidden=true) @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
-        return helper.Create(parent, data, uriInfo, authorization, lcfPatronCredential);
+    public Response Create(<Entity> data, @Parameter(hidden=true) @HeaderParam("Authorization") String authorization, @Parameter(hidden=true) @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
+        return helper.Create(parent, data, authorization, lcfPatronCredential, uri.getBaseUri().toString());
     }
 }
 >>

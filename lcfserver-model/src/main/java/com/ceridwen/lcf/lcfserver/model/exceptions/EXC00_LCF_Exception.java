@@ -45,7 +45,7 @@ public abstract class EXC00_LCF_Exception extends RuntimeException {
 		this.longMessage = longMessage;
 		this.ref = ref;
 		if (cause != null) {
-			this.initCause(cause);
+                    this.initCause(cause);
 		}
 	}
 
