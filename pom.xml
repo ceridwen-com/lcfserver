@@ -47,7 +47,13 @@ The Library Communications Framework (LCF) is a set of library interoperability 
         <lcfserver.resourcemanager.artifactid>lcfserver-resources-memory</lcfserver.resourcemanager.artifactid>
         <lcfserver.resourcemanager.version>${project.version}</lcfserver.resourcemanager.version>       
         <java.ee.version>7.0</java.ee.version>
-        <openapi.swagger.version>2.0.8</openapi.swagger.version>
+        <openapi.swagger.version>2.0.8</openapi.swagger.version>      
+        <jersey.container.version>2.28</jersey.container.version>
+        <jersey.jaxb-runtime.version>2.4.0-b180830.0438</jersey.jaxb-runtime.version> 
+        <string.template.version>4.0.2</string.template.version>  
+        <junit.jupiter.version>5.4.2</junit.jupiter.version>
+        <commons.beanutils.version>1.9.3</commons.beanutils.version>
+        <ceridwen.util.version>1.7-SNAPSHOT</ceridwen.util.version>
     </properties>
 
     <prerequisites>

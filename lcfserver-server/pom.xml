@@ -27,53 +27,38 @@
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-            <version>2.1.1</version>
-        </dependency>
 
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-core</artifactId>
-            <version>2.0.8</version>
-            <type>jar</type>
+            <version>${openapi.swagger.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-jaxrs2</artifactId>
             <version>${openapi.swagger.version}</version>
-        </dependency>        
-        <dependency>
-            <groupId>io.swagger.core.v3</groupId>
-            <artifactId>swagger-jaxrs2-servlet-initializer</artifactId>
-            <version>${openapi.swagger.version}</version>
-        </dependency>   
+        </dependency>          
 
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
-            <artifactId>jersey-container-jetty-servlet</artifactId>
-            <version>2.28</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.activation</groupId>
-            <artifactId>activation</artifactId>
-            <version>1.1.1</version>
+            <artifactId>jersey-container-servlet</artifactId>
+            <version>${jersey.container.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.inject</groupId>
             <artifactId>jersey-hk2</artifactId>
-            <version>2.28</version>
+            <version>${jersey.container.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
-            <version>2.4.0-b180830.0438</version>
+            <version>${jersey.jaxb-runtime.version}</version>
         </dependency>
         <dependency>
             <groupId>com.ceridwen.util</groupId>
             <artifactId>ceridwen-util</artifactId>
-            <version>1.7-SNAPSHOT</version>
+            <version>${ceridwen.util.version}</version>
         </dependency>
     </dependencies>
 
