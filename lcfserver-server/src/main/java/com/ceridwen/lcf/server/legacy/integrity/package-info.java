@@ -19,23 +19,13 @@
  *
  *     
  *******************************************************************************/
-package com.ceridwen.lcf.server.handlers;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
+/**
+ *
+ * Modelling of relationships between Entities defined in the LCF Schema generated classes
+ * with helper methods for manipulating references 
+ *  
+ */
+package com.ceridwen.lcf.server.core.integrity;
 
-import com.ceridwen.lcf.server.responses.LCFResponse;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.jaxrs.annotation.JacksonFeatures;
 
-@Provider
-public class LCFResponseHandler implements ExceptionMapper<LCFResponse>{
-    @Override
-    @JacksonFeatures(serializationEnable = {SerializationFeature.INDENT_OUTPUT}, serializationDisable = {SerializationFeature.WRITE_DATES_AS_TIMESTAMPS})
-    public Response toResponse(final LCFResponse exception) {
-        // TODO need to ensure ids in LCFResponse are referenced
-        // TODO need to check how data is marshalled
-        return Response.status(exception.getHTTPStatus()).entity(exception.getLCFResponse()).build(); //type(MediaType.APPLICATIOn_XML?
-    }
-}

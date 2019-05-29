@@ -2,6 +2,8 @@ EntityWebservice(LCFPath, Entity, EntityPath, SubEntity, SelectionCriteria) ::= 
 package com.ceridwen.lcf.server.webservice;
 
 import com.ceridwen.lcf.server.resources.<Entity>ResourceManagerInterface;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.jaxrs.annotation.JacksonFeatures;
 import io.swagger.v3.oas.annotations.Parameter;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -30,6 +32,7 @@ public class <Entity>Webservice implements EntityInterface\<<Entity>\>
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @JacksonFeatures(serializationEnable = {SerializationFeature.INDENT_OUTPUT}, serializationDisable = {SerializationFeature.WRITE_DATES_AS_TIMESTAMPS})
     @Override
     public <Entity> Retrieve(@Parameter(hidden=true) @HeaderParam("Authorization") String authorization, @Parameter(hidden=true) @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
         return helper.Retrieve(identifier, authorization, lcfPatronCredential);
@@ -38,6 +41,7 @@ public class <Entity>Webservice implements EntityInterface\<<Entity>\>
     @PUT
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @JacksonFeatures(serializationEnable = {SerializationFeature.INDENT_OUTPUT}, serializationDisable = {SerializationFeature.WRITE_DATES_AS_TIMESTAMPS})
     @Override
     public <Entity> Modify(<Entity> data, @Parameter(hidden=true) @HeaderParam("Authorization") String authorization, @Parameter(hidden=true) @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
         return helper.Modify(identifier, data, authorization, lcfPatronCredential);

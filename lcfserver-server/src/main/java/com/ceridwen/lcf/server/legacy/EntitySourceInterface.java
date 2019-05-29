@@ -19,23 +19,14 @@
  *
  *     
  *******************************************************************************/
-package com.ceridwen.lcf.server.handlers;
+package com.ceridwen.lcf.server.legacy;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
-
-import com.ceridwen.lcf.server.responses.LCFResponse;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.jaxrs.annotation.JacksonFeatures;
-
-@Provider
-public class LCFResponseHandler implements ExceptionMapper<LCFResponse>{
-    @Override
-    @JacksonFeatures(serializationEnable = {SerializationFeature.INDENT_OUTPUT}, serializationDisable = {SerializationFeature.WRITE_DATES_AS_TIMESTAMPS})
-    public Response toResponse(final LCFResponse exception) {
-        // TODO need to ensure ids in LCFResponse are referenced
-        // TODO need to check how data is marshalled
-        return Response.status(exception.getHTTPStatus()).entity(exception.getLCFResponse()).build(); //type(MediaType.APPLICATIOn_XML?
-    }
+public interface EntitySourceInterface<E> {
+	String Create(Object parent, E entity);
+	String Create(E entity);
+	E Retrieve(String identifier);
+	E Modify(String identifier, E entity);
+	void Delete(String identifier);
+	QueryResults<E> Query(Object parent, int start, int max, String query);
+	QueryResults<E> Query(String query, int start, int max);
 }

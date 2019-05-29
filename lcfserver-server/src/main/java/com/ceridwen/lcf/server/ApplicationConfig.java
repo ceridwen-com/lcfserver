@@ -6,6 +6,9 @@
 package com.ceridwen.lcf.server;
 
 import com.ceridwen.lcf.lcfserver.model.EntityTypes;
+import com.ceridwen.lcf.server.handlers.LCFExceptionHandler;
+import com.ceridwen.lcf.server.handlers.LCFResponseHandler;
+import com.ceridwen.lcf.server.webservice.DescriptionWebPage;
 import com.ceridwen.lcf.server.webservice.WebserviceHelper;
 import com.fasterxml.jackson.databind.AnnotationIntrospector;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -13,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.deser.DeserializationProblemHandler;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
+import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import io.swagger.v3.core.converter.ModelConverters;
@@ -44,12 +48,15 @@ import javax.xml.bind.annotation.XmlEnumValue;
 @OpenAPIDefinition( info = @Info(description = "LCF", version = "1.1.0", title = "LCF"))
 public class ApplicationConfig extends Application {
     
-    public ApplicationConfig() {        
+    public ApplicationConfig() { 
+        
+        
         ObjectMapper mapper = Json.mapper();
-        
+        /* Configure Swagger Json\Yaml generation */
         mapper.registerModule(new JaxbAnnotationModule());
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);        
         
+        /* Hack to fix incorrect generation of enum values as swagger does not honour @XmlEnumValue */
         ModelResolver modelResolver = new ModelResolver(mapper) {
             @Override
             protected void _addEnumProps(Class<?> propClass, Schema property) {
@@ -79,9 +86,12 @@ public class ApplicationConfig extends Application {
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> resources = new java.util.HashSet<>();
+        resources.add(JacksonJaxbJsonProvider.class);
         resources.add(OpenApiResource.class);
         resources.add(AcceptHeaderOpenApiResource.class);
+        resources.add(DescriptionWebPage.class);
         resources.add(LCFExceptionHandler.class);
+        resources.add(LCFResponseHandler.class);
         
         for (EntityTypes.Type type: EntityTypes.Type.values()) {
             try {

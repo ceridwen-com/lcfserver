@@ -19,23 +19,19 @@
  *
  *     
  *******************************************************************************/
-package com.ceridwen.lcf.server.handlers;
+package com.ceridwen.lcf.server.legacy.integrity;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
+import java.util.Vector;
 
-import com.ceridwen.lcf.server.responses.LCFResponse;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.jaxrs.annotation.JacksonFeatures;
+public class NullListRef<E> extends ListRef<E> {
 
-@Provider
-public class LCFResponseHandler implements ExceptionMapper<LCFResponse>{
-    @Override
-    @JacksonFeatures(serializationEnable = {SerializationFeature.INDENT_OUTPUT}, serializationDisable = {SerializationFeature.WRITE_DATES_AS_TIMESTAMPS})
-    public Response toResponse(final LCFResponse exception) {
-        // TODO need to ensure ids in LCFResponse are referenced
-        // TODO need to check how data is marshalled
-        return Response.status(exception.getHTTPStatus()).entity(exception.getLCFResponse()).build(); //type(MediaType.APPLICATIOn_XML?
-    }
+	public NullListRef() {
+		super(					
+			(o,s) -> {}, //Manifestation does not contain list of child Items
+			(o,s) -> {}, //Manifestation does not contain list of child Items
+			(o,s) -> {return false;},
+			o -> {return new Vector<>();}
+		);
+	}
+
 }

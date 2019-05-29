@@ -2,6 +2,8 @@ EntityListWebservice(LCFPath, Entity, EntityPath, SubEntity, SelectionCriteria) 
 package com.ceridwen.lcf.server.webservice;
 
 import com.ceridwen.lcf.server.resources.<Entity>ResourceManagerInterface;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.jaxrs.annotation.JacksonFeatures;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -42,6 +44,7 @@ public class <Entity>ListWebservice {
     
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @JacksonFeatures(serializationEnable = {SerializationFeature.INDENT_OUTPUT}, serializationDisable = {SerializationFeature.WRITE_DATES_AS_TIMESTAMPS})
     public LcfEntityListResponse List(  @DefaultValue("0") @QueryParam("os:startIndex") int startIndex, 
                                         @DefaultValue("0") @QueryParam("os:count") int count, 
 <SelectionCriteria: {criterion | 
@@ -60,6 +63,7 @@ public class <Entity>ListWebservice {
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @JacksonFeatures(serializationEnable = {SerializationFeature.INDENT_OUTPUT}, serializationDisable = {SerializationFeature.WRITE_DATES_AS_TIMESTAMPS})
     @ApiResponse(
         responseCode = "201",
         description = "Without content")    

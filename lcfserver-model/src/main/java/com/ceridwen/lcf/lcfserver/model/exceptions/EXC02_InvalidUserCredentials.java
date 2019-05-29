@@ -21,6 +21,7 @@
  *******************************************************************************/
 package com.ceridwen.lcf.lcfserver.model.exceptions;
 
+import java.util.List;
 import org.bic.ns.lcf.v1_0.ExceptionConditionType;
 
 public class EXC02_InvalidUserCredentials extends EXC00_LCF_Exception {
@@ -37,6 +38,13 @@ public class EXC02_InvalidUserCredentials extends EXC00_LCF_Exception {
 		super(shortMessage, longMessage, ref, cause);
 	}
 
+        @Override
+        public List<CustomHeader> getCustomHeaders() {
+            List headers = super.getCustomHeaders(); 
+            headers.add(new CustomHeader("lcf-authorisation-failure", "patron"));
+            return headers;
+        }
+       
 	@Override
 	protected ExceptionConditionType getExceptionConditionType() {
 		return ExceptionConditionType.VALUE_2;

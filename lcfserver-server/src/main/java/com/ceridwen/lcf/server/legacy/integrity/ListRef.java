@@ -19,20 +19,36 @@
  *
  *     
  *******************************************************************************/
-package com.ceridwen.lcf.server;
+package com.ceridwen.lcf.server.legacy.integrity;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
+import com.ceridwen.util.indirection.Adder;
+import com.ceridwen.util.indirection.Contains;
+import com.ceridwen.util.indirection.Lister;
+import com.ceridwen.util.indirection.Remover;
 
-import com.ceridwen.lcf.server.responses.LCFResponse;
+public class ListRef<E> extends Ref<E> {
+	private Adder<E> adder;
+	private Remover<E> remover;
+	private Contains<E> contains;
+	private Lister<E> lister;
 
-@Provider
-public class LCFResponseHandler implements ExceptionMapper<LCFResponse>{
-	@Override
-	public Response toResponse(final LCFResponse exception) {
-		// TODO need to ensure ids in LCFResponse are referenced
-		// TODO need to check how data is marshalled
-	   	return Response.status(exception.getHTTPStatus()).entity(exception.getLCFResponse()).build(); //type(MediaType.APPLICATIOn_XML?
-	   }
+	public ListRef(Adder<E> adder, Remover<E> remover, Contains<E> contains, Lister<E> lister) {
+		this.adder = adder;
+		this.remover = remover;
+		this.contains = contains;
+		this.lister = lister;
+	}
+	
+	public Adder<E> getAdder() {
+		return adder;
+	}
+	public Remover<E> getRemover() {
+		return remover;
+	}
+	public Contains<E> getContains() {
+		return contains;
+	}
+	public Lister<E> getLister() {
+		return lister;
+	}
 }

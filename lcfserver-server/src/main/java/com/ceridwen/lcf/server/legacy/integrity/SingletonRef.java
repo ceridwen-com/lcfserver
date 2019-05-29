@@ -19,23 +19,25 @@
  *
  *     
  *******************************************************************************/
-package com.ceridwen.lcf.server.handlers;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
+package com.ceridwen.lcf.server.legacy.integrity;
 
-import com.ceridwen.lcf.server.responses.LCFResponse;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.jaxrs.annotation.JacksonFeatures;
+import com.ceridwen.util.indirection.Getter;
+import com.ceridwen.util.indirection.Setter;
 
-@Provider
-public class LCFResponseHandler implements ExceptionMapper<LCFResponse>{
-    @Override
-    @JacksonFeatures(serializationEnable = {SerializationFeature.INDENT_OUTPUT}, serializationDisable = {SerializationFeature.WRITE_DATES_AS_TIMESTAMPS})
-    public Response toResponse(final LCFResponse exception) {
-        // TODO need to ensure ids in LCFResponse are referenced
-        // TODO need to check how data is marshalled
-        return Response.status(exception.getHTTPStatus()).entity(exception.getLCFResponse()).build(); //type(MediaType.APPLICATIOn_XML?
-    }
+public class SingletonRef<E> extends Ref<E> {
+	private Getter<E> getter;
+	private Setter<E> setter;
+
+	public SingletonRef(Getter<E> getter, Setter<E> setter) {
+		this.getter = getter;
+		this.setter = setter;
+	}
+	
+	public Getter<E> getGetter() {
+		return getter;
+	}
+	public Setter<E> getSetter() {
+		return setter;
+	}
 }

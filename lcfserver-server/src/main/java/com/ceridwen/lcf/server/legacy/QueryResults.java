@@ -19,41 +19,32 @@
  *
  *     
  *******************************************************************************/
-package com.ceridwen.lcf.lcfserver.model.exceptions;
+package com.ceridwen.lcf.server.legacy;
 
 import java.util.List;
-import org.bic.ns.lcf.v1_0.ExceptionConditionType;
 
-public class EXC03_InvalidTerminalCredentials extends EXC00_LCF_Exception {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8635187518663576610L;
-
-	private EXC03_InvalidTerminalCredentials() {
-		super(null, null, null, null);
+public class QueryResults<E> {
+	private int totalResults;
+	private int skippedResults;
+	private List<E> results;
+	
+	public int getTotalResults() {
+		return totalResults;
+	}
+	public void setTotalResults(int totalResults) {
+		this.totalResults = totalResults;
+	}
+	public int getSkippedResults() {
+		return skippedResults;
+	}
+	public void setSkippedResults(int skippedResults) {
+		this.skippedResults = skippedResults;
+	}
+	public List<E> getResults() {
+		return results;
+	}
+	public void setResults(List<E> results) {
+		this.results = results;
 	}
 	
-	public EXC03_InvalidTerminalCredentials(String shortMessage, String longMessage, String ref, Throwable cause) {
-		super(shortMessage, longMessage, ref, cause);
-	}
-
-        @Override
-        public List<CustomHeader> getCustomHeaders() {
-            List headers = super.getCustomHeaders(); 
-            headers.add(new CustomHeader("lcf-authorisation-failure", "patron"));
-            return headers;
-        }
-        
-	@Override
-	protected ExceptionConditionType getExceptionConditionType() {
-		return ExceptionConditionType.VALUE_3;
-	}
-
-	@Override
-	public int getHTTPErrorCode() {
-		return 401;
-	}
-
 }

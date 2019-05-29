@@ -23,6 +23,8 @@ package com.ceridwen.lcf.lcfserver.model.exceptions;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bic.ns.lcf.v1_0.ExceptionCondition;
 import org.bic.ns.lcf.v1_0.ExceptionConditionType;
@@ -31,8 +33,22 @@ import org.bic.ns.lcf.v1_0.Message;
 import org.bic.ns.lcf.v1_0.MessageAlertType; // CONCERNED ABOUT TYPE HERE
 import org.bic.ns.lcf.v1_0.ReasonDeniedType;
 
+
+
 public abstract class EXC00_LCF_Exception extends RuntimeException {
-	/**
+
+    public class CustomHeader {
+        public String header;
+        public String value;
+        public CustomHeader(String header, String value) {
+            this.header = header;
+            this.value = value;
+        }
+    }
+
+    
+    
+    /**
 	 * 
 	 */
 	private static final long serialVersionUID = -2641857695689580372L;
@@ -48,6 +64,10 @@ public abstract class EXC00_LCF_Exception extends RuntimeException {
                     this.initCause(cause);
 		}
 	}
+        
+        public List<CustomHeader> getCustomHeaders() {
+            return new ArrayList<>();
+        }
 
         protected abstract ExceptionConditionType getExceptionConditionType();
 

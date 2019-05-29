@@ -13,7 +13,6 @@ import com.ceridwen.lcf.lcfserver.model.exceptions.EXC05_InvalidEntityReference;
 import com.ceridwen.lcf.server.resources.AbstractResourceManagerInterface;
 import java.lang.reflect.Field;
 import java.net.URI;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +21,6 @@ import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
 import org.bic.ns.lcf.v1_0.Entity;
 import org.bic.ns.lcf.v1_0.LcfEntityListResponse;
 import org.bic.ns.lcf.v1_0.SelectionCriteria;
@@ -85,14 +82,14 @@ public class WebserviceHelper<E> {
 	Response Create(Object parent, E entity, String authorization, String lcfPatronCredential, String baseUri) {
             String identifier = rm.Create(getAuthenticationTokens(authorization, lcfPatronCredential), parent, entity);
         
-            return Response.created(URI.create(baseUri + EntityTypes.LCF_PREFIX + "/" + EntityTypes.lookUpByClass(rm.getEntityClass()).getEntityTypeCodeValue())).entity(entity).build();
+            return Response.created(URI.create(baseUri + EntityTypes.LCF_PREFIX + "/" + EntityTypes.lookUpByClass(rm.getEntityClass()).getEntityTypeCodeValue() + "/" + identifier)).entity(entity).build();
         }
                     
 	E Retrieve(String identifier, String authorization, String lcfPatronCredential) {
             E entity = rm.Retrieve(getAuthenticationTokens(authorization, lcfPatronCredential), identifier);
             
             if (entity == null) {
-                throw new EXC05_InvalidEntityReference("Entity not found", "Entity not found", identifier, null);
+                throw new EXC05_InvalidEntityReference("Entity not found", "Entity not found", "", null);
             }
             
             return entity;         

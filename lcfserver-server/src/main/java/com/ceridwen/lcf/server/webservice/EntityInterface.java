@@ -10,6 +10,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.PUT;
 
+import javax.ws.rs.core.Response;
+
 /**
  *
  * @author Matthew.Dovey
