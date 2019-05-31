@@ -25,7 +25,7 @@ import com.ceridwen.lcf.lcfserver.model.EntityTypes;
 import com.ceridwen.lcf.lcfserver.model.EntityTypes.Type;
 import com.ceridwen.lcf.server.legacy.EntitySourceInterface;
 import com.ceridwen.lcf.server.legacy.EntitySourcesInterface;
-import com.ceridwen.lcf.server.legacy.QueryResults;
+import com.ceridwen.lcf.server.resources.QueryResults;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStream;

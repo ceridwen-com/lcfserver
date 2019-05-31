@@ -21,6 +21,8 @@
  *******************************************************************************/
 package com.ceridwen.lcf.server.legacy;
 
+import com.ceridwen.lcf.server.resources.QueryResults;
+
 public interface EntitySourceInterface<E> {
 	String Create(Object parent, E entity);
 	String Create(E entity);

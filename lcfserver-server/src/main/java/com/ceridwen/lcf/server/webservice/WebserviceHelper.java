@@ -6,11 +6,13 @@
 package com.ceridwen.lcf.server.webservice;
 
 import com.ceridwen.lcf.lcfserver.model.EntityTypes;
-import com.ceridwen.lcf.lcfserver.model.ReferenceHandler;
+import com.ceridwen.lcf.lcfserver.model.AddReferenceHandler;
+import com.ceridwen.lcf.lcfserver.model.RemoveReferenceHandler;
 import com.ceridwen.lcf.lcfserver.model.authentication.AbstractAuthenticationToken;
 import com.ceridwen.lcf.lcfserver.model.authentication.BasicAuthenticationToken;
 import com.ceridwen.lcf.lcfserver.model.exceptions.EXC05_InvalidEntityReference;
 import com.ceridwen.lcf.server.resources.AbstractResourceManagerInterface;
+import com.ceridwen.lcf.server.resources.QueryResults;
 import java.lang.reflect.Field;
 import java.net.URI;
 import java.util.HashMap;
@@ -55,8 +57,12 @@ public class WebserviceHelper<E> {
             }
         }
         
-        public boolean hasResourceManager() {
-            return (rm != null);
+//        public boolean hasResourceManager() {
+//            return (rm != null);
+//        }
+        
+        public AbstractResourceManagerInterface<E> getResourceManager() {
+            return rm;
         }
         
         private Map<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken> getAuthenticationTokens(String authorization, String lcfPatronCredential) {
@@ -80,23 +86,35 @@ public class WebserviceHelper<E> {
         } 
     
 	Response Create(Object parent, E entity, String authorization, String lcfPatronCredential, String baseUri) {
+            new RemoveReferenceHandler().removeReferences(entity, baseUri + EntityTypes.LCF_PREFIX + "/");
+
             String identifier = rm.Create(getAuthenticationTokens(authorization, lcfPatronCredential), parent, entity);
+
+            new AddReferenceHandler().addReferences(entity, baseUri + EntityTypes.LCF_PREFIX + "/");
         
             return Response.created(URI.create(baseUri + EntityTypes.LCF_PREFIX + "/" + EntityTypes.lookUpByClass(rm.getEntityClass()).getEntityTypeCodeValue() + "/" + identifier)).entity(entity).build();
         }
                     
-	E Retrieve(String identifier, String authorization, String lcfPatronCredential) {
+	E Retrieve(String identifier, String authorization, String lcfPatronCredential, String baseUri) {
             E entity = rm.Retrieve(getAuthenticationTokens(authorization, lcfPatronCredential), identifier);
             
             if (entity == null) {
                 throw new EXC05_InvalidEntityReference("Entity not found", "Entity not found", "", null);
             }
             
+            new AddReferenceHandler().addReferences(entity, baseUri + EntityTypes.LCF_PREFIX + "/");
+            
             return entity;         
         }
         
-	E Modify(String identifier, E entity, String authorization, String lcfPatronCredential) {
-            return rm.Modify(getAuthenticationTokens(authorization, lcfPatronCredential), identifier, entity);
+	E Modify(String identifier, E entity, String authorization, String lcfPatronCredential, String baseUri) {
+            new RemoveReferenceHandler().removeReferences(entity, baseUri + EntityTypes.LCF_PREFIX + "/");
+
+            E modified = rm.Modify(getAuthenticationTokens(authorization, lcfPatronCredential), identifier, entity);
+            
+            new AddReferenceHandler().addReferences(modified, baseUri + EntityTypes.LCF_PREFIX + "/");
+            
+            return modified;                    
         }
                 
 	void Delete(String identifier, String authorization, String lcfPatronCredential) {
@@ -115,9 +133,9 @@ public class WebserviceHelper<E> {
                response.getSelectionCriterion().add(criterion); 
             }
             
-            List<E> results = rm.Query(getAuthenticationTokens(authorization, lcfPatronCredential), parent, startIndex, count, selectionCriterion);
+            QueryResults<E> queryResults = rm.Query(getAuthenticationTokens(authorization, lcfPatronCredential), parent, startIndex, count, selectionCriterion);
             
-            for (E e: results) {
+            for (E e: queryResults.getResults()) {
                 try {
                     Field field = e.getClass().getDeclaredField("identifier");
                     field.setAccessible(true);
@@ -130,11 +148,11 @@ public class WebserviceHelper<E> {
                 }
             }
 
-            response.setTotalResults(results.size());
-            response.setStartIndex(startIndex);
-            response.setItemsPerPage(count);
+            response.setTotalResults(queryResults.getTotalResults());
+            response.setStartIndex(queryResults.getSkippedResults());
+            response.setItemsPerPage(queryResults.getResults().size());
 
-            ReferenceHandler.processReferences(response, baseUri + EntityTypes.LCF_PREFIX + "/");
+            new AddReferenceHandler().addReferences(response, baseUri + EntityTypes.LCF_PREFIX + "/");
             
             return response;        
         }

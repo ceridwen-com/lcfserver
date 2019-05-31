@@ -8,10 +8,11 @@ package com.ceridwen.lcf.server;
 import com.ceridwen.lcf.lcfserver.model.EntityTypes;
 import com.ceridwen.lcf.server.handlers.LCFExceptionHandler;
 import com.ceridwen.lcf.server.handlers.LCFResponseHandler;
+import com.ceridwen.lcf.server.resources.AbstractResourceManagerInterface;
 import com.ceridwen.lcf.server.webservice.DescriptionWebPage;
 import com.ceridwen.lcf.server.webservice.WebserviceHelper;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.AnnotationIntrospector;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.deser.DeserializationProblemHandler;
@@ -40,6 +41,7 @@ import java.util.logging.Logger;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import javax.xml.bind.annotation.XmlEnumValue;
+import org.glassfish.jersey.server.ResourceConfig;
 
 /**
  *
@@ -49,8 +51,6 @@ import javax.xml.bind.annotation.XmlEnumValue;
 public class ApplicationConfig extends Application {
     
     public ApplicationConfig() { 
-        
-        
         ObjectMapper mapper = Json.mapper();
         /* Configure Swagger Json\Yaml generation */
         mapper.registerModule(new JaxbAnnotationModule());
@@ -86,7 +86,9 @@ public class ApplicationConfig extends Application {
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> resources = new java.util.HashSet<>();
-        resources.add(JacksonJaxbJsonProvider.class);
+        resources.add(MyJacksonJaxbJsonProvider.class);
+//        resources.add(ObjectMapperContextResolver.class);
+//        resources.add(JacksonJaxbJsonProvider.class);
         resources.add(OpenApiResource.class);
         resources.add(AcceptHeaderOpenApiResource.class);
         resources.add(DescriptionWebPage.class);
@@ -98,7 +100,8 @@ public class ApplicationConfig extends Application {
                 Class entity = Class.forName("org.bic.ns.lcf.v1_0." + type.name());
                 Class rmi = Class.forName("com.ceridwen.lcf.server.resources." + type.name() + "ResourceManagerInterface");
                 WebserviceHelper helper = new WebserviceHelper(entity, rmi);
-                if (helper.hasResourceManager()) {
+                AbstractResourceManagerInterface rm = helper.getResourceManager();
+                if (rm != null) {
                     Class webservice = Class.forName("com.ceridwen.lcf.server.webservice." + type.name() + "ContainerWebservice");
                     resources.add(webservice);
                     Logger.getLogger(ApplicationConfig.class.getName()).log(Level.INFO, type.name() + ": Resource Manager loaded");

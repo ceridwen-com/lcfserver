@@ -19,8 +19,9 @@
  *
  *     
  *******************************************************************************/
-package com.ceridwen.lcf.server.legacy;
+package com.ceridwen.lcf.server.resources;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class QueryResults<E> {
@@ -41,7 +42,10 @@ public class QueryResults<E> {
 		this.skippedResults = skippedResults;
 	}
 	public List<E> getResults() {
-		return results;
+            if (results == null) {
+                this.results = new ArrayList();
+            }
+            return results;
 	}
 	public void setResults(List<E> results) {
 		this.results = results;

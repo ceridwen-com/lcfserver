@@ -5,7 +5,6 @@
  */
 package com.ceridwen.lcf.lcfserver.model;
 
-import static com.ceridwen.lcf.lcfserver.model.ReferenceHandler.checkReferences;
 import java.util.ArrayList;
 import java.util.List;
 import org.bic.ns.lcf.v1_0.LcfCheckInResponse;
@@ -23,9 +22,23 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author Matthew
  */
-public class ReferenceHandlerTest {
+
+
+class TestReferenceHandler extends AbstractReferenceHandler {
     
-    public ReferenceHandlerTest() {
+    public boolean testReferences(Class clazz) {
+        return iterateProperties(clazz, null, null, null, "", "");
+    }
+    
+    @Override
+    protected void handleReference(Class clazz, Object instance, String propertyReference, String refprefix) {
+    }
+    
+}
+
+public class AbstractReferenceHandlerTest {
+    
+    public AbstractReferenceHandlerTest() {
     }
     
     @BeforeAll
@@ -62,7 +75,7 @@ public class ReferenceHandlerTest {
         
         boolean success = true;
         for (Class clazz: clazzes) {
-            if (checkReferences(clazz)) {
+            if (new TestReferenceHandler().testReferences(clazz)) {
                 System.out.println(clazz.getName()+ ": SUCCESS");
             } else {
                 System.out.println(clazz.getName() + ": FAILURE");  

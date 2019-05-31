@@ -4,6 +4,7 @@ package com.ceridwen.lcf.server.resources.memory;
 import com.ceridwen.lcf.lcfserver.model.EntityTypes;
 import com.ceridwen.lcf.lcfserver.model.authentication.AbstractAuthenticationToken;
 import com.ceridwen.lcf.server.resources.<Entity>ResourceManagerInterface;
+import com.ceridwen.lcf.server.resources.QueryResults;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -43,8 +44,8 @@ public class <Entity>ResourceManager implements <Entity>ResourceManagerInterface
     }
 
     @Override
-    public List\<<Entity>\> Query(Map\<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken\> authTokens, Object parent, int startIndex, int count, List\<SelectionCriterion\> selection) {
-        return (List\<<Entity>\>) MemoryResourceManager.getMemoryResourceManager().list(EntityTypes.Type.<Entity>);
+    public QueryResults\<<Entity>\> Query(Map\<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken\> authTokens, Object parent, int startIndex, int count, List\<SelectionCriterion\> selection) {
+        return (QueryResults\<<Entity>\>)MemoryResourceManager.getMemoryResourceManager().list(EntityTypes.Type.<Entity>, startIndex, count);
     }
     
 }

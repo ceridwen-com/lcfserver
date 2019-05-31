@@ -27,7 +27,7 @@ import java.util.TreeSet;
 import org.bic.ns.lcf.v1_0.Item;
 import org.bic.ns.lcf.v1_0.Reservation;
 
-import com.ceridwen.lcf.server.legacy.QueryResults;
+import com.ceridwen.lcf.server.resources.QueryResults;
 import com.ceridwen.lcf.server.legacy.EntitySourcesInterface;
 
 public class ItemReadOnlyFieldsFilter extends AbstractReadOnlyFieldsFilter<Item> {

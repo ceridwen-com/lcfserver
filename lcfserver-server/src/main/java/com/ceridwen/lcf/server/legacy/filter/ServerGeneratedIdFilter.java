@@ -26,7 +26,7 @@ import com.ceridwen.lcf.lcfserver.model.EntityTypes.Type;
 import com.ceridwen.lcf.lcfserver.model.exceptions.EXC05_InvalidEntityReference;
 import com.ceridwen.lcf.server.legacy.EntitySourceInterface;
 import com.ceridwen.lcf.server.legacy.EntitySourcesInterface;
-import com.ceridwen.lcf.server.legacy.QueryResults;
+import com.ceridwen.lcf.server.resources.QueryResults;
 import java.util.UUID;
 
 @SuppressWarnings("rawtypes")

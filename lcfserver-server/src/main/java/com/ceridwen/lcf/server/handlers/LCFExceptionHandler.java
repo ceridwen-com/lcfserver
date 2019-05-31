@@ -21,7 +21,7 @@
  *******************************************************************************/
 package com.ceridwen.lcf.server.handlers;
 
-import com.ceridwen.lcf.lcfserver.model.ReferenceHandler;
+import com.ceridwen.lcf.lcfserver.model.AddReferenceHandler;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -36,11 +36,12 @@ public class LCFExceptionHandler implements ExceptionMapper<EXC00_LCF_Exception>
     @Override
     @JacksonFeatures(serializationEnable = {SerializationFeature.INDENT_OUTPUT}, serializationDisable = {SerializationFeature.WRITE_DATES_AS_TIMESTAMPS})    
     public Response toResponse(final EXC00_LCF_Exception exception) {
-	ReferenceHandler.processReferences(exception.getLcfException(), "<expandurl>");	// TODO need to check how data is marshalled
+	new AddReferenceHandler().addReferences(exception.getLcfException(), "<expandurl>");	// TODO need to check how data is marshalled
     	ResponseBuilder responseBuilder = Response.status(exception.getHTTPErrorCode());
         for (EXC00_LCF_Exception.CustomHeader customHeader: exception.getCustomHeaders()) {
             responseBuilder = responseBuilder.header(customHeader.header, customHeader.value);       
         }
+        
         return responseBuilder.entity(exception.getLcfException()).build(); //type(MediaType.APPLICATIOn_XML?
     }
 }

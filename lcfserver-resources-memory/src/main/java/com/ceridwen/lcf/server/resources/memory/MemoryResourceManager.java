@@ -6,7 +6,9 @@
 package com.ceridwen.lcf.server.resources.memory;
 
 import com.ceridwen.lcf.lcfserver.model.EntityTypes;
+import com.ceridwen.lcf.server.resources.QueryResults;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,13 +125,31 @@ public class MemoryResourceManager {
         }
     }
     
-    public List<? extends Object> list(EntityTypes.Type type) {
+    public QueryResults<? extends Object> list(EntityTypes.Type type, int startIndex, int count) {
+        QueryResults queryResults = new QueryResults();
+        Collection results;
         if (database.containsKey(type)) {
-            return new ArrayList(database.get(type).values());
+            results = database.get(type).values();
         } else {
-            return new ArrayList<>();
+            results = new ArrayList();
+        }
+       
+        int counter = 0;
+        queryResults.setTotalResults(results.size());
+        queryResults.setSkippedResults(counter);
+        
+        for (Object o: results) {
+            if (counter >= startIndex) {
+                if (counter < startIndex + count) {
+                    queryResults.getResults().add(o);
+                }
+            } else {
+                queryResults.setSkippedResults(counter+1);
+            }
+            counter++;
         }
         
+        return queryResults;
     }
     
     
