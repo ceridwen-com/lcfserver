@@ -10,47 +10,51 @@ import com.ceridwen.lcf.server.handlers.LCFExceptionHandler;
 import com.ceridwen.lcf.server.handlers.LCFResponseHandler;
 import com.ceridwen.lcf.server.resources.AbstractResourceManagerInterface;
 import com.ceridwen.lcf.server.webservice.DescriptionWebPage;
+import com.ceridwen.lcf.server.webservice.SwaggerUIWebPage;
 import com.ceridwen.lcf.server.webservice.WebserviceHelper;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.AnnotationIntrospector;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.deser.DeserializationProblemHandler;
-import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
-import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
-import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import io.swagger.v3.core.converter.ModelConverters;
 import io.swagger.v3.core.jackson.ModelResolver;
 import io.swagger.v3.core.util.Json;
-import io.swagger.v3.core.util.Yaml;
+import io.swagger.v3.jaxrs2.integration.JaxrsOpenApiContextBuilder;
 import io.swagger.v3.jaxrs2.integration.resources.AcceptHeaderOpenApiResource;
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
+import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.integration.OpenApiConfigurationException;
+import io.swagger.v3.oas.integration.SwaggerConfiguration;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.StringSchema;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import javax.xml.bind.annotation.XmlEnumValue;
-import org.glassfish.jersey.server.ResourceConfig;
 
 /**
  *
  * @author Matthew
  */
-@OpenAPIDefinition( info = @Info(description = "LCF", version = "1.1.0", title = "LCF"))
+@OpenAPIDefinition( info = @Info(description = "LCF", title = "LCF"), 
+        externalDocs = @ExternalDocumentation(description = "BIC LCF Documentation", url = "https://bic-org-uk.githib.io/bic-lcf"))
+@SecurityScheme( name = "Terminal Authentication", type= SecuritySchemeType.HTTP, scheme="basic")
+@SecurityScheme( name = "Patron Authentication", type=SecuritySchemeType.APIKEY, in=SecuritySchemeIn.HEADER, paramName="lcf-patron-credential", description = "Should be of the form \"Basic {credentials}\", where {credentials} is the base64 encoding of id and password joined by a single colon (:)." )
 public class ApplicationConfig extends Application {
-    
+        
     public ApplicationConfig() { 
+        super();
+        
+        
         ObjectMapper mapper = Json.mapper();
         /* Configure Swagger Json\Yaml generation */
         mapper.registerModule(new JaxbAnnotationModule());
@@ -81,15 +85,27 @@ public class ApplicationConfig extends Application {
         };
         
         ModelConverters.getInstance().addConverter(modelResolver);
+        
+        SwaggerConfiguration oasConfig = new SwaggerConfiguration()
+                .ignoredRoutes(Arrays.asList(new String[]{"/application.wadl"}))
+                .filterClass(OpenApiFilter.class.getName());
+
+        try {
+            new JaxrsOpenApiContextBuilder()
+                    .application(this)
+                    .openApiConfiguration(oasConfig)
+                    .buildContext(true);
+        } catch (OpenApiConfigurationException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }        
     }
 
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> resources = new java.util.HashSet<>();
         resources.add(MyJacksonJaxbJsonProvider.class);
-//        resources.add(ObjectMapperContextResolver.class);
-//        resources.add(JacksonJaxbJsonProvider.class);
         resources.add(OpenApiResource.class);
+        resources.add(SwaggerUIWebPage.class);
         resources.add(AcceptHeaderOpenApiResource.class);
         resources.add(DescriptionWebPage.class);
         resources.add(LCFExceptionHandler.class);
@@ -104,15 +120,16 @@ public class ApplicationConfig extends Application {
                 if (rm != null) {
                     Class webservice = Class.forName("com.ceridwen.lcf.server.webservice." + type.name() + "ContainerWebservice");
                     resources.add(webservice);
-                    Logger.getLogger(ApplicationConfig.class.getName()).log(Level.INFO, type.name() + ": Resource Manager loaded");
+                    Logger.getLogger(ApplicationConfig.class.getName()).log(Level.INFO, "{0}: Resource Manager loaded", type.name());
                 } else {
-                    Logger.getLogger(ApplicationConfig.class.getName()).log(Level.INFO, type.name() + ": No Resource Manager available");                    
+                    Logger.getLogger(ApplicationConfig.class.getName()).log(Level.INFO, "{0}: No Resource Manager available", type.name());                    
                 }
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(ApplicationConfig.class.getName()).log(Level.SEVERE, type.name() + ": Error loading Resource Manager", ex);
+                Logger.getLogger(ApplicationConfig.class.getName()).log(Level.SEVERE, type.name() + "{0}: Error loading Resource Manager", ex);
             }
         }
         
         return resources;
     }
+ 
 }

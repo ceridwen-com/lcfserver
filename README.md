@@ -11,27 +11,9 @@ The Library Communications Framework (LCF) is a set of library interoperability 
 * [JDK (>= 1.8)](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
 * [Maven (>= 3.3)](https://maven.apache.org/)
 
-**To install and run servlet implementation:**
+**To install and run:**
 ```bash
 git clone https://github.com/ceridwen-com/lcfserver.git
 cd lcfserver
-mvn jetty:run -Dlcf.server.frontend=servlet
+mvn jetty:run-war
 ```
-
-**To install and run org.restlet implementation:** **
-```bash
-git clone https://github.com/ceridwen-com/lcfserver.git
-cd lcfserver
-mvn jetty:run -Dlcf.server.frontend=restlet
-```
-
-**To install and run org.restlet implementation with optional modules:**
-```bash
-git clone https://github.com/ceridwen-com/lcfserver.git
-cd lcfserver
-mvn jetty:run -Dlcf.server.frontend=restlet -Dlcf.server.frontend.module.raml -Dlcf.server.frontend.module.swagger
-```
-
--------
-
-See [lcfserver-assembly/src/main/resources/README.md](lcfserver-assembly/src/main/resources/README.md) for further details

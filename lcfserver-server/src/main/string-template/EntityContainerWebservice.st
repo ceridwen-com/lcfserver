@@ -2,12 +2,14 @@ EntityContainerWebservice(LCFPath, Entity, EntityPath, SubEntity, SelectionCrite
 package com.ceridwen.lcf.server.webservice;
 
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import org.bic.ns.lcf.v1_0.<Entity>;
 
 @Path("<LCFPath>/<EntityPath>")
+@Tag( name = "<Entity>", description="<Entity> Operations" )
 public class <Entity>ContainerWebservice extends <Entity>ListWebservice implements EntityLocatorInterface\<<Entity>\> {
 
     @Path("{identifier}")

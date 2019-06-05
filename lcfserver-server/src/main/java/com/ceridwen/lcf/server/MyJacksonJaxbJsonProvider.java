@@ -91,7 +91,7 @@ public class MyJacksonJaxbJsonProvider extends JacksonJsonProvider {
         mapper.setAnnotationIntrospector(createJaxbJacksonAnnotationIntrospector());
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_ABSENT);
+        mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_EMPTY);
         return mapper;
     }
     

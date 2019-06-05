@@ -31,21 +31,14 @@ public class EXC03_InvalidTerminalCredentials extends EXC00_LCF_Exception {
 	 */
 	private static final long serialVersionUID = 8635187518663576610L;
 
-	private EXC03_InvalidTerminalCredentials() {
-		super(null, null, null, null);
+	public EXC03_InvalidTerminalCredentials() {
+		super("Invalid terminal credentials", "Please submit terminal credentials via HTTP Auth", null, null);
 	}
 	
 	public EXC03_InvalidTerminalCredentials(String shortMessage, String longMessage, String ref, Throwable cause) {
 		super(shortMessage, longMessage, ref, cause);
 	}
 
-        @Override
-        public List<CustomHeader> getCustomHeaders() {
-            List headers = super.getCustomHeaders(); 
-            headers.add(new CustomHeader("lcf-authorisation-failure", "patron"));
-            return headers;
-        }
-        
 	@Override
 	protected ExceptionConditionType getExceptionConditionType() {
 		return ExceptionConditionType.VALUE_3;
@@ -56,4 +49,10 @@ public class EXC03_InvalidTerminalCredentials extends EXC00_LCF_Exception {
 		return 401;
 	}
 
+    @Override
+    public List<CustomHeader> getCustomHeaders() {
+        List<CustomHeader> headers = super.getCustomHeaders(); 
+        headers.add(new CustomHeader("WWW-Authenticate", "Basic realm=\"BIC-LCF\", charset=\"UTF-8\""));
+        return headers;
+    }
 }

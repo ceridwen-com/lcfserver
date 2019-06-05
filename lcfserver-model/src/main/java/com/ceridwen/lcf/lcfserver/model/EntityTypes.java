@@ -5,6 +5,7 @@
  */
 package com.ceridwen.lcf.lcfserver.model;
 
+import com.jcabi.manifests.Manifests;
 import java.util.HashMap;
 import java.util.Map;
 import org.bic.ns.lcf.v1_0.EntityType;
@@ -102,5 +103,13 @@ public class EntityTypes {
 
     public static Type lookUpByClass(Class typeClass) {
             return classtable.get(typeClass);
+    }
+    
+    public static String getLCFSpecVersion() {
+        if (Manifests.exists("BIC-LCF-Version")) {
+            return Manifests.read("BIC-LCF-Version");
+        } else {
+            return "1.x";
+        }
     }
 }

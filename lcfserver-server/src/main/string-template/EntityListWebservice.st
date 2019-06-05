@@ -5,6 +5,7 @@ import com.ceridwen.lcf.server.resources.<Entity>ResourceManagerInterface;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.Parameter;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +44,14 @@ public class <Entity>ListWebservice {
     
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public LcfEntityListResponse List(  @DefaultValue("0") @QueryParam("os:startIndex") int startIndex, 
-                                        @DefaultValue("0") @QueryParam("os:count") int count, 
+    @SecurityRequirement(name = "Terminal Authentication")
+    @SecurityRequirement(name = "Patron Authentication")
+    @ApiResponse(
+        responseCode = "200",
+        description = "Retrieved",
+        content = @Content(schema = @Schema(implementation = LcfEntityListResponse.class)))
+    public Response List(  @DefaultValue("0") @QueryParam("os:startIndex") int startIndex, 
+                                        @DefaultValue("-1") @QueryParam("os:count") int count, 
 <SelectionCriteria: {criterion | 
                                         @QueryParam("<criterion.Parameter>") String <criterion.Variable>,}>
                                         @Parameter(hidden=true) @HeaderParam("Authorization") String authorization, 
@@ -61,6 +68,8 @@ public class <Entity>ListWebservice {
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @SecurityRequirement(name = "Terminal Authentication")
+    @SecurityRequirement(name = "Patron Authentication")
     @ApiResponse(
         responseCode = "201",
         description = "Without content")    

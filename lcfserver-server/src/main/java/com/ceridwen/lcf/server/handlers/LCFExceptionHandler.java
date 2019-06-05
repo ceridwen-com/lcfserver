@@ -22,6 +22,7 @@
 package com.ceridwen.lcf.server.handlers;
 
 import com.ceridwen.lcf.lcfserver.model.AddReferenceHandler;
+import com.ceridwen.lcf.lcfserver.model.EntityTypes;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -41,7 +42,7 @@ public class LCFExceptionHandler implements ExceptionMapper<EXC00_LCF_Exception>
         for (EXC00_LCF_Exception.CustomHeader customHeader: exception.getCustomHeaders()) {
             responseBuilder = responseBuilder.header(customHeader.header, customHeader.value);       
         }
-        
+        responseBuilder = responseBuilder.header("lcf-version", EntityTypes.getLCFSpecVersion());       
         return responseBuilder.entity(exception.getLcfException()).build(); //type(MediaType.APPLICATIOn_XML?
     }
 }

@@ -24,28 +24,28 @@ public class <Entity>ResourceManager implements <Entity>ResourceManagerInterface
         if (entity.getIdentifier() == null || entity.getIdentifier().isBlank()) {
             entity.setIdentifier(UUID.randomUUID().toString());
         }
-        MemoryResourceManager.getMemoryResourceManager().put(EntityTypes.Type.<Entity>, entity.getIdentifier(), entity);
+        MemoryResourceManager.getMemoryResourceManager().put(EntityTypes.Type.<Entity>, entity.getIdentifier(), parent, entity, authTokens);
         return entity.getIdentifier();
     }
 
     @Override
     public <Entity> Retrieve(Map\<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken\> authTokens, String identifier) {
-        return (<Entity>) MemoryResourceManager.getMemoryResourceManager().get(EntityTypes.Type.<Entity>, identifier);
+        return (<Entity>) MemoryResourceManager.getMemoryResourceManager().get(EntityTypes.Type.<Entity>, identifier, authTokens);
     }
 
     @Override
     public <Entity> Modify(Map\<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken\> authTokens, String identifier, <Entity> entity) {
-        return (<Entity>) MemoryResourceManager.getMemoryResourceManager().put(EntityTypes.Type.<Entity>, identifier, entity);
+        return (<Entity>) MemoryResourceManager.getMemoryResourceManager().put(EntityTypes.Type.<Entity>, identifier, null, entity, authTokens);
     }
 
     @Override
     public void Delete(Map\<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken\> authTokens, String identifier) {
-        MemoryResourceManager.getMemoryResourceManager().delete(EntityTypes.Type.<Entity>, identifier);
+        MemoryResourceManager.getMemoryResourceManager().delete(EntityTypes.Type.<Entity>, identifier, authTokens);
     }
 
     @Override
     public QueryResults\<<Entity>\> Query(Map\<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken\> authTokens, Object parent, int startIndex, int count, List\<SelectionCriterion\> selection) {
-        return (QueryResults\<<Entity>\>)MemoryResourceManager.getMemoryResourceManager().list(EntityTypes.Type.<Entity>, startIndex, count);
+        return (QueryResults\<<Entity>\>)MemoryResourceManager.getMemoryResourceManager().list(EntityTypes.Type.<Entity>, parent, startIndex, count, selection, authTokens);
     }
     
 }

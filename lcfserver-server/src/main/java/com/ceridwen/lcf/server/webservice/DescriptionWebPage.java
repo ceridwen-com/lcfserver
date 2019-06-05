@@ -1,6 +1,7 @@
 package com.ceridwen.lcf.server.webservice;
 
 import com.ceridwen.lcf.lcfserver.model.EntityTypes;
+import io.swagger.v3.oas.annotations.Hidden;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -9,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 @Path("/")
+@Hidden
 public class DescriptionWebPage {
 
     @Context
@@ -118,13 +120,12 @@ public class DescriptionWebPage {
 "<h1>BIC LCF Server</h1>\n" +
 "<hr>\n" +
 "<blockquote>\n" +
-"Documentation on the BIC LCF Standard can be found at <a href=\"https://bic-org-uk.github.io/bic-lcf/\">https://bic-org-uk.github.io/bic-lcf/</a>\n" +
-"</blockquote>\n" +
-"<hr>\n" +
-"<blockquote>\n";
+"Documentation on the BIC LCF Standard can be found at <a href=\"https://bic-org-uk.github.io/bic-lcf/\">https://bic-org-uk.github.io/bic-lcf/</a><br>\n";
 String openapi = uriInfo.getBaseUri() +"openapi.json";
+String swaggerUI = uriInfo.getBaseUri() +"swagger-ui.html";
   page += 
-"OpenApi 3.0 Definition can be found at <a href=\"" + openapi + "\">" + openapi + "</a>\n" +
+"OpenApi 3.0 Definition can be found at <a href=\"" + openapi + "\">" + openapi + "</a><br>\n" +
+"Swagger UI can be found at <a href=\"" + swaggerUI + "\">" + swaggerUI + "</a><br>\n" +
 "</blockquote>\n" +
 "<hr>\n" +
 "<h2>Web Service Endpoints</h2>\n" +

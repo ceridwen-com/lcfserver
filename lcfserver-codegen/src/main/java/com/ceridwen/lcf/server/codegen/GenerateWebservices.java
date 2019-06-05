@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bic.ns.lcf.v1_0.SelectionCriteria;
 
 /**
@@ -19,14 +21,41 @@ import org.bic.ns.lcf.v1_0.SelectionCriteria;
  */
 public class GenerateWebservices extends Generator {
     
-    List<StringTemplateSelectionCriterion> getSelectionCriteria() {
+    String dashedToCamel(String dashed) {
+        
+        if (dashed.endsWith("-id")) {
+            dashed = dashed.replaceAll("-id$", "-ref");
+        }
+        
+        StringBuffer out = new StringBuffer();
+        boolean shift = true;
+        
+        for (Character c: dashed.toCharArray()) {
+            if (c == '-') {
+                shift = true;
+            } else {                
+                out.append(shift?c.toString().toUpperCase():c);
+                shift = false;
+            }
+        }
+        return out.toString();
+    }
+    
+    
+    List<StringTemplateSelectionCriterion> getSelectionCriteria(EntityTypes.Type entity) {
             List<StringTemplateSelectionCriterion> list = new ArrayList<>();
-            
+                        
             for (SelectionCriteria criterion: SelectionCriteria.values()) {
-                StringTemplateSelectionCriterion criteria = new StringTemplateSelectionCriterion();
-                criteria.setParameter(criterion.value());
-                criteria.setVariable(criterion.name());
-                list.add(criteria);
+                String property = dashedToCamel(criterion.value());
+                try {
+                    entity.getTypeClass().getMethod("get" + property);
+                    StringTemplateSelectionCriterion criteria = new StringTemplateSelectionCriterion();
+                    criteria.setParameter(criterion.value());
+                    criteria.setVariable(criterion.name());
+                    list.add(criteria);
+                } catch (NoSuchMethodException | SecurityException ex) {
+                    Logger.getLogger(GenerateWebservices.class.getName()).log(Level.INFO, "Selection Criteria {0} not applicable to {1}", new String[]{criterion.value(), entity.getEntityTypeCodeValue()});
+                }
             }
             
             return list;
@@ -57,7 +86,7 @@ public class GenerateWebservices extends Generator {
             }
         }
         map.put("SubEntity", subentities);
-        map.put("SelectionCriteria", getSelectionCriteria());
+        map.put("SelectionCriteria", getSelectionCriteria(entity));
         
         return map;        
     }

@@ -69,14 +69,14 @@ public class WebserviceHelper<E> {
             Map<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken> authenticationTokens = new HashMap<>();
             
             if (authorization != null) {
-                if (authorization.startsWith("BASIC ")) {
+                if (authorization.toUpperCase().startsWith("BASIC ")) {
                     BasicAuthenticationToken token = new BasicAuthenticationToken(BasicAuthenticationToken.AuthenticationCategory.TERMINAL, authorization.replace("BASIC ", ""));
                     authenticationTokens.put(token.getAuthenticationCategory(), token);
                 }
             }
 
             if (lcfPatronCredential != null) {
-                if (lcfPatronCredential.startsWith("BASIC ")) {
+                if (lcfPatronCredential.toUpperCase().startsWith("BASIC ")) {
                     BasicAuthenticationToken token = new BasicAuthenticationToken(BasicAuthenticationToken.AuthenticationCategory.USER, lcfPatronCredential.replace("BASIC ", ""));
                     authenticationTokens.put(token.getAuthenticationCategory(), token);
                 }
@@ -92,10 +92,10 @@ public class WebserviceHelper<E> {
 
             new AddReferenceHandler().addReferences(entity, baseUri + EntityTypes.LCF_PREFIX + "/");
         
-            return Response.created(URI.create(baseUri + EntityTypes.LCF_PREFIX + "/" + EntityTypes.lookUpByClass(rm.getEntityClass()).getEntityTypeCodeValue() + "/" + identifier)).entity(entity).build();
+            return Response.created(URI.create(baseUri + EntityTypes.LCF_PREFIX + "/" + EntityTypes.lookUpByClass(rm.getEntityClass()).getEntityTypeCodeValue() + "/" + identifier)).entity(entity).header("lcf-version", EntityTypes.getLCFSpecVersion()).build();
         }
                     
-	E Retrieve(String identifier, String authorization, String lcfPatronCredential, String baseUri) {
+	Response Retrieve(String identifier, String authorization, String lcfPatronCredential, String baseUri) {
             E entity = rm.Retrieve(getAuthenticationTokens(authorization, lcfPatronCredential), identifier);
             
             if (entity == null) {
@@ -104,24 +104,25 @@ public class WebserviceHelper<E> {
             
             new AddReferenceHandler().addReferences(entity, baseUri + EntityTypes.LCF_PREFIX + "/");
             
-            return entity;         
+            return Response.ok(entity).header("lcf-version", EntityTypes.getLCFSpecVersion()).build();
         }
         
-	E Modify(String identifier, E entity, String authorization, String lcfPatronCredential, String baseUri) {
+	Response Modify(String identifier, E entity, String authorization, String lcfPatronCredential, String baseUri) {
             new RemoveReferenceHandler().removeReferences(entity, baseUri + EntityTypes.LCF_PREFIX + "/");
 
             E modified = rm.Modify(getAuthenticationTokens(authorization, lcfPatronCredential), identifier, entity);
             
             new AddReferenceHandler().addReferences(modified, baseUri + EntityTypes.LCF_PREFIX + "/");
             
-            return modified;                    
+            return Response.ok(modified).header("lcf-version", EntityTypes.getLCFSpecVersion()).build();                 
         }
                 
-	void Delete(String identifier, String authorization, String lcfPatronCredential) {
+	Response Delete(String identifier, String authorization, String lcfPatronCredential) {
             rm.Delete(getAuthenticationTokens(authorization, lcfPatronCredential), identifier);
+            return Response.ok().header("lcf-version", EntityTypes.getLCFSpecVersion()).build();
         }
 
-        LcfEntityListResponse Query(Object parent, int startIndex, int count, List<SelectionCriterion> selectionCriterion, String authorization, String lcfPatronCredential, String baseUri) {
+        Response Query(Object parent, int startIndex, int count, List<SelectionCriterion> selectionCriterion, String authorization, String lcfPatronCredential, String baseUri) {
             LcfEntityListResponse response = new LcfEntityListResponse();
 
             EntityTypes.Type et = EntityTypes.lookUpByClass(clazz);
@@ -154,7 +155,7 @@ public class WebserviceHelper<E> {
 
             new AddReferenceHandler().addReferences(response, baseUri + EntityTypes.LCF_PREFIX + "/");
             
-            return response;        
+            return Response.ok(response).header("lcf-version", EntityTypes.getLCFSpecVersion()).build();        
         }
         
     public void addSelectionCriterion(List<SelectionCriterion> selectionCriterion, String parameter, String variable) {
