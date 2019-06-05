@@ -20,6 +20,7 @@ import io.swagger.v3.core.filter.AbstractSpecFilter;
 import io.swagger.v3.core.model.ApiDescription;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.servers.Server;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +63,7 @@ public class OpenApiFilter extends AbstractSpecFilter {
     
     
     
+    
 
 //    public static final String WADL = "/application.wadl";
 //
@@ -72,6 +74,15 @@ public class OpenApiFilter extends AbstractSpecFilter {
 //        }
 //        return Optional.of(operation);
 //    }
+
+    @Override
+    public Optional<Schema> filterSchema(Schema schema, Map<String, List<String>> params, Map<String, String> cookies, Map<String, List<String>> headers) {
+       String namespace = schema.getXml().getNamespace();
+       if (namespace == null || namespace.isBlank()) {
+           schema.getXml().setNamespace("http://ns.bic.org.uk/lcf/1.0");
+       }
+       return Optional.of(schema);
+    }
 }    
 
 
