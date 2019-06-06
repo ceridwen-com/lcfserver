@@ -6,35 +6,35 @@
     <version>1.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-  <name>lcfserver</name>
-  <description>
-This is a java reference server implementation of the Library Communication Framework.
-The Library Communications Framework (LCF) is a set of library interoperability standards which defines a framework for the communication of data between self-service and other library terminal applications to and from library management systems.</description>
-  <inceptionYear>2016</inceptionYear>
-  <url>https://software.ceridwen.com/redmine/projects/lcfserver</url>
-  <organization>
-    <name>Ceridwen Limited</name>
-    <url>http://www.ceridwen.com</url>
-  </organization>
+    <name>lcfserver</name>
+    <description>
+        This is a java reference server implementation of the Library Communication Framework.
+        The Library Communications Framework (LCF) is a set of library interoperability standards which defines a framework for the communication of data between self-service and other library terminal applications to and from library management systems.</description>
+    <inceptionYear>2016</inceptionYear>
+    <url>https://software.ceridwen.com/redmine/projects/lcfserver</url>
+    <organization>
+        <name>Ceridwen Limited</name>
+        <url>http://www.ceridwen.com</url>
+    </organization>
 
-  <licenses>
-    <license>
-      <name>Apache License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
-  <issueManagement>
-    <system>Redmine</system>
-    <url>https://software.ceridwen.com/redmine/projects/lcfserver/issues</url>
-  </issueManagement>
+    <issueManagement>
+        <system>Redmine</system>
+        <url>https://software.ceridwen.com/redmine/projects/lcfserver/issues</url>
+    </issueManagement>
 
-  <scm>
-    <url>https://software.ceridwen.com/redmine/projects/lcfserver/repository</url>
-    <connection>scm:git:https://software.ceridwen.com/redmine/lcfserver.git</connection>
-    <tag>HEAD</tag>
-  </scm>
+    <scm>
+        <url>https://software.ceridwen.com/redmine/projects/lcfserver/repository</url>
+        <connection>scm:git:https://software.ceridwen.com/redmine/lcfserver.git</connection>
+        <tag>HEAD</tag>
+    </scm>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -60,18 +60,18 @@ The Library Communications Framework (LCF) is a set of library interoperability 
         <maven>${maven.min.version}</maven>
     </prerequisites> 
 
-  <repositories>
-    <repository>
-      <id>ceridwen-libs-release</id>
-      <name>Ceridwen Release Repository</name>
-      <url>https://software.ceridwen.com/artifactory/libs-release</url>
-    </repository>
-    <repository>
-      <id>ceridwen-libs-snapshot</id>
-      <name>Ceridwen Snapshot Repository</name>
-      <url>https://software.ceridwen.com/artifactory/libs-snapshot</url>
-    </repository>
-  </repositories>
+    <repositories>
+        <repository>
+            <id>ceridwen-libs-release</id>
+            <name>Ceridwen Release Repository</name>
+            <url>https://software.ceridwen.com/artifactory/libs-release</url>
+        </repository>
+        <repository>
+            <id>ceridwen-libs-snapshot</id>
+            <name>Ceridwen Snapshot Repository</name>
+            <url>https://software.ceridwen.com/artifactory/libs-snapshot</url>
+        </repository>
+    </repositories>
     
     <build>
         <pluginManagement>
@@ -162,6 +162,29 @@ The Library Communications Framework (LCF) is a set of library interoperability 
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>versions-maven-plugin</artifactId>
                     <version>2.7</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.amashchenko.maven.plugin</groupId>
+                    <artifactId>gitflow-maven-plugin</artifactId>
+                    <version>1.12.0</version>
+                    <configuration>
+                        <installProject>false</installProject>
+                        <verbose>false</verbose>
+                        <gitFlowConfig>
+                            <productionBranch>master</productionBranch>
+                            <developmentBranch>develop</developmentBranch>
+                            <featureBranchPrefix>feature/</featureBranchPrefix>
+                            <releaseBranchPrefix>release/${project.artifactId}-</releaseBranchPrefix>
+                            <hotfixBranchPrefix>hotfix/${project.artifactId}-</hotfixBranchPrefix>
+                            <supportBranchPrefix>support//${project.artifactId}-</supportBranchPrefix>
+                            <versionTagPrefix>version/${project.artifactId}-</versionTagPrefix>
+                            <origin>origin</origin>
+                        </gitFlowConfig>            
+                        <allowSnapshots>true</allowSnapshots>
+                        <keepBranch>true</keepBranch>
+                        <noDeploy>true</noDeploy>
+                        <suppressFastForward>true</suppressFastForward>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.eclipse.jetty</groupId>
