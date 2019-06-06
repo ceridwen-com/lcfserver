@@ -21,7 +21,7 @@
  *******************************************************************************/
 package com.ceridwen.lcf.server.legacy.integrity;
 
-import com.ceridwen.lcf.lcfserver.model.EntityTypes;
+import com.ceridwen.lcf.model.enumerations.EntityTypes;
 
 public class Relationship<ParentType, ChildType> {
 	public enum Type {

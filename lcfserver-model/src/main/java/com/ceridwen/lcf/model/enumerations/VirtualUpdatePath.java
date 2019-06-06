@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ceridwen.lcf.lcfserver.model;
+package com.ceridwen.lcf.model.enumerations;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,24 +22,24 @@ import java.util.List;
  *
  * @author Matthew.Dovey
  */
-public enum CreationQualifier {
-    CONFIRMATION("confirmation", Arrays.asList(EntityTypes.Type.Charge, EntityTypes.Type.Loan, EntityTypes.Type.Reservation)),
-    CHARGE_ACKNOWLEDGED("charge-acknowledged", Arrays.asList(EntityTypes.Type.Loan, EntityTypes.Type.Reservation));
+public enum VirtualUpdatePath {
+    PASSWORD("password", Arrays.asList(EntityTypes.Type.Patron)),
+    PIN("pin", Arrays.asList(EntityTypes.Type.Patron));
 
-    private String parameter;
+    private String path;
     private List<EntityTypes.Type> applicable;
-        
-    private CreationQualifier(String parameter, List<EntityTypes.Type> applicable) {
-        this.parameter = parameter;
+    
+    private VirtualUpdatePath(String path, List<EntityTypes.Type> applicable) {
+        this.path = path;
         this.applicable = applicable;
-        
     }
     
-    public String getParameterText() {
-        return this.parameter;
+    public String getPath() {
+        return this.path;
     }
     
     public boolean isApplicable(EntityTypes.Type type) {
         return applicable.contains(type);
     }
+
 }

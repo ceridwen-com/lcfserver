@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ceridwen.lcf.lcfserver.model;
+package com.ceridwen.lcf.model.enumerations;
 
 import com.jcabi.manifests.Manifests;
 import java.util.HashMap;

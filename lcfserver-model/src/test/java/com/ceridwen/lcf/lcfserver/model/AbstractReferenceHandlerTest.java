@@ -5,8 +5,12 @@
  */
 package com.ceridwen.lcf.lcfserver.model;
 
+import com.ceridwen.lcf.model.referencing.AbstractReferenceHandler;
+import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bic.ns.lcf.v1_0.LcfCheckInResponse;
 import org.bic.ns.lcf.v1_0.LcfCheckOutResponse;
 import org.bic.ns.lcf.v1_0.LcfEntityListResponse;
@@ -62,7 +66,7 @@ public class AbstractReferenceHandlerTest {
      */
     @org.junit.jupiter.api.Test
     public void testCheckReferences() {
-        System.out.println("checkReferences");
+        Logger.getLogger(AbstractReferenceHandlerTest.class.getName()).log(Level.INFO, "Checking references");      
         List<Class> clazzes = new ArrayList<>();
         for (EntityTypes.Type type: EntityTypes.Type.values()) {
             clazzes.add(type.getTypeClass());
@@ -76,9 +80,9 @@ public class AbstractReferenceHandlerTest {
         boolean success = true;
         for (Class clazz: clazzes) {
             if (new TestReferenceHandler().testReferences(clazz)) {
-                System.out.println(clazz.getName()+ ": SUCCESS");
+                Logger.getLogger(AbstractReferenceHandlerTest.class.getName()).log(Level.INFO, "{0} : SUCCESS", clazz.getName());      
             } else {
-                System.out.println(clazz.getName() + ": FAILURE");  
+                Logger.getLogger(AbstractReferenceHandlerTest.class.getName()).log(Level.WARNING, "{0} : FAILURE", clazz.getName());      
                 success = false;
             }
         }

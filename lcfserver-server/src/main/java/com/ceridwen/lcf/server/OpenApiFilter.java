@@ -15,7 +15,7 @@
  */
 package com.ceridwen.lcf.server;
 
-import com.ceridwen.lcf.lcfserver.model.EntityTypes;
+import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import io.swagger.v3.core.filter.AbstractSpecFilter;
 import io.swagger.v3.core.model.ApiDescription;
 import io.swagger.v3.oas.models.OpenAPI;

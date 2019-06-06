@@ -43,7 +43,7 @@ import org.bic.ns.lcf.v1_0.Patron;
 import org.bic.ns.lcf.v1_0.Title;
 import org.bic.ns.lcf.v1_0.TitleType;
 
-import com.ceridwen.lcf.lcfserver.model.EntityTypes;
+import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import com.ceridwen.lcf.server.legacy.EntitySourceInterface;
 import com.ceridwen.lcf.server.legacy.EntitySourcesInterface;
 import com.ceridwen.lcf.server.legacy.filter.EntitySourcesFilter;

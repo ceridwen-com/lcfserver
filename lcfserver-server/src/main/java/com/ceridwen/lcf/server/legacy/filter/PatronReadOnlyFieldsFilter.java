@@ -30,7 +30,7 @@ import org.bic.ns.lcf.v1_0.Patron;
 import org.bic.ns.lcf.v1_0.Reservation;
 
 import com.ceridwen.lcf.server.resources.QueryResults;
-import com.ceridwen.lcf.lcfserver.model.EntityTypes;
+import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import com.ceridwen.lcf.server.legacy.EntitySourcesInterface;
 
 public class PatronReadOnlyFieldsFilter extends AbstractReadOnlyFieldsFilter<Patron> {

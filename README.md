@@ -15,5 +15,5 @@ The Library Communications Framework (LCF) is a set of library interoperability 
 ```bash
 git clone https://github.com/ceridwen-com/lcfserver.git
 cd lcfserver
-mvn jetty:run-war
+mvn clean install jetty:run-war
 ```

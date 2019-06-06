@@ -5,16 +5,16 @@
  */
 package com.ceridwen.lcf.server.webservice;
 
-import com.ceridwen.lcf.lcfserver.model.CreationQualifier;
-import com.ceridwen.lcf.lcfserver.model.EntityTypes;
-import com.ceridwen.lcf.lcfserver.model.AddReferenceHandler;
-import com.ceridwen.lcf.lcfserver.model.RemoveReferenceHandler;
-import com.ceridwen.lcf.lcfserver.model.VirtualUpdatePath;
-import com.ceridwen.lcf.lcfserver.model.authentication.AbstractAuthenticationToken;
-import com.ceridwen.lcf.lcfserver.model.authentication.AuthenticationCategory;
-import com.ceridwen.lcf.lcfserver.model.authentication.BasicAuthenticationToken;
-import com.ceridwen.lcf.lcfserver.model.exceptions.EXC04_UnableToProcessRequest;
-import com.ceridwen.lcf.lcfserver.model.exceptions.EXC05_InvalidEntityReference;
+import com.ceridwen.lcf.model.enumerations.CreationQualifier;
+import com.ceridwen.lcf.model.enumerations.EntityTypes;
+import com.ceridwen.lcf.model.referencing.AddReferenceHandler;
+import com.ceridwen.lcf.model.referencing.RemoveReferenceHandler;
+import com.ceridwen.lcf.model.enumerations.VirtualUpdatePath;
+import com.ceridwen.lcf.model.authentication.AuthenticationToken;
+import com.ceridwen.lcf.model.authentication.AuthenticationCategory;
+import com.ceridwen.lcf.model.authentication.BasicAuthenticationToken;
+import com.ceridwen.lcf.model.exceptions.EXC04_UnableToProcessRequest;
+import com.ceridwen.lcf.model.exceptions.EXC05_InvalidEntityReference;
 import com.ceridwen.lcf.server.resources.AbstractResourceManagerInterface;
 import com.ceridwen.lcf.server.resources.QueryResults;
 import java.lang.reflect.Field;
@@ -67,7 +67,7 @@ public class WebserviceHelper<E> {
         return rm;
     }
     
-    Response Create(Object parent, E entity, List<CreationQualifier> qualifiers, Map<AuthenticationCategory, AbstractAuthenticationToken> tokens, String baseUri) {
+    Response Create(Object parent, E entity, List<CreationQualifier> qualifiers, List<AuthenticationToken> tokens, String baseUri) {
         new RemoveReferenceHandler().removeReferences(entity, baseUri + EntityTypes.LCF_PREFIX + "/");
         
         String identifier = rm.Create(tokens, parent, entity, qualifiers);
@@ -77,7 +77,7 @@ public class WebserviceHelper<E> {
         return Response.created(URI.create(baseUri + EntityTypes.LCF_PREFIX + "/" + EntityTypes.lookUpByClass(rm.getEntityClass()).getEntityTypeCodeValue() + "/" + identifier)).entity(entity).header("lcf-version", EntityTypes.getLCFSpecVersion()).build();
     }
     
-    Response Retrieve(String identifier, Map<AuthenticationCategory, AbstractAuthenticationToken> tokens, String baseUri) {
+    Response Retrieve(String identifier, List<AuthenticationToken> tokens, String baseUri) {
         E entity = rm.Retrieve(tokens, identifier);
         
         if (entity == null) {
@@ -89,7 +89,7 @@ public class WebserviceHelper<E> {
         return Response.ok(entity).header("lcf-version", EntityTypes.getLCFSpecVersion()).build();
     }
     
-    Response Modify(String identifier, E entity, Map<AuthenticationCategory, AbstractAuthenticationToken> tokens, String baseUri) {
+    Response Modify(String identifier, E entity, List<AuthenticationToken> tokens, String baseUri) {
         new RemoveReferenceHandler().removeReferences(entity, baseUri + EntityTypes.LCF_PREFIX + "/");
         
         E modified = rm.Modify(tokens, identifier, entity);
@@ -99,12 +99,12 @@ public class WebserviceHelper<E> {
         return Response.ok(modified).header("lcf-version", EntityTypes.getLCFSpecVersion()).build();        
     }
     
-    Response Delete(String identifier, Map<AuthenticationCategory, AbstractAuthenticationToken> tokens) {
+    Response Delete(String identifier, List<AuthenticationToken> tokens) {
         rm.Delete(tokens, identifier);
         return Response.ok().header("lcf-version", EntityTypes.getLCFSpecVersion()).build();
     }
     
-    Response Query(Object parent, int startIndex, int count, List<SelectionCriterion> selectionCriterion, Map<AuthenticationCategory, AbstractAuthenticationToken> tokens, String baseUri) {
+    Response Query(Object parent, int startIndex, int count, List<SelectionCriterion> selectionCriterion, List<AuthenticationToken> tokens, String baseUri) {
         LcfEntityListResponse response = new LcfEntityListResponse();
         
         EntityTypes.Type et = EntityTypes.lookUpByClass(clazz);
@@ -140,7 +140,7 @@ public class WebserviceHelper<E> {
         return Response.ok(response).header("lcf-version", EntityTypes.getLCFSpecVersion()).build();        
     }
     
-    public Response updateVirtualValue(String identifier, VirtualUpdatePath path, String value, Map<AuthenticationCategory, AbstractAuthenticationToken> tokens, String baseUri) {
+    public Response updateVirtualValue(String identifier, VirtualUpdatePath path, String value, List<AuthenticationToken> tokens, String baseUri) {
         
         this.Retrieve(identifier, tokens, baseUri);
         
@@ -166,11 +166,11 @@ public class WebserviceHelper<E> {
         }
     }
     
-    public void addAuthenthicationTokens(Map<AuthenticationCategory, AbstractAuthenticationToken> tokens, AuthenticationCategory category, String rawvalue) {
+    public void addAuthenthicationTokens(List<AuthenticationToken> tokens, AuthenticationCategory category, String rawvalue) {
         if (rawvalue != null && !rawvalue.isEmpty()) {
             if (rawvalue.toUpperCase().startsWith("BASIC ")) {
                 BasicAuthenticationToken token = new BasicAuthenticationToken(category, rawvalue.replace("BASIC ", ""));
-                tokens.put(token.getAuthenticationCategory(), token);
+                tokens.add(token);
             }
         }
     }

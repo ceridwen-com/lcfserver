@@ -1,9 +1,9 @@
 EntityListWebservice(LCFPath, Entity, EntityPath, SubEntity, SelectionCriteria, AlternativePosts, AlternativePuts, AlternativeGets, AlternativeDeletes, CreationQualifiers, VirtualUpdatePaths, AuthenticationSchemes) ::= <<
 package com.ceridwen.lcf.server.webservice;
 
-import com.ceridwen.lcf.lcfserver.model.CreationQualifier;
-import com.ceridwen.lcf.lcfserver.model.authentication.AbstractAuthenticationToken;
-import com.ceridwen.lcf.lcfserver.model.authentication.AuthenticationCategory;
+import com.ceridwen.lcf.model.enumerations.CreationQualifier;
+import com.ceridwen.lcf.model.authentication.AuthenticationToken;
+import com.ceridwen.lcf.model.authentication.AuthenticationCategory;
 import com.ceridwen.lcf.server.resources.<Entity>ResourceManagerInterface;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,9 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.Parameter;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -64,7 +62,7 @@ public class <Entity>ListWebservice {
             @DefaultValue("-1") @QueryParam("os:count") int count 
         ) {
 
-        Map\<AuthenticationCategory, AbstractAuthenticationToken\> tokens = new EnumMap\<\>(AuthenticationCategory.class);
+        List\<AuthenticationToken\> tokens = new ArrayList\<\>();
         
 <AuthenticationSchemes: {authenticationscheme |
         helper.addAuthenthicationTokens(tokens, AuthenticationCategory.<authenticationscheme.key>, <authenticationscheme.key>);}>
@@ -101,7 +99,7 @@ public class <Entity>ListWebservice {
             @HeaderParam("<qualifier.value>") String <qualifier.key>,}>
             <Entity> data
         ) {
-        Map\<AuthenticationCategory, AbstractAuthenticationToken\> tokens = new EnumMap\<\>(AuthenticationCategory.class);
+        List\<AuthenticationToken\> tokens = new ArrayList\<\>();
         
 <AuthenticationSchemes: {authenticationscheme |
         helper.addAuthenthicationTokens(tokens, AuthenticationCategory.<authenticationscheme.key>, <authenticationscheme.key>);}>

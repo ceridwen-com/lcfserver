@@ -21,9 +21,9 @@
  *******************************************************************************/
 package com.ceridwen.lcf.server.legacy.filter;
 
-import com.ceridwen.lcf.lcfserver.model.EntityTypes;
-import com.ceridwen.lcf.lcfserver.model.EntityTypes.Type;
-import com.ceridwen.lcf.lcfserver.model.exceptions.EXC04_UnableToProcessRequest;
+import com.ceridwen.lcf.model.enumerations.EntityTypes;
+import com.ceridwen.lcf.model.enumerations.EntityTypes.Type;
+import com.ceridwen.lcf.model.exceptions.EXC04_UnableToProcessRequest;
 import com.ceridwen.lcf.server.legacy.EntitySourceInterface;
 import com.ceridwen.lcf.server.legacy.EntitySourcesInterface;
 import com.ceridwen.lcf.server.resources.QueryResults;

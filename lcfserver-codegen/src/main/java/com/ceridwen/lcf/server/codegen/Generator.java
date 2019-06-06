@@ -5,7 +5,7 @@
  */
 package com.ceridwen.lcf.server.codegen;
 
-import com.ceridwen.lcf.lcfserver.model.EntityTypes;
+import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,6 +17,7 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupDir;
 import org.stringtemplate.v4.misc.ErrorBuffer;
+import org.stringtemplate.v4.misc.STMessage;
 
 /**
  *
@@ -30,11 +31,11 @@ public abstract class Generator {
         }
         if (!outputFile.exists()) {
             if (!outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
-                System.out.println(String.format("Unable to fully create the output directory: %s", baseDirectory.getAbsolutePath()));
+                Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, "Unable to fully create the output directory: {0}", baseDirectory.getAbsolutePath());
                 return null;
             }
             if (!outputFile.createNewFile()) {
-                System.out.println(String.format("Unable to create the output file: %s", outputFile.getAbsolutePath()));
+                Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, "Unable to create the output file: {0}", outputFile.getAbsolutePath());
                 return null;
             }
         }
@@ -55,9 +56,10 @@ public abstract class Generator {
             st.add(key, attributes.get(key));
         }
         if (null == st || !errorBuffer.errors.isEmpty()) {
-            System.out.println(String.format("Unable to execute template. %n%s", errorBuffer.toString()));
+            Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, "Unable to execute template. {0}", errorBuffer.toString());
             return;
         }
+        Logger.getLogger(Generator.class.getName()).log(Level.INFO, "Generating {0} to {1}", new String[]{prefix + entityType.name() + template + suffix, targetdir} );      
         render(st, targetdir, prefix + entityType.name() + template + suffix);
     }
 
@@ -70,10 +72,10 @@ public abstract class Generator {
             fileWriter.flush();
             fileWriter.close();
             if (!listener.errors.isEmpty()) {
-                System.out.println(listener.toString());
+                Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, "StringTemplate Rendering error {0}", listener.toString());                
             }
         } catch (IOException e) {
-            System.out.println(String.format("Unable to write output file: %s. (%s)", targetfile, e.getMessage()));
+            Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, String.format("Unable to write output file: %s.", targetfile), e);                
         }
     }
 }

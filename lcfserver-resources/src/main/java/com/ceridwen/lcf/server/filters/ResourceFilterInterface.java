@@ -15,8 +15,8 @@
  */
 package com.ceridwen.lcf.server.filters;
 
-import com.ceridwen.lcf.lcfserver.model.authentication.AbstractAuthenticationToken;
-import com.ceridwen.lcf.lcfserver.model.authentication.AuthenticationCategory;
+import com.ceridwen.lcf.model.authentication.AuthenticationToken;
+import com.ceridwen.lcf.model.authentication.AuthenticationCategory;
 import java.util.List;
 import java.util.Map;
 import org.bic.ns.lcf.v1_0.SelectionCriterion;
@@ -26,9 +26,9 @@ import org.bic.ns.lcf.v1_0.SelectionCriterion;
  * @author Matthew.Dovey
  */
 public interface ResourceFilterInterface<E> {
-	E Create(Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens, Object parent, E entity);
-	E Retrieve(Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens, E Entity);
-	E Modify(Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens, String identifier, E entity);
-	void Delete(Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens, String identifier);
-	List<E> Query(Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens, Object parent, int startIndex, int count, List<SelectionCriterion> selection, List<E> results);
+	E Create(Map<AuthenticationCategory, AuthenticationToken> authTokens, Object parent, E entity);
+	E Retrieve(Map<AuthenticationCategory, AuthenticationToken> authTokens, E Entity);
+	E Modify(Map<AuthenticationCategory, AuthenticationToken> authTokens, String identifier, E entity);
+	void Delete(Map<AuthenticationCategory, AuthenticationToken> authTokens, String identifier);
+	List<E> Query(Map<AuthenticationCategory, AuthenticationToken> authTokens, Object parent, int startIndex, int count, List<SelectionCriterion> selection, List<E> results);
 }

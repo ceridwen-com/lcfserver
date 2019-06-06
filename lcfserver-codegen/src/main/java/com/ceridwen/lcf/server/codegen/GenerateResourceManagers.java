@@ -5,7 +5,7 @@
  */
 package com.ceridwen.lcf.server.codegen;
 
-import com.ceridwen.lcf.lcfserver.model.EntityTypes;
+import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import java.util.HashMap;
 import java.util.Map;
 

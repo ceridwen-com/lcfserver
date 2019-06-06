@@ -5,7 +5,7 @@
  */
 package com.ceridwen.lcf.server;
 
-import com.ceridwen.lcf.lcfserver.model.EntityTypes;
+import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import com.ceridwen.lcf.server.handlers.LCFExceptionHandler;
 import com.ceridwen.lcf.server.handlers.LCFResponseHandler;
 import com.ceridwen.lcf.server.resources.AbstractResourceManagerInterface;
@@ -45,7 +45,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
  *
  * @author Matthew
  */
-@OpenAPIDefinition( info = @Info(description = "LCF", title = "LCF"), 
+@OpenAPIDefinition( info = @Info(description = "BIC Library Communications Framework ", title = "BIC LCF"), 
         externalDocs = @ExternalDocumentation(description = "BIC LCF Documentation", url = "https://bic-org-uk.githib.io/bic-lcf"))
 @SecurityScheme( name= "TERMINAL", description = "Terminal Authentication", type= SecuritySchemeType.HTTP, scheme="basic")
 @SecurityScheme( name = "USER", description = "Patron Authentication. Should be of the form \"Basic {credentials}\", where {credentials} is the base64 encoding of id and password joined by a single colon (:).", type=SecuritySchemeType.APIKEY, in=SecuritySchemeIn.HEADER, paramName="lcf-patron-credential" )
@@ -87,7 +87,7 @@ public class ApplicationConfig extends Application {
         ModelConverters.getInstance().addConverter(modelResolver);
         
         SwaggerConfiguration oasConfig = new SwaggerConfiguration()
-                .ignoredRoutes(Arrays.asList(new String[]{"/application.wadl"}))
+                .ignoredRoutes(Arrays.asList("/application.wadl"))
                 .filterClass(OpenApiFilter.class.getName());
 
         try {

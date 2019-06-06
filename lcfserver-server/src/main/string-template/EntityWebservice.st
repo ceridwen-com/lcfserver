@@ -1,17 +1,17 @@
 EntityWebservice(LCFPath, Entity, EntityPath, SubEntity, SelectionCriteria, AlternativePosts, AlternativePuts, AlternativeGets, AlternativeDeletes, CreationQualifiers, VirtualUpdatePaths, AuthenticationSchemes) ::= <<
 package com.ceridwen.lcf.server.webservice;
 
-import com.ceridwen.lcf.lcfserver.model.VirtualUpdatePath;
-import com.ceridwen.lcf.lcfserver.model.authentication.AbstractAuthenticationToken;
-import com.ceridwen.lcf.lcfserver.model.authentication.AuthenticationCategory;
+import com.ceridwen.lcf.model.enumerations.VirtualUpdatePath;
+import com.ceridwen.lcf.model.authentication.AuthenticationToken;
+import com.ceridwen.lcf.model.authentication.AuthenticationCategory;
 import com.ceridwen.lcf.server.resources.<Entity>ResourceManagerInterface;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.Parameter;
-import java.util.EnumMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -31,9 +31,9 @@ public class <Entity>Webservice
     UriInfo uri;
 
     private final String identifier;
-    Map\<AuthenticationCategory, AbstractAuthenticationToken\> tokens;
+    List\<AuthenticationToken\> tokens;
     
-    <Entity>Webservice(String identifier, Map\<AuthenticationCategory, AbstractAuthenticationToken\> tokens, UriInfo uri) {
+    <Entity>Webservice(String identifier, List\<AuthenticationToken\> tokens, UriInfo uri) {
         this.tokens = tokens;
         this.identifier = identifier;
         this.uri = uri;
@@ -57,7 +57,7 @@ public class <Entity>Webservice
             @Parameter(hidden=true) @HeaderParam("<authenticationscheme.value>") String <authenticationscheme.key>,}>
             @Parameter(hidden=true) @HeaderParam("dummy") String dummy    
         ) {
-        Map\<AuthenticationCategory, AbstractAuthenticationToken\> tokens = new EnumMap\<\>(AuthenticationCategory.class);
+        List\<AuthenticationToken\> tokens = new ArrayList\<\>();
         
 <AuthenticationSchemes: {authenticationscheme |
         helper.addAuthenthicationTokens(tokens, AuthenticationCategory.<authenticationscheme.key>, <authenticationscheme.key>);}>
@@ -84,7 +84,7 @@ public class <Entity>Webservice
             @Parameter(hidden=true) @HeaderParam("<authenticationscheme.value>") String <authenticationscheme.key>,}>
             <Entity> data
         ) {
-        Map\<AuthenticationCategory, AbstractAuthenticationToken\> tokens = new EnumMap\<\>(AuthenticationCategory.class);
+        List\<AuthenticationToken\> tokens = new ArrayList\<\>();
         
 <AuthenticationSchemes: {authenticationscheme |
         helper.addAuthenthicationTokens(tokens, AuthenticationCategory.<authenticationscheme.key>, <authenticationscheme.key>);}>
@@ -108,7 +108,7 @@ public class <Entity>Webservice
             @Parameter(hidden=true) @HeaderParam("<authenticationscheme.value>") String <authenticationscheme.key>,}>
             @Parameter(hidden=true) @HeaderParam("dummy") String dummy    
         ) {
-        Map\<AuthenticationCategory, AbstractAuthenticationToken\> tokens = new EnumMap\<\>(AuthenticationCategory.class);
+        List\<AuthenticationToken\> tokens = new ArrayList\<\>();
         
 <AuthenticationSchemes: {authenticationscheme |
         helper.addAuthenthicationTokens(tokens, AuthenticationCategory.<authenticationscheme.key>, <authenticationscheme.key>);}>
@@ -131,7 +131,7 @@ public class <Entity>Webservice
             @Parameter(hidden=true) @HeaderParam("<authenticationscheme.value>") String <authenticationscheme.key>,}>
             String data
         ) {
-        Map\<AuthenticationCategory, AbstractAuthenticationToken\> tokens = new EnumMap\<\>(AuthenticationCategory.class);
+        List\<AuthenticationToken\> tokens = new ArrayList\<\>();
         
 <AuthenticationSchemes: {authenticationscheme |
         helper.addAuthenthicationTokens(tokens, AuthenticationCategory.<authenticationscheme.key>, <authenticationscheme.key>);}>
@@ -152,7 +152,7 @@ public class <Entity>Webservice
             @Parameter(hidden=true) @HeaderParam("<authenticationscheme.value>") String <authenticationscheme.key>,}>
             @Parameter(hidden=true) @HeaderParam("dummy") String dummy    
         ) {
-        Map\<AuthenticationCategory, AbstractAuthenticationToken\> tokens = new EnumMap\<\>(AuthenticationCategory.class);
+        List\<AuthenticationToken\> tokens = new ArrayList\<\>();
         
 <AuthenticationSchemes: {authenticationscheme |
         helper.addAuthenthicationTokens(tokens, AuthenticationCategory.<authenticationscheme.key>, <authenticationscheme.key>);}>
