@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ceridwen.lcf.lcfserver.model.authentication;
+package com.ceridwen.lcf.model.authentication;
 
 /**
  *
  * @author Matthew.Dovey
  */
-public abstract class AbstractAuthenticationToken {
+public abstract class AuthenticationToken {
 
     private AuthenticationCategory authenticationCategory;
     
-    public AbstractAuthenticationToken(AuthenticationCategory authenticationCategory) {
+    public AuthenticationToken(AuthenticationCategory authenticationCategory) {
         this.authenticationCategory = authenticationCategory;
     }
     

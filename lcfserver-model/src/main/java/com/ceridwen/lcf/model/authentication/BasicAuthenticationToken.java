@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ceridwen.lcf.lcfserver.model.authentication;
+package com.ceridwen.lcf.model.authentication;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,7 +12,7 @@ import java.util.logging.Logger;
  *
  * @author Matthew.Dovey
  */
-public class BasicAuthenticationToken extends AbstractAuthenticationToken {
+public class BasicAuthenticationToken extends AuthenticationToken {
     private String username;
     private String password;
     

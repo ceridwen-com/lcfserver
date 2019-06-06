@@ -19,32 +19,33 @@
  *
  *     
  *******************************************************************************/
-package com.ceridwen.lcf.lcfserver.model.exceptions;
+package com.ceridwen.lcf.model.exceptions;
 
 import org.bic.ns.lcf.v1_0.ExceptionConditionType;
 
-public class EXC01_ServiceUnavailable extends EXC00_LCF_Exception {
+public class EXC04_UnableToProcessRequest extends EXC00_LCF_Exception {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -1769027119532791427L;
+	private static final long serialVersionUID = -5758999035087097784L;
 
-	private EXC01_ServiceUnavailable() {
+	private EXC04_UnableToProcessRequest() {
 		super(null, null, null, null);
 	}
-	public EXC01_ServiceUnavailable(String shortMessage, String longMessage, String ref, Throwable cause) {
+	
+	public EXC04_UnableToProcessRequest(String shortMessage, String longMessage, String ref, Throwable cause) {
 		super(shortMessage, longMessage, ref, cause);
 	}
 
 	@Override
 	protected ExceptionConditionType getExceptionConditionType() {
-		return ExceptionConditionType.VALUE_1;
+		return ExceptionConditionType.VALUE_4;
 	}
 
 	@Override
 	public int getHTTPErrorCode() {
-		return 503;
+		return 500;
 	}
 
 }

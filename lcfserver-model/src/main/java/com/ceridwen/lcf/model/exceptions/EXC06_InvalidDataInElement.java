@@ -19,7 +19,7 @@
  *
  *     
  *******************************************************************************/
-package com.ceridwen.lcf.lcfserver.model.exceptions;
+package com.ceridwen.lcf.model.exceptions;
 
 import org.bic.ns.lcf.v1_0.ExceptionConditionType;
 

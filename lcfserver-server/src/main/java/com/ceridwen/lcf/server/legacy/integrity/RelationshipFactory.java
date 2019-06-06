@@ -21,7 +21,7 @@
  *******************************************************************************/
 package com.ceridwen.lcf.server.legacy.integrity;
 
-import com.ceridwen.lcf.lcfserver.model.EntityTypes;
+import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;

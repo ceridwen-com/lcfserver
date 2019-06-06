@@ -21,7 +21,7 @@
  *******************************************************************************/
 package com.ceridwen.lcf.server.legacy;
 
-import com.ceridwen.lcf.lcfserver.model.EntityTypes;
+import com.ceridwen.lcf.model.enumerations.EntityTypes;
 
 public interface EntitySourcesInterface {
 	public <T>EntitySourceInterface<T> getEntitySource(EntityTypes.Type type, Class<T> clazz);	

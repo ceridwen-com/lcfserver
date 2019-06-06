@@ -21,13 +21,13 @@
  *******************************************************************************/
 package com.ceridwen.lcf.server.handlers;
 
-import com.ceridwen.lcf.lcfserver.model.AddReferenceHandler;
-import com.ceridwen.lcf.lcfserver.model.EntityTypes;
+import com.ceridwen.lcf.model.referencing.AddReferenceHandler;
+import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import com.ceridwen.lcf.lcfserver.model.exceptions.EXC00_LCF_Exception;
+import com.ceridwen.lcf.model.exceptions.EXC00_LCF_Exception;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.jaxrs.annotation.JacksonFeatures;
 import javax.ws.rs.core.Response.ResponseBuilder;

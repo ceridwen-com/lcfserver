@@ -21,7 +21,7 @@
  *******************************************************************************/
 package com.ceridwen.lcf.server.legacy.filter;
 
-import com.ceridwen.lcf.lcfserver.model.EntityTypes;
+import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import java.util.TreeSet;
 
 import org.bic.ns.lcf.v1_0.Item;

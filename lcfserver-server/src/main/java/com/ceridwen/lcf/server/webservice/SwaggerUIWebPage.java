@@ -1,6 +1,6 @@
 package com.ceridwen.lcf.server.webservice;
 
-import com.ceridwen.lcf.lcfserver.model.EntityTypes;
+import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import com.ceridwen.lcf.server.OpenApiFilter;
 import io.swagger.v3.oas.annotations.Hidden;
 import javax.ws.rs.GET;

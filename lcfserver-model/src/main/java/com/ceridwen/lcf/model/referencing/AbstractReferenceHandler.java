@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ceridwen.lcf.lcfserver.model;
+package com.ceridwen.lcf.model.referencing;
 
+import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;

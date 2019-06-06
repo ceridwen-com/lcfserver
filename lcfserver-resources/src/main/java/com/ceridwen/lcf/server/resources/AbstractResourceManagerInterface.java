@@ -21,21 +21,19 @@
  *******************************************************************************/
 package com.ceridwen.lcf.server.resources;
 
-import com.ceridwen.lcf.lcfserver.model.CreationQualifier;
-import com.ceridwen.lcf.lcfserver.model.VirtualUpdatePath;
-import com.ceridwen.lcf.lcfserver.model.authentication.AbstractAuthenticationToken;
-import com.ceridwen.lcf.lcfserver.model.authentication.AuthenticationCategory;
+import com.ceridwen.lcf.model.enumerations.CreationQualifier;
+import com.ceridwen.lcf.model.enumerations.VirtualUpdatePath;
+import com.ceridwen.lcf.model.authentication.AuthenticationToken;
 import java.util.List;
-import java.util.Map;
 import org.bic.ns.lcf.v1_0.SelectionCriterion;
 
 
 public abstract interface AbstractResourceManagerInterface<E> {
         Class getEntityClass();
-	String Create(Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens, Object parent, E entity, List<CreationQualifier> qualifiers);
-	E Retrieve(Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens, String identifier);
-	E Modify(Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens, String identifier, E entity);
-        void UpdateValue(Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens, String identifier, VirtualUpdatePath path, String value);
-	void Delete(Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens, String identifier);
-	QueryResults<E> Query(Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens, Object parent, int startIndex, int count, List<SelectionCriterion> selection);
+	String Create(List<AuthenticationToken> authTokens, Object parent, E entity, List<CreationQualifier> qualifiers);
+	E Retrieve(List<AuthenticationToken> authTokens, String identifier);
+	E Modify(List<AuthenticationToken> authTokens, String identifier, E entity);
+        void UpdateValue(List<AuthenticationToken> authTokens, String identifier, VirtualUpdatePath path, String value);
+	void Delete(List<AuthenticationToken> authTokens, String identifier);
+	QueryResults<E> Query(List<AuthenticationToken> authTokens, Object parent, int startIndex, int count, List<SelectionCriterion> selection);
 }

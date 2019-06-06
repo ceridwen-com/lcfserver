@@ -19,41 +19,33 @@
  *
  *     
  *******************************************************************************/
-package com.ceridwen.lcf.lcfserver.model.exceptions;
+package com.ceridwen.lcf.model.exceptions;
 
 import org.bic.ns.lcf.v1_0.ExceptionConditionType;
-import org.bic.ns.lcf.v1_0.ReasonDeniedType;
 
-public class EXC07_RequestDenied extends EXC00_LCF_Exception {
+public class EXC05_InvalidEntityReference extends EXC00_LCF_Exception {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8483322867344634031L;
-	
-	private ReasonDeniedType reasonDenied;
-	
-	private EXC07_RequestDenied() {
+	private static final long serialVersionUID = -7995845277859035441L;
+
+	private EXC05_InvalidEntityReference() {
 		super(null, null, null, null);
 	}
-	public EXC07_RequestDenied(String shortMessage, String longMessage, String ref, ReasonDeniedType reasonDenied, Throwable cause) {
+	
+	public EXC05_InvalidEntityReference(String shortMessage, String longMessage, String ref, Throwable cause) {
 		super(shortMessage, longMessage, ref, cause);
-		this.reasonDenied = reasonDenied;
 	}
 
 	@Override
 	protected ExceptionConditionType getExceptionConditionType() {
-		return ExceptionConditionType.VALUE_7;
-	}
-	
-	@Override
-	protected ReasonDeniedType getReasonDenied() {
-		return this.reasonDenied;
+		return ExceptionConditionType.VALUE_5;
 	}
 
 	@Override
 	public int getHTTPErrorCode() {
-		return 403;
+		return 404;
 	}
 
 }

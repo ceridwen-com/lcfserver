@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ceridwen.lcf.lcfserver.model;
+package com.ceridwen.lcf.model.referencing;
 
+import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import java.util.HashMap;
 import java.util.Map;
 import org.bic.ns.lcf.v1_0.Entity;

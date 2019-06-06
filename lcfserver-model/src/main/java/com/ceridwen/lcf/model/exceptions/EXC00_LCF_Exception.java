@@ -19,7 +19,7 @@
  *
  *     
  *******************************************************************************/
-package com.ceridwen.lcf.lcfserver.model.exceptions;
+package com.ceridwen.lcf.model.exceptions;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

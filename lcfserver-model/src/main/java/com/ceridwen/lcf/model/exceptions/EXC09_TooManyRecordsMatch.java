@@ -19,40 +19,32 @@
  *
  *     
  *******************************************************************************/
-package com.ceridwen.lcf.lcfserver.model.exceptions;
+package com.ceridwen.lcf.model.exceptions;
 
-import java.util.List;
 import org.bic.ns.lcf.v1_0.ExceptionConditionType;
 
-public class EXC03_InvalidTerminalCredentials extends EXC00_LCF_Exception {
+public class EXC09_TooManyRecordsMatch extends EXC00_LCF_Exception {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8635187518663576610L;
+	private static final long serialVersionUID = 4632092737238389656L;
 
-	public EXC03_InvalidTerminalCredentials() {
-		super("Invalid terminal credentials", "Please submit terminal credentials via HTTP Auth", null, null);
+	private EXC09_TooManyRecordsMatch() {
+		super(null, null, null, null);
 	}
 	
-	public EXC03_InvalidTerminalCredentials(String shortMessage, String longMessage, String ref, Throwable cause) {
+	public EXC09_TooManyRecordsMatch(String shortMessage, String longMessage, String ref, Throwable cause) {
 		super(shortMessage, longMessage, ref, cause);
 	}
 
 	@Override
 	protected ExceptionConditionType getExceptionConditionType() {
-		return ExceptionConditionType.VALUE_3;
+		return ExceptionConditionType.VALUE_9;
 	}
 
 	@Override
 	public int getHTTPErrorCode() {
-		return 401;
+		return 404;
 	}
-
-    @Override
-    public List<CustomHeader> getCustomHeaders() {
-        List<CustomHeader> headers = super.getCustomHeaders(); 
-        headers.add(new CustomHeader("WWW-Authenticate", "Basic realm=\"BIC-LCF\", charset=\"UTF-8\""));
-        return headers;
-    }
 }

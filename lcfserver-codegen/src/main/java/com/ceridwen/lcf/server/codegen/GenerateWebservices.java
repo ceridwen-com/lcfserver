@@ -5,11 +5,11 @@
  */
 package com.ceridwen.lcf.server.codegen;
 
-import com.ceridwen.lcf.lcfserver.model.AlternativeResponseFormats;
-import com.ceridwen.lcf.lcfserver.model.CreationQualifier;
-import com.ceridwen.lcf.lcfserver.model.EntityTypes;
-import com.ceridwen.lcf.lcfserver.model.VirtualUpdatePath;
-import com.ceridwen.lcf.lcfserver.model.authentication.AuthenticationCategory;
+import com.ceridwen.lcf.model.enumerations.AlternativeResponseFormats;
+import com.ceridwen.lcf.model.enumerations.CreationQualifier;
+import com.ceridwen.lcf.model.enumerations.EntityTypes;
+import com.ceridwen.lcf.model.enumerations.VirtualUpdatePath;
+import com.ceridwen.lcf.model.authentication.AuthenticationCategory;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
