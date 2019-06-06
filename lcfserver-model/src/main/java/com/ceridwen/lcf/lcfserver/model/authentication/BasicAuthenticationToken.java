@@ -16,7 +16,7 @@ public class BasicAuthenticationToken extends AbstractAuthenticationToken {
     private String username;
     private String password;
     
-    public BasicAuthenticationToken(BasicAuthenticationToken.AuthenticationCategory authenticationCategory, String BASE64)
+    public BasicAuthenticationToken(AuthenticationCategory authenticationCategory, String BASE64)
     {
         super(authenticationCategory);
         this.username = "";
@@ -34,7 +34,7 @@ public class BasicAuthenticationToken extends AbstractAuthenticationToken {
         }
     }
     
-    public BasicAuthenticationToken(BasicAuthenticationToken.AuthenticationCategory authenticationCategory, String username, String password)
+    public BasicAuthenticationToken(AuthenticationCategory authenticationCategory, String username, String password)
     {
         super(authenticationCategory);
         this.username = username;

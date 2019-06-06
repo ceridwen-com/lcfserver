@@ -21,7 +21,10 @@
  *******************************************************************************/
 package com.ceridwen.lcf.server.resources;
 
+import com.ceridwen.lcf.lcfserver.model.CreationQualifier;
+import com.ceridwen.lcf.lcfserver.model.VirtualUpdatePath;
 import com.ceridwen.lcf.lcfserver.model.authentication.AbstractAuthenticationToken;
+import com.ceridwen.lcf.lcfserver.model.authentication.AuthenticationCategory;
 import java.util.List;
 import java.util.Map;
 import org.bic.ns.lcf.v1_0.SelectionCriterion;
@@ -29,9 +32,10 @@ import org.bic.ns.lcf.v1_0.SelectionCriterion;
 
 public abstract interface AbstractResourceManagerInterface<E> {
         Class getEntityClass();
-	String Create(Map<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken> authTokens, Object parent, E entity);
-	E Retrieve(Map<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken> authTokens, String identifier);
-	E Modify(Map<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken> authTokens, String identifier, E entity);
-	void Delete(Map<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken> authTokens, String identifier);
-	QueryResults<E> Query(Map<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken> authTokens, Object parent, int startIndex, int count, List<SelectionCriterion> selection);
+	String Create(Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens, Object parent, E entity, List<CreationQualifier> qualifiers);
+	E Retrieve(Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens, String identifier);
+	E Modify(Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens, String identifier, E entity);
+        void UpdateValue(Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens, String identifier, VirtualUpdatePath path, String value);
+	void Delete(Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens, String identifier);
+	QueryResults<E> Query(Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens, Object parent, int startIndex, int count, List<SelectionCriterion> selection);
 }

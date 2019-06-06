@@ -47,8 +47,8 @@ import javax.xml.bind.annotation.XmlEnumValue;
  */
 @OpenAPIDefinition( info = @Info(description = "LCF", title = "LCF"), 
         externalDocs = @ExternalDocumentation(description = "BIC LCF Documentation", url = "https://bic-org-uk.githib.io/bic-lcf"))
-@SecurityScheme( name = "Terminal Authentication", type= SecuritySchemeType.HTTP, scheme="basic")
-@SecurityScheme( name = "Patron Authentication", type=SecuritySchemeType.APIKEY, in=SecuritySchemeIn.HEADER, paramName="lcf-patron-credential", description = "Should be of the form \"Basic {credentials}\", where {credentials} is the base64 encoding of id and password joined by a single colon (:)." )
+@SecurityScheme( name= "TERMINAL", description = "Terminal Authentication", type= SecuritySchemeType.HTTP, scheme="basic")
+@SecurityScheme( name = "USER", description = "Patron Authentication. Should be of the form \"Basic {credentials}\", where {credentials} is the base64 encoding of id and password joined by a single colon (:).", type=SecuritySchemeType.APIKEY, in=SecuritySchemeIn.HEADER, paramName="lcf-patron-credential" )
 public class ApplicationConfig extends Application {
         
     public ApplicationConfig() { 

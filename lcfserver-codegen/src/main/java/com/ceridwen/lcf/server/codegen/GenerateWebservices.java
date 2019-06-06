@@ -5,9 +5,14 @@
  */
 package com.ceridwen.lcf.server.codegen;
 
+import com.ceridwen.lcf.lcfserver.model.AlternativeResponseFormats;
+import com.ceridwen.lcf.lcfserver.model.CreationQualifier;
 import com.ceridwen.lcf.lcfserver.model.EntityTypes;
+import com.ceridwen.lcf.lcfserver.model.VirtualUpdatePath;
+import com.ceridwen.lcf.lcfserver.model.authentication.AuthenticationCategory;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +67,77 @@ public class GenerateWebservices extends Generator {
             
     }
     
+    List<String> getAlternativePostResponses(EntityTypes.Type entity) {
+        List<String> formats = new ArrayList<>();
+        for (Class format: new AlternativeResponseFormats().getAlternativePostFormat(entity)) {
+            formats.add(format.getName());
+        }
+        
+        return formats;
+    }
+
+    List<String> getAlternativePutResponses(EntityTypes.Type entity) {
+        List<String> formats = new ArrayList<>();
+        for (Class format: new AlternativeResponseFormats().getAlternativePutFormat(entity)) {
+            formats.add(format.getName());
+        }
+        
+        return formats;
+    }
+
+    List<String> getAlternativeGetResponses(EntityTypes.Type entity) {
+        List<String> formats = new ArrayList<>();
+        for (Class format: new AlternativeResponseFormats().getAlternativeGetFormat(entity)) {
+            formats.add(format.getName());
+        }
+        
+        return formats;
+    }
+
+    List<String> getAlternativeDeleteResponses(EntityTypes.Type entity) {
+        List<String> formats = new ArrayList<>();
+        for (Class format: new AlternativeResponseFormats().getAlternativeDeleteFormat(entity)) {
+            formats.add(format.getName());
+        }
+        
+        return formats;
+    }
+    
+    List<KeyValue<CreationQualifier>> getCreationQualifiers(EntityTypes.Type entity) {
+        ArrayList<KeyValue<CreationQualifier>> list = new ArrayList<>();
+        
+        for (CreationQualifier qualifier: CreationQualifier.values()) {
+            if (qualifier.isApplicable(entity)) {
+                list.add(new KeyValue<>(qualifier, qualifier.getParameterText()));
+            }
+        }
+        
+        return list;
+    }
+    
+    List<KeyValue<VirtualUpdatePath>> getVirtualPaths(EntityTypes.Type entity) {
+        ArrayList<KeyValue<VirtualUpdatePath>> list = new ArrayList<>();
+        
+        for (VirtualUpdatePath path: VirtualUpdatePath.values()) {
+            if (path.isApplicable(entity)) {
+                list.add(new KeyValue<>(path, path.getPath()));
+            }
+        }
+        
+        return list;
+    }
+    
+    List<KeyValue<AuthenticationCategory>> getAuthenticationSchemes(EntityTypes.Type entity) {
+        ArrayList<KeyValue<AuthenticationCategory>> list = new ArrayList<>();
+        
+        for (AuthenticationCategory category: AuthenticationCategory.values()) {
+            list.add(new KeyValue<>(category, category.getParameterText()));
+        }
+        
+        return list;
+    }
+    
+    
     @Override
     Map getEntityMap(EntityTypes.Type entity) {
         Map<String, Object> map = new HashMap<>();
@@ -87,6 +163,13 @@ public class GenerateWebservices extends Generator {
         }
         map.put("SubEntity", subentities);
         map.put("SelectionCriteria", getSelectionCriteria(entity));
+        map.put("AlternativePosts", getAlternativePostResponses(entity));
+        map.put("AlternativePuts", getAlternativePutResponses(entity));
+        map.put("AlternativeGets", getAlternativeGetResponses(entity));
+        map.put("AlternativeDeletes", getAlternativeDeleteResponses(entity));
+        map.put("CreationQualifiers", getCreationQualifiers(entity));
+        map.put("VirtualUpdatePaths", getVirtualPaths(entity));
+        map.put("AuthenticationSchemes", getAuthenticationSchemes(entity));
         
         return map;        
     }
@@ -107,3 +190,8 @@ public class GenerateWebservices extends Generator {
 
     
 }
+
+
+
+
+

@@ -1,85 +1,163 @@
-EntityWebservice(LCFPath, Entity, EntityPath, SubEntity, SelectionCriteria) ::= <<
+EntityWebservice(LCFPath, Entity, EntityPath, SubEntity, SelectionCriteria, AlternativePosts, AlternativePuts, AlternativeGets, AlternativeDeletes, CreationQualifiers, VirtualUpdatePaths, AuthenticationSchemes) ::= <<
 package com.ceridwen.lcf.server.webservice;
 
+import com.ceridwen.lcf.lcfserver.model.VirtualUpdatePath;
+import com.ceridwen.lcf.lcfserver.model.authentication.AbstractAuthenticationToken;
+import com.ceridwen.lcf.lcfserver.model.authentication.AuthenticationCategory;
 import com.ceridwen.lcf.server.resources.<Entity>ResourceManagerInterface;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.Parameter;
+import java.util.EnumMap;
+import java.util.Map;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.MediaType;
 import org.bic.ns.lcf.v1_0.<Entity>;
 
-public class <Entity>Webservice implements EntityInterface\<<Entity>\>
+public class <Entity>Webservice
  {
     WebserviceHelper\<<Entity>\> helper = new WebserviceHelper\<\>(<Entity>.class, <Entity>ResourceManagerInterface.class);
 
     UriInfo uri;
 
     private final String identifier;
-    private final String authorization;
-    private final String lcfPatronCredential;
+    Map\<AuthenticationCategory, AbstractAuthenticationToken\> tokens;
     
-    <Entity>Webservice(String identifier, String authorization, String lcfPatronCredential, UriInfo uri) {
-        this.authorization = authorization;
-        this.lcfPatronCredential = lcfPatronCredential;
+    <Entity>Webservice(String identifier, Map\<AuthenticationCategory, AbstractAuthenticationToken\> tokens, UriInfo uri) {
+        this.tokens = tokens;
         this.identifier = identifier;
         this.uri = uri;
     }
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @SecurityRequirement(name = "Terminal Authentication")
-    @SecurityRequirement(name = "Patron Authentication")
+<AuthenticationSchemes: {authenticationscheme |
+    @SecurityRequirement(name = "<authenticationscheme.key>")}>
     @ApiResponse(
         responseCode = "200",
         description = "Retrieved",
         content = @Content(schema = @Schema(implementation = <Entity>.class)))
-    @Override
-    public Response Retrieve(@Parameter(hidden=true) @HeaderParam("Authorization") String authorization, @Parameter(hidden=true) @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
-        return helper.Retrieve(identifier, authorization, lcfPatronCredential, uri.getBaseUri().toString());
+<AlternativeGets: {alternative |
+    @ApiResponse(
+        responseCode = "200",
+        description = "<alternative>",
+        content = @Content(schema = @Schema(implementation = <alternative>.class)))}>
+    public Response Retrieve(
+<AuthenticationSchemes: {authenticationscheme |
+            @Parameter(hidden=true) @HeaderParam("<authenticationscheme.value>") String <authenticationscheme.key>,}>
+            @Parameter(hidden=true) @HeaderParam("dummy") String dummy    
+        ) {
+        Map\<AuthenticationCategory, AbstractAuthenticationToken\> tokens = new EnumMap\<\>(AuthenticationCategory.class);
+        
+<AuthenticationSchemes: {authenticationscheme |
+        helper.addAuthenthicationTokens(tokens, AuthenticationCategory.<authenticationscheme.key>, <authenticationscheme.key>);}>
+
+        return helper.Retrieve(identifier, tokens, uri.getBaseUri().toString());
     }
 
     @PUT
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @SecurityRequirement(name = "Terminal Authentication")
-    @SecurityRequirement(name = "Patron Authentication")
+<AuthenticationSchemes: {authenticationscheme |
+    @SecurityRequirement(name = "<authenticationscheme.key>")}>
     @ApiResponse(
         responseCode = "200",
-        description = "Modfied",
+        description = "Modified",
         content = @Content(schema = @Schema(implementation = <Entity>.class)))
-    @Override
-    public Response Modify(<Entity> data, @Parameter(hidden=true) @HeaderParam("Authorization") String authorization, @Parameter(hidden=true) @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
-        return helper.Modify(identifier, data, authorization, lcfPatronCredential, uri.getBaseUri().toString());
+<AlternativePuts: {alternative |
+    @ApiResponse(
+        responseCode = "200",
+        description = "<alternative>",
+        content = @Content(schema = @Schema(implementation = <alternative>.class)))}>
+    public Response Modify(
+<AuthenticationSchemes: {authenticationscheme |
+            @Parameter(hidden=true) @HeaderParam("<authenticationscheme.value>") String <authenticationscheme.key>,}>
+            <Entity> data
+        ) {
+        Map\<AuthenticationCategory, AbstractAuthenticationToken\> tokens = new EnumMap\<\>(AuthenticationCategory.class);
+        
+<AuthenticationSchemes: {authenticationscheme |
+        helper.addAuthenthicationTokens(tokens, AuthenticationCategory.<authenticationscheme.key>, <authenticationscheme.key>);}>
+
+        return helper.Modify(identifier, data, tokens, uri.getBaseUri().toString());
     }
 
     @DELETE
-    @SecurityRequirement(name = "Terminal Authentication")
-    @SecurityRequirement(name = "Patron Authentication")
+<AuthenticationSchemes: {authenticationscheme |
+    @SecurityRequirement(name = "<authenticationscheme.key>")}>
     @ApiResponse(
         responseCode = "200",
         description = "Deleted")
-    @Override
-    public Response Delete(@Parameter(hidden=true) @HeaderParam("Authorization") String authorization, @Parameter(hidden=true) @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
-        return helper.Delete(identifier, authorization, lcfPatronCredential);
+<AlternativeDeletes: {alternative |
+    @ApiResponse(
+        responseCode = "200",
+        description = "<alternative>",
+        content = @Content(schema = @Schema(implementation = <alternative>.class)))}>
+    public Response Delete(
+<AuthenticationSchemes: {authenticationscheme |
+            @Parameter(hidden=true) @HeaderParam("<authenticationscheme.value>") String <authenticationscheme.key>,}>
+            @Parameter(hidden=true) @HeaderParam("dummy") String dummy    
+        ) {
+        Map\<AuthenticationCategory, AbstractAuthenticationToken\> tokens = new EnumMap\<\>(AuthenticationCategory.class);
+        
+<AuthenticationSchemes: {authenticationscheme |
+        helper.addAuthenthicationTokens(tokens, AuthenticationCategory.<authenticationscheme.key>, <authenticationscheme.key>);}>
+        
+        return helper.Delete(identifier, tokens);
     }
+
+<VirtualUpdatePaths: {path |
+
+
+    @Path("<path.value>")
+    @PUT
+<AuthenticationSchemes: {authenticationscheme |
+    @SecurityRequirement(name = "<authenticationscheme.key>")}>
+    @ApiResponse(
+        responseCode = "200",
+        description = "Updated")
+    public Response Update<path.key>(
+<AuthenticationSchemes: {authenticationscheme |
+            @Parameter(hidden=true) @HeaderParam("<authenticationscheme.value>") String <authenticationscheme.key>,}>
+            String data
+        ) {
+        Map\<AuthenticationCategory, AbstractAuthenticationToken\> tokens = new EnumMap\<\>(AuthenticationCategory.class);
+        
+<AuthenticationSchemes: {authenticationscheme |
+        helper.addAuthenthicationTokens(tokens, AuthenticationCategory.<authenticationscheme.key>, <authenticationscheme.key>);}>
+
+        return helper.updateVirtualValue(identifier, VirtualUpdatePath.<path.key>, data, tokens, uri.getBaseUri().toString());
+    \}
+}>
+
 <SubEntity: {subentity |
 
 
     @Path("<subentity.EntityPath>")
-    public <subentity.Entity>ListWebservice Locate<subentity.Entity>(@Parameter(hidden=true) @HeaderParam("Authorization") String authorization, @Parameter(hidden=true) @HeaderParam("lcf-patron-credential") String lcfPatronCredential) {
-        return new <subentity.Entity>ListWebservice(helper.Retrieve(identifier, authorization, lcfPatronCredential, uri.getBaseUri().toString()), uri);
+<AuthenticationSchemes: {authenticationscheme |
+    @SecurityRequirement(name = "<authenticationscheme.key>")}>
+    public <subentity.Entity>ListWebservice Locate<subentity.Entity>
+        (
+<AuthenticationSchemes: {authenticationscheme |
+            @Parameter(hidden=true) @HeaderParam("<authenticationscheme.value>") String <authenticationscheme.key>,}>
+            @Parameter(hidden=true) @HeaderParam("dummy") String dummy    
+        ) {
+        Map\<AuthenticationCategory, AbstractAuthenticationToken\> tokens = new EnumMap\<\>(AuthenticationCategory.class);
+        
+<AuthenticationSchemes: {authenticationscheme |
+        helper.addAuthenthicationTokens(tokens, AuthenticationCategory.<authenticationscheme.key>, <authenticationscheme.key>);}>
+
+        return new <subentity.Entity>ListWebservice(helper.Retrieve(identifier, tokens, uri.getBaseUri().toString()), uri);
     \}
 }>}
 >>

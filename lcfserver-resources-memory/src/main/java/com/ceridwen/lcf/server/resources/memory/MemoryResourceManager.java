@@ -5,11 +5,15 @@
  */
 package com.ceridwen.lcf.server.resources.memory;
 
+import com.ceridwen.lcf.lcfserver.model.CreationQualifier;
 import com.ceridwen.lcf.lcfserver.model.EntityTypes;
+import com.ceridwen.lcf.lcfserver.model.VirtualUpdatePath;
 import com.ceridwen.lcf.lcfserver.model.authentication.AbstractAuthenticationToken;
+import com.ceridwen.lcf.lcfserver.model.authentication.AuthenticationCategory;
 import com.ceridwen.lcf.lcfserver.model.authentication.BasicAuthenticationToken;
 import com.ceridwen.lcf.lcfserver.model.exceptions.EXC02_InvalidUserCredentials;
 import com.ceridwen.lcf.lcfserver.model.exceptions.EXC03_InvalidTerminalCredentials;
+import com.ceridwen.lcf.lcfserver.model.exceptions.EXC04_UnableToProcessRequest;
 import com.ceridwen.lcf.server.resources.QueryResults;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -61,7 +65,7 @@ public class MemoryResourceManager {
     private static MemoryResourceManager mgr = null;
     
     private Map<EntityTypes.Type, Map<String, Object>> database;
-    private Map<EntityTypes.Type, Map<AbstractAuthenticationToken.AuthenticationCategory, BasicAuthenticationToken>> authentications;
+    private Map<EntityTypes.Type, Map<AuthenticationCategory, BasicAuthenticationToken>> authentications;
     
     public static MemoryResourceManager getMemoryResourceManager() {
         if (mgr == null) {
@@ -95,17 +99,17 @@ public class MemoryResourceManager {
         int amount = (new Random()).nextInt(25)+5;
         for (int i=0; i < amount; i++) {
             Patron patron = this.GeneratePatron();
-            this.put(EntityTypes.Type.Patron, patron.getIdentifier(), null, patron, new HashMap<>());
+            this.put(EntityTypes.Type.Patron, patron.getIdentifier(), null, patron, new ArrayList<>(), new HashMap<>());
         }
         
-        Map<AbstractAuthenticationToken.AuthenticationCategory, BasicAuthenticationToken> authorisationsCredentials = new EnumMap<>(AbstractAuthenticationToken.AuthenticationCategory.class);
-        authorisationsCredentials.put(AbstractAuthenticationToken.AuthenticationCategory.TERMINAL, new BasicAuthenticationToken(AbstractAuthenticationToken.AuthenticationCategory.TERMINAL, "terminal", "password"));
-        authorisationsCredentials.put(AbstractAuthenticationToken.AuthenticationCategory.USER, new BasicAuthenticationToken(AbstractAuthenticationToken.AuthenticationCategory.USER, "user", "patron"));
+        Map<AuthenticationCategory, BasicAuthenticationToken> authorisationsCredentials = new EnumMap<>(AuthenticationCategory.class);
+        authorisationsCredentials.put(AuthenticationCategory.TERMINAL, new BasicAuthenticationToken(AuthenticationCategory.TERMINAL, "terminal", "password"));
+        authorisationsCredentials.put(AuthenticationCategory.USER, new BasicAuthenticationToken(AuthenticationCategory.USER, "user", "patron"));
         authentications.put(EntityTypes.Type.Authorisation, authorisationsCredentials);
     }
     
-    public void Authenticate(EntityTypes.Type type, Map<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken> authTokens) {
-        Map<AbstractAuthenticationToken.AuthenticationCategory, BasicAuthenticationToken> entityAuthentications = authentications.get(type);
+    public void Authenticate(EntityTypes.Type type, Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens) {
+        Map<AuthenticationCategory, BasicAuthenticationToken> entityAuthentications = authentications.get(type);
         
         if (entityAuthentications == null) {
             return;
@@ -114,9 +118,9 @@ public class MemoryResourceManager {
         BasicAuthenticationToken token;
         BasicAuthenticationToken mytoken;
         
-        token = entityAuthentications.get(AbstractAuthenticationToken.AuthenticationCategory.TERMINAL);
+        token = entityAuthentications.get(AuthenticationCategory.TERMINAL);
         if (token != null) {
-            mytoken = (BasicAuthenticationToken)authTokens.get(AbstractAuthenticationToken.AuthenticationCategory.TERMINAL);
+            mytoken = (BasicAuthenticationToken)authTokens.get(AuthenticationCategory.TERMINAL);
             if (mytoken == null) {
                 throw new EXC03_InvalidTerminalCredentials();
             }
@@ -125,9 +129,9 @@ public class MemoryResourceManager {
             }
         }
 
-        token = entityAuthentications.get(AbstractAuthenticationToken.AuthenticationCategory.USER);
+        token = entityAuthentications.get(AuthenticationCategory.USER);
         if (token != null) {
-            mytoken = (BasicAuthenticationToken)authTokens.get(AbstractAuthenticationToken.AuthenticationCategory.USER);
+            mytoken = (BasicAuthenticationToken)authTokens.get(AuthenticationCategory.USER);
             if (mytoken == null) {
                 throw new EXC02_InvalidUserCredentials();
             }
@@ -137,7 +141,7 @@ public class MemoryResourceManager {
         }
     }
     
-    public Object get(EntityTypes.Type type, String identifier, Map<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken> authTokens) {
+    public Object get(EntityTypes.Type type, String identifier, Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens) {
         Authenticate(type, authTokens);
         
         if (database.containsKey(type)) {
@@ -149,7 +153,7 @@ public class MemoryResourceManager {
         return null;
     }
   
-    public Object put(EntityTypes.Type type, String identifier, Object parent, Object data, Map<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken> authTokens) {
+    public Object put(EntityTypes.Type type, String identifier, Object parent, Object data, List<CreationQualifier> qualifiers, Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens) {
         Authenticate(type, authTokens);
 
         if (!database.containsKey(type)) {
@@ -166,7 +170,7 @@ public class MemoryResourceManager {
         return data;
     }    
     
-    public void delete(EntityTypes.Type type, String identifier, Map<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken> authTokens) {
+    public void delete(EntityTypes.Type type, String identifier, Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens) {
         Authenticate(type, authTokens);
 
         if (database.containsKey(type)) {
@@ -177,7 +181,7 @@ public class MemoryResourceManager {
         }
     }
     
-    public QueryResults<? extends Object> list(EntityTypes.Type type, Object parent, int startIndex, int count, List<SelectionCriterion> selection, Map<AbstractAuthenticationToken.AuthenticationCategory, AbstractAuthenticationToken> authTokens) {
+    public QueryResults<? extends Object> list(EntityTypes.Type type, Object parent, int startIndex, int count, List<SelectionCriterion> selection, Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens) {
         Authenticate(type, authTokens);
 
         QueryResults queryResults = new QueryResults();
@@ -206,5 +210,15 @@ public class MemoryResourceManager {
         return queryResults;
     }
     
-    
+    public void UpdateValue(EntityTypes.Type type, String identifier, VirtualUpdatePath path, String value, Map<AuthenticationCategory, AbstractAuthenticationToken> authTokens) {
+        Authenticate(type, authTokens);
+        
+        if (type.equals(EntityTypes.Type.Patron)) {
+            //TODO
+        } else {
+            throw new EXC04_UnableToProcessRequest("Invalid request", "Request invalid for " + type.getEntityTypeCodeValue(), path.getPath(), null );
+        }
+        
+    }
+
 }

@@ -10,10 +10,6 @@ package com.ceridwen.lcf.lcfserver.model.authentication;
  * @author Matthew.Dovey
  */
 public abstract class AbstractAuthenticationToken {
-    public enum AuthenticationCategory {
-        TERMINAL,
-        USER
-    };
 
     private AuthenticationCategory authenticationCategory;
     
