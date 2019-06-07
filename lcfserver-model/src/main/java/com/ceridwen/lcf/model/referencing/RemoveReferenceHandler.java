@@ -16,6 +16,7 @@
 package com.ceridwen.lcf.model.referencing;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,6 +44,9 @@ public class RemoveReferenceHandler extends AbstractReferenceHandler {
                     String setter = propertyReference.replaceFirst("get", "set");
                     newresult = ((String)result).replaceFirst(refprefix, ""); 
                     clazz.getMethod(setter, String.class).invoke(instance, newresult);
+                }        
+                if (result != null && result.getClass().equals(ArrayList.class)) {
+                    ((ArrayList<String>)result).replaceAll(s -> s.replaceFirst(refprefix, ""));
                 }        
             }
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {

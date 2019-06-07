@@ -21,6 +21,11 @@
             <artifactId>lcfserver-resources</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.jeasy</groupId>
+            <artifactId>easy-random-core</artifactId>
+            <version>${jeasy.random.version}</version>
+        </dependency>
     </dependencies>
     
     <build>

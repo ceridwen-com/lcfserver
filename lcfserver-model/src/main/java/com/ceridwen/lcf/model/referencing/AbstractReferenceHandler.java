@@ -46,24 +46,23 @@ public abstract class AbstractReferenceHandler {
             for (Method method: clazz.getDeclaredMethods()) {
                 if (method.getName().startsWith("get") && method.getParameterCount() == 0) {
                     if (method.getReturnType().equals(String.class)) {
-                        String property = propertyFromPropertyReferenceGetter(method.getName());
-                        if (property != null) {
-                            if (!canHandleReference(clazz, instance, parentClazz, parent, method.getName(), property, urlPrefix, logPrefix)) {
-                                success = false;
-                            }                            
-                        }
+                        success = handleStringType(method, clazz, instance, parentClazz, parent, urlPrefix, logPrefix, success);
                     } else {
                         Type returnType = method.getGenericReturnType();
                         Class returnClazz = method.getReturnType();
-                        if (!returnType.getTypeName().startsWith("java.lang")) {
+                        if (!(returnType.getTypeName().startsWith("java.lang") || returnType.getTypeName().endsWith("XMLGregorianCalendar"))) {
                             if (returnClazz.equals(List.class)){
                                 if ((Type)returnType instanceof ParameterizedType) {
                                     Type elementType = ((ParameterizedType)returnType).getActualTypeArguments()[0];
-                                    if (instance == null) {
-                                        iterateProperties(Class.forName(elementType.getTypeName()), null, clazz, instance, urlPrefix, logPrefix + clazz.getName() + ".");
+                                    if (elementType.equals(String.class)) {
+                                        handleStringType(method, clazz, instance, parentClazz, parent, urlPrefix, logPrefix, success);                                        
                                     } else {
-                                        for (Object i : (List)method.invoke(instance)) {
-                                            iterateProperties(Class.forName(elementType.getTypeName()), i, clazz, instance, urlPrefix, logPrefix + clazz.getName() + ".");
+                                        if (instance == null) {
+                                            iterateProperties(Class.forName(elementType.getTypeName()), null, clazz, instance, urlPrefix, logPrefix + clazz.getName() + ".");
+                                        } else {
+                                            for (Object i : (List)method.invoke(instance)) {
+                                                iterateProperties(Class.forName(elementType.getTypeName()), i, clazz, instance, urlPrefix, logPrefix + clazz.getName() + ".");
+                                            }
                                         }
                                     }
                                 }
@@ -83,6 +82,16 @@ public abstract class AbstractReferenceHandler {
             success = false;
         }
         
+        return success;
+    }
+
+    protected boolean handleStringType(Method method, Class clazz, Object instance, Class parentClazz, Object parent, String urlPrefix, String logPrefix, boolean success) {
+        String property = propertyFromPropertyReferenceGetter(method.getName());
+        if (property != null) {
+            if (!canHandleReference(clazz, instance, parentClazz, parent, method.getName(), property, urlPrefix, logPrefix)) {
+                success = false;
+            }
+        }
         return success;
     }
     
