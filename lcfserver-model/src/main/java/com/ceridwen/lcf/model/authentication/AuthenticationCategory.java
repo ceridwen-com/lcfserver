@@ -21,7 +21,7 @@ package com.ceridwen.lcf.model.authentication;
  */
 public enum AuthenticationCategory {
     TERMINAL("Authorization"),
-    USER("lcf-user-credential");
+    USER("lcf-patron-credential");
     private String parameter;
     
     private AuthenticationCategory(String parameter) {
