@@ -3,7 +3,7 @@
 
     <groupId>com.ceridwen.lcf</groupId>
     <artifactId>lcfserver</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.1.0-populate-data-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>lcfserver</name>
@@ -40,8 +40,8 @@
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.min.version>3.5</maven.min.version>
-        <java.compiler.source>1.8</java.compiler.source>
-        <java.compiler.target>1.8</java.compiler.target>
+        <java.compiler.source>9</java.compiler.source>
+        <java.compiler.target>9</java.compiler.target>
         <lcf.schema.version>1.1.0</lcf.schema.version>
         <lcfserver.resourcemanager.groupid>${project.groupId}</lcfserver.resourcemanager.groupid>
         <lcfserver.resourcemanager.artifactid>lcfserver-resources-memory</lcfserver.resourcemanager.artifactid>
@@ -55,6 +55,7 @@
         <commons.beanutils.version>1.9.3</commons.beanutils.version>
         <ceridwen.util.version>1.7-SNAPSHOT</ceridwen.util.version>
         <jcabi.manifests.version>1.1</jcabi.manifests.version>
+        <jeasy.random.version>4.0.0</jeasy.random.version>
     </properties>
 
     <prerequisites>

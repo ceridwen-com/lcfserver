@@ -33,6 +33,8 @@ import org.bic.ns.lcf.v1_0.CardStatusInfo;
 import org.bic.ns.lcf.v1_0.Iso639LanguageCode;
 import org.bic.ns.lcf.v1_0.Patron;
 import org.bic.ns.lcf.v1_0.SelectionCriterion;
+import org.jeasy.random.EasyRandom;
+import org.jeasy.random.EasyRandomParameters;
 
 
 enum Operation {
@@ -234,15 +236,39 @@ public class MemoryResourceManager {
 
     }
     
+    public void generateRandomContent(EntityTypes.Type type) {
+        EasyRandomParameters parameters = new EasyRandomParameters()
+            .seed(123L)
+            .objectPoolSize(100)
+            .randomizationDepth(3)
+            .stringLengthRange(5, 12)
+            .collectionSizeRange(1, 10)
+            .scanClasspathForConcreteTypes(true)
+            .overrideDefaultInitialization(false)
+            .ignoreRandomizationErrors(true);
+        EasyRandom easyRandom = new EasyRandom(parameters);
+
+        int amount = (new Random()).nextInt(25)+5;
+        for (int i=0; i < amount; i++) {
+            Object o = easyRandom.nextObject(type.getTypeClass());
+            this.directPut(type, type.getIdentifier(o), o);
+        }
+    }
+    
     public MemoryResourceManager() {
         this.database = new HashMap<>();
         
         int amount = (new Random()).nextInt(25)+5;
-        for (int i=0; i < amount; i++) {
-            Patron patron = this.GeneratePatron();
-            this.put(EntityTypes.Type.Patron, patron.getIdentifier(), null, patron, new ArrayList<>(), new ArrayList<>());
-            Authenticator.getAuthenticator().updatePassword(AuthenticationCategory.USER, patron.getBarcodeId(), "password");
+//        for (int i=0; i < amount; i++) {
+//            Patron patron = this.GeneratePatron();
+//            this.put(EntityTypes.Type.Patron, patron.getIdentifier(), null, patron, new ArrayList<>(), new ArrayList<>());
+//            Authenticator.getAuthenticator().updatePassword(AuthenticationCategory.USER, patron.getBarcodeId(), "password");
+//        }
+        
+        for (EntityTypes.Type type: EntityTypes.Type.values()) {
+            generateRandomContent(type);
         }
+
 
         Authenticator.getAuthenticator().updatePassword(AuthenticationCategory.USER, "patron", "password");
         Authenticator.getAuthenticator().updatePassword(AuthenticationCategory.TERMINAL, "terminal", "password");
@@ -253,15 +279,8 @@ public class MemoryResourceManager {
    
     public Object get(EntityTypes.Type type, String identifier, List<AuthenticationToken> authTokens) {
         Authenticator.getAuthenticator().authenticate(type, Operation.GET, authTokens);
-        
-        Object response = null;
-        
-        if (database.containsKey(type)) {
-            Map<String, Object> map = database.get(type);
-            if (map.containsKey(identifier)) {
-                response = map.get(identifier);
-            }
-        }
+
+        Object response = directGet(type, identifier);
         
 //        if (type.equals(EntityTypes.Type.Patron)) {
 //            Authenticator.getAuthenticator().authenticate(((Patron)response).getBarcodeId(), authTokens);
@@ -269,10 +288,26 @@ public class MemoryResourceManager {
 
         return response;
     }
+
+    private Object directGet(EntityTypes.Type type, String identifier) {
+        
+        if (database.containsKey(type)) {
+            Map<String, Object> map = database.get(type);
+            if (map.containsKey(identifier)) {
+                return map.get(identifier);
+            }
+        }
+        return null;
+    }
+    
   
     public Object put(EntityTypes.Type type, String identifier, Object parent, Object data, List<CreationQualifier> qualifiers, List<AuthenticationToken> authTokens) {
         Authenticator.getAuthenticator().authenticate(type, Operation.PUT, authTokens);
 
+        return directPut(type, identifier, data);
+    }    
+
+    private Object directPut(EntityTypes.Type type, String identifier, Object data) {
         if (!database.containsKey(type)) {
             database.put(type, new HashMap<>());
         }    
@@ -329,7 +364,7 @@ public class MemoryResourceManager {
     
     public void UpdateValue(EntityTypes.Type type, String identifier, VirtualUpdatePath path, String value, List<AuthenticationToken> authTokens) {
         if (type.equals(EntityTypes.Type.Patron) && (path.equals(VirtualUpdatePath.PASSWORD) || path.equals(VirtualUpdatePath.PIN))) {
-            Patron patron = (Patron)this.get(type, identifier, authTokens);
+            Patron patron = (Patron)this.directGet(type, identifier);
             if (patron == null) {
                 throw new EXC05_InvalidEntityReference("", "", "", null);
             }
