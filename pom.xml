@@ -39,7 +39,7 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.min.version>3.0</maven.min.version>
+        <maven.min.version>3.5</maven.min.version>
         <java.compiler.source>1.8</java.compiler.source>
         <java.compiler.target>1.8</java.compiler.target>
         <lcf.schema.version>1.1.0</lcf.schema.version>
@@ -54,6 +54,7 @@
         <junit.jupiter.version>5.4.2</junit.jupiter.version>
         <commons.beanutils.version>1.9.3</commons.beanutils.version>
         <ceridwen.util.version>1.7-SNAPSHOT</ceridwen.util.version>
+        <jcabi.manifests.version>1.1</jcabi.manifests.version>
     </properties>
 
     <prerequisites>
@@ -73,9 +74,75 @@
         </repository>
     </repositories>
     
+    <dependencyManagement>
+        <!-- Needed to avoid multiple conflicting jars -->
+        <dependencies>
+            <dependency>
+                <groupId>org.bic.ns.lcf</groupId>
+                <artifactId>lcf-schema</artifactId>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-impl</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+        <!-- Force versions to avoid OWASP Identified Vulnerabilities -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>2.9.9</version>
+            </dependency>
+<!--
+            <dependency>
+                <groupId>org.igniterealtime.smack</groupId>
+                <artifactId>smack-core</artifactId>
+                <version>4.3.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.igniterealtime.smack</groupId>
+                <artifactId>smack-im</artifactId>
+                <version>4.3.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.igniterealtime.smack</groupId>
+                <artifactId>smack-tcp</artifactId>
+                <version>4.3.4</version>
+            </dependency>        
+            <dependency>
+                <groupId>org.igniterealtime.smack</groupId>
+                <artifactId>smack-extensions</artifactId>
+                <version>4.3.4</version>
+            </dependency> 
+-->            
+        </dependencies>
+        
+        
+    </dependencyManagement>
+    
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>3.0.0-M2</version>
+                    <executions>
+                        <execution>
+                            <id>enforce-maven</id>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <requireMavenVersion>
+                                        <version>${maven.min.version}</version>
+                                    </requireMavenVersion>
+                                </rules>    
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
@@ -131,7 +198,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
-                    <version>3.2.2</version>
+                    <version>3.2.3</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -163,6 +230,18 @@
                     <artifactId>versions-maven-plugin</artifactId>
                     <version>2.7</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.owasp</groupId>
+                    <artifactId>dependency-check-maven</artifactId>
+                    <version>5.0.0-M3</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>                
                 <plugin>
                     <groupId>com.amashchenko.maven.plugin</groupId>
                     <artifactId>gitflow-maven-plugin</artifactId>
@@ -212,6 +291,12 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+            </plugin>
+        </plugins>
     </build>
 
     <modules>

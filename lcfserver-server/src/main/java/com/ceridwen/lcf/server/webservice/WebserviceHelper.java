@@ -141,9 +141,6 @@ public class WebserviceHelper<E> {
     }
     
     public Response updateVirtualValue(String identifier, VirtualUpdatePath path, String value, List<AuthenticationToken> tokens, String baseUri) {
-        
-        this.Retrieve(identifier, tokens, baseUri);
-        
         if (value != null) {
             rm.UpdateValue(tokens, identifier, path, value);
         } else {
