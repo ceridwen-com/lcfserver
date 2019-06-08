@@ -224,6 +224,9 @@ limitations under the License.
                     <version>3.1.0</version>
                     <configuration>
                         <failOnError>false</failOnError>
+                        <failOnWarnings>false</failOnWarnings>
+                        <quiet>true</quiet>
+                        <author>Ceridwen Limited</author>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -324,7 +327,7 @@ limitations under the License.
                     <execution>
                         <phase>package</phase>
                         <goals>
-                            <goal>javadoc</goal>
+                            <goal>jar</goal>
                         </goals>
                     </execution>
                 </executions>
