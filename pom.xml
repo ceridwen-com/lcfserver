@@ -315,6 +315,7 @@ limitations under the License.
                 </plugin>
             </plugins>
         </pluginManagement>
+<!--
         <plugins>
             <plugin>
                 <groupId>org.owasp</groupId>
@@ -333,7 +334,8 @@ limitations under the License.
                 </executions>
             </plugin>    
         </plugins>
-    </build>
+-->    
+        </build>
 
     <modules>
         <module>lcfserver-model</module>
