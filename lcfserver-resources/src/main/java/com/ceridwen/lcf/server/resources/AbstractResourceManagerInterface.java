@@ -1,24 +1,18 @@
-/*******************************************************************************
- * Copyright (c) 2016, Matthew J. Dovey (www.ceridwen.com).
- *   
+/* 
+ * Copyright 2019 Ceridwen Limited.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * You may not use this file except in compliance with the License.
+ * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *   
- *     http://www.apache.org/licenses/LICENSE-2.0
- *   
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *    
- *   
- * Contributors:
- *     Matthew J. Dovey (www.ceridwen.com) - initial API and implementation
- *
- *     
- *******************************************************************************/
+ */
 package com.ceridwen.lcf.server.resources;
 
 import com.ceridwen.lcf.model.enumerations.CreationQualifier;
@@ -30,7 +24,7 @@ import org.bic.ns.lcf.v1_0.SelectionCriterion;
 /**
  * Interface for handling LCF Entity requests
  * Register specific implementation in 
- * META-INF/Servers/com.ceridwen.lcf.server.resources.<E>ResourceManagerInterface
+ * META-INF/Servers/com.ceridwen.lcf.server.resources.{Entity}ResourceManagerInterface
  * 
  * @param <E>   LCF Entity class
  */

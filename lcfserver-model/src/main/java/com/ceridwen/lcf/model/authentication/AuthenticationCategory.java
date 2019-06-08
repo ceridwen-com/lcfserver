@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2019 Ceridwen Limited.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,10 +17,18 @@ package com.ceridwen.lcf.model.authentication;
 
 /**
  *
- * @author Matthew.Dovey
+ * @author Ceridwen Limited
  */
 public enum AuthenticationCategory {
+
+    /**
+     *
+     */
     TERMINAL("Authorization"),
+
+    /**
+     *
+     */
     USER("lcf-patron-credential");
     private String parameter;
     
@@ -28,6 +36,10 @@ public enum AuthenticationCategory {
         this.parameter = parameter;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getParameterText() {
         return this.parameter;
     }

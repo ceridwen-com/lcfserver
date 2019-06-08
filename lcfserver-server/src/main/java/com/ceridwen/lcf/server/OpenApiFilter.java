@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2019 Ceridwen Limited.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,13 +35,24 @@ import javax.ws.rs.ext.Provider;
 
 /**
  *
- * @author Matthew.Dovey
+ * @author Ceridwen Limited
  */
 @Provider
 public class OpenApiFilter extends AbstractSpecFilter {
 
+    /**
+     *
+     */
     public static String uri = null;
 
+    /**
+     *
+     * @param openAPI
+     * @param params
+     * @param cookies
+     * @param headers
+     * @return
+     */
     @Override
     public Optional<OpenAPI> filterOpenAPI(OpenAPI openAPI, Map<String, List<String>> params, Map<String, String> cookies, Map<String, List<String>> headers) {
         Optional<OpenAPI> openApi = super.filterOpenAPI(openAPI, params, cookies, headers); //To change body of generated methods, choose Tools | Templates.
@@ -74,6 +85,15 @@ public class OpenApiFilter extends AbstractSpecFilter {
 //        }
 //        return Optional.of(operation);
 //    }
+
+    /**
+     *
+     * @param schema
+     * @param params
+     * @param cookies
+     * @param headers
+     * @return
+     */
 
     @Override
     public Optional<Schema> filterSchema(Schema schema, Map<String, List<String>> params, Map<String, String> cookies, Map<String, List<String>> headers) {

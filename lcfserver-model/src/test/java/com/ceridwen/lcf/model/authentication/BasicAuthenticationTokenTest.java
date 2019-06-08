@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2019 Ceridwen Limited.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,25 +24,40 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
- * @author Matthew
+ * @author Ceridwen Limited
  */
 public class BasicAuthenticationTokenTest {
     
+    /**
+     *
+     */
     public BasicAuthenticationTokenTest() {
     }
     
+    /**
+     *
+     */
     @BeforeAll
     public static void setUpClass() {
     }
     
+    /**
+     *
+     */
     @AfterAll
     public static void tearDownClass() {
     }
     
+    /**
+     *
+     */
     @BeforeEach
     public void setUp() {
     }
     
+    /**
+     *
+     */
     @AfterEach
     public void tearDown() {
     }
