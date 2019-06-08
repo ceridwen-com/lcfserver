@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2019 Ceridwen Limited.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -80,6 +80,8 @@ public class MyJacksonJaxbJsonProvider extends JacksonJsonProvider {
      * Constructor to use when a custom mapper (usually components
      * like serializer/deserializer factories that have been configured)
      * is to be used.
+     * @param mapper
+     * @param annotationsToUse
      */
     public MyJacksonJaxbJsonProvider(ObjectMapper mapper, Annotations[] annotationsToUse)
     {

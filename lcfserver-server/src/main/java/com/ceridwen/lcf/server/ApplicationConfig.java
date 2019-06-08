@@ -1,7 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright 2019 Ceridwen Limited.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.ceridwen.lcf.server;
 
@@ -43,7 +53,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
 
 /**
  *
- * @author Matthew
+ * @author Ceridwen Limited
  */
 @OpenAPIDefinition( info = @Info(description = "BIC Library Communications Framework ", title = "BIC LCF"), 
         externalDocs = @ExternalDocumentation(description = "BIC LCF Documentation", url = "https://bic-org-uk.githib.io/bic-lcf"))
@@ -51,6 +61,9 @@ import javax.xml.bind.annotation.XmlEnumValue;
 @SecurityScheme( name = "USER", description = "Patron Authentication. Should be of the form \"Basic {credentials}\", where {credentials} is the base64 encoding of id and password joined by a single colon (:).", type=SecuritySchemeType.APIKEY, in=SecuritySchemeIn.HEADER, paramName="lcf-patron-credential" )
 public class ApplicationConfig extends Application {
         
+    /**
+     *
+     */
     public ApplicationConfig() { 
         super();
         
@@ -100,6 +113,10 @@ public class ApplicationConfig extends Application {
         }        
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> resources = new java.util.HashSet<>();

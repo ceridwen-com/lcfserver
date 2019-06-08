@@ -1,7 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright 2019 Ceridwen Limited.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.ceridwen.lcf.server.webservice;
 
@@ -32,13 +42,19 @@ import org.bic.ns.lcf.v1_0.SelectionCriterion;
 
 /**
  *
- * @author Matthew.Dovey
+ * @author Ceridwen Limited
+ * @param <E>
  */
 public class WebserviceHelper<E> {
     
     AbstractResourceManagerInterface<E> rm = null;
     Class<E> clazz;
     
+    /**
+     *
+     * @param clazz
+     * @param interfaze
+     */
     public WebserviceHelper(Class<E> clazz, Class<? extends AbstractResourceManagerInterface<E>> interfaze) {
         this.clazz = clazz;
         
@@ -62,6 +78,11 @@ public class WebserviceHelper<E> {
 //        public boolean hasResourceManager() {
 //            return (rm != null);
 //        }
+
+    /**
+     *
+     * @return
+     */
     public AbstractResourceManagerInterface<E> getResourceManager() {
         return rm;
     }
@@ -149,6 +170,15 @@ public class WebserviceHelper<E> {
         return Response.ok(response).header("lcf-version", EntityTypes.getLCFSpecVersion()).build();        
     }
     
+    /**
+     *
+     * @param identifier
+     * @param path
+     * @param value
+     * @param tokens
+     * @param baseUri
+     * @return
+     */
     public Response directValueUpdate(String identifier, DirectUpdatePath path, String value, List<AuthenticationToken> tokens, String baseUri) {
         if (value != null) {
             if (!rm.DirectValueUpdate(tokens, identifier, path, value)) {
@@ -161,6 +191,12 @@ public class WebserviceHelper<E> {
         return Response.ok().header("lcf-version", EntityTypes.getLCFSpecVersion()).build();        
     }
     
+    /**
+     *
+     * @param selectionCriterion
+     * @param parameter
+     * @param variable
+     */
     public void addSelectionCriterion(List<SelectionCriterion> selectionCriterion, String parameter, String variable) {
         try {
             if (variable != null && !variable.isEmpty()) {
@@ -174,6 +210,12 @@ public class WebserviceHelper<E> {
         }
     }
     
+    /**
+     *
+     * @param tokens
+     * @param category
+     * @param rawvalue
+     */
     public void addAuthenthicationTokens(List<AuthenticationToken> tokens, AuthenticationCategory category, String rawvalue) {
         if (rawvalue != null && !rawvalue.isEmpty()) {
             if (rawvalue.toUpperCase().startsWith("BASIC ")) {
@@ -183,6 +225,12 @@ public class WebserviceHelper<E> {
         }
     }
     
+    /**
+     *
+     * @param qualifiers
+     * @param qualifier
+     * @param value
+     */
     public void addCreationQualifier(List<CreationQualifier> qualifiers, CreationQualifier qualifier, String value) {
         if (value != null && !value.isEmpty()) {
             if (value.equalsIgnoreCase("y") || value.equalsIgnoreCase("1")) {

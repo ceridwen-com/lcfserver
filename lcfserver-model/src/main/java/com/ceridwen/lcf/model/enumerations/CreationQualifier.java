@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2019 Ceridwen Limited.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,10 +20,18 @@ import java.util.List;
 
 /**
  *
- * @author Matthew.Dovey
+ * @author Ceridwen Limited
  */
 public enum CreationQualifier {
+
+    /**
+     *
+     */
     CONFIRMATION("confirmation", Arrays.asList(EntityTypes.Type.Charge, EntityTypes.Type.Loan, EntityTypes.Type.Reservation)),
+
+    /**
+     *
+     */
     CHARGE_ACKNOWLEDGED("charge-acknowledged", Arrays.asList(EntityTypes.Type.Loan, EntityTypes.Type.Reservation));
 
     private String parameter;
@@ -35,10 +43,19 @@ public enum CreationQualifier {
         
     }
     
+    /**
+     *
+     * @return
+     */
     public String getParameterText() {
         return this.parameter;
     }
     
+    /**
+     *
+     * @param type
+     * @return
+     */
     public boolean isApplicable(EntityTypes.Type type) {
         return applicable.contains(type);
     }

@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2019 Ceridwen Limited.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,10 +20,18 @@ import java.util.List;
 
 /**
  *
- * @author Matthew.Dovey
+ * @author Ceridwen Limited
  */
 public enum DirectUpdatePath {
+
+    /**
+     *
+     */
     PASSWORD("password", Arrays.asList(EntityTypes.Type.Patron)),
+
+    /**
+     *
+     */
     PIN("pin", Arrays.asList(EntityTypes.Type.Patron));
 
     private String path;
@@ -34,10 +42,19 @@ public enum DirectUpdatePath {
         this.applicable = applicable;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getPath() {
         return this.path;
     }
     
+    /**
+     *
+     * @param type
+     * @return
+     */
     public boolean isApplicable(EntityTypes.Type type) {
         return applicable.contains(type);
     }

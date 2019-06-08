@@ -21,9 +21,17 @@
  *******************************************************************************/
 package com.ceridwen.lcf.server.legacy.integrity;
 
+/**
+ *
+ * @author Ceridwen Limited
+ * @param <E>
+ */
 public class NullSingletonRef<E> extends SingletonRef<E> {
 
-	public NullSingletonRef() {
+    /**
+     *
+     */
+    public NullSingletonRef() {
 		super(
 			o -> {return "";},
 			(o, s) -> {}

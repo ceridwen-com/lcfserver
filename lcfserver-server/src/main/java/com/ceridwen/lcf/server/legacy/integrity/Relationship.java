@@ -1,39 +1,70 @@
-/*******************************************************************************
- * Copyright (c) 2016, Matthew J. Dovey (www.ceridwen.com).
- *   
+/* 
+ * Copyright 2019 Ceridwen Limited.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * You may not use this file except in compliance with the License.
+ * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *   
- *     http://www.apache.org/licenses/LICENSE-2.0
- *   
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *    
- *   
- * Contributors:
- *     Matthew J. Dovey (www.ceridwen.com) - initial API and implementation
- *
- *     
- *******************************************************************************/
+ */
 package com.ceridwen.lcf.server.legacy.integrity;
 
 import com.ceridwen.lcf.model.enumerations.EntityTypes;
 
+/**
+ *
+ * @author Ceridwen Limited
+ * @param <ParentType>
+ * @param <ChildType>
+ */
 public class Relationship<ParentType, ChildType> {
-	public enum Type {
-		OneToOne,
-		OneToMany,
-		ManyToMany
+
+    /**
+     *
+     */
+    public enum Type {
+
+            /**
+             *
+             */
+            OneToOne,
+
+            /**
+             *
+             */
+            OneToMany,
+
+            /**
+             *
+             */
+            ManyToMany
 	}
 	
-	public enum Integrity {
-		ReferencesValid,
-		CascadeParentDelete,
-		ParentRequired
+    /**
+     *
+     */
+    public enum Integrity {
+
+        /**
+         *
+         */
+        ReferencesValid,
+
+        /**
+         *
+         */
+        CascadeParentDelete,
+
+        /**
+         *
+         */
+        ParentRequired
 	}
 
 	private Type relationshipType;
@@ -43,7 +74,15 @@ public class Relationship<ParentType, ChildType> {
 	private Ref<ChildType> parentRefInChild;
 	private Integrity integrity;
 	
-	public Relationship(EntityTypes.Type parentType, SingletonRef<ChildType> parentRefInChild, EntityTypes.Type childType, SingletonRef<ParentType> childRefInParent, Integrity integrity) {
+    /**
+     *
+     * @param parentType
+     * @param parentRefInChild
+     * @param childType
+     * @param childRefInParent
+     * @param integrity
+     */
+    public Relationship(EntityTypes.Type parentType, SingletonRef<ChildType> parentRefInChild, EntityTypes.Type childType, SingletonRef<ParentType> childRefInParent, Integrity integrity) {
 		this.relationshipType = Type.OneToOne;
 		this.parentType = parentType;
 		this.childRefInParent = childRefInParent;
@@ -52,7 +91,15 @@ public class Relationship<ParentType, ChildType> {
 		this.integrity = integrity;
 	}
 
-	public Relationship(EntityTypes.Type parentType, SingletonRef<ChildType> parentRefInchild, EntityTypes.Type childType, ListRef<ParentType> childRefInParent, Integrity integrity) {
+    /**
+     *
+     * @param parentType
+     * @param parentRefInchild
+     * @param childType
+     * @param childRefInParent
+     * @param integrity
+     */
+    public Relationship(EntityTypes.Type parentType, SingletonRef<ChildType> parentRefInchild, EntityTypes.Type childType, ListRef<ParentType> childRefInParent, Integrity integrity) {
 		this.relationshipType = Type.OneToMany;
 		this.parentType = parentType;
 		this.childRefInParent = childRefInParent;
@@ -61,7 +108,14 @@ public class Relationship<ParentType, ChildType> {
 		this.integrity = integrity;
 	}
 
-	public Relationship(EntityTypes.Type parentType, ListRef<ChildType> parentRefInChild, EntityTypes.Type childType, ListRef<ParentType> childRefInParent) {
+    /**
+     *
+     * @param parentType
+     * @param parentRefInChild
+     * @param childType
+     * @param childRefInParent
+     */
+    public Relationship(EntityTypes.Type parentType, ListRef<ChildType> parentRefInChild, EntityTypes.Type childType, ListRef<ParentType> childRefInParent) {
 		this.relationshipType = Type.ManyToMany;
 		this.parentType = parentType;
 		this.childRefInParent = childRefInParent;
@@ -70,22 +124,51 @@ public class Relationship<ParentType, ChildType> {
 		this.integrity = Integrity.ReferencesValid;
 	}
 
-	public Type getRelationshipType() {
+    /**
+     *
+     * @return
+     */
+    public Type getRelationshipType() {
 		return relationshipType;
 	}
-	public EntityTypes.Type getParentType() {
+
+    /**
+     *
+     * @return
+     */
+    public EntityTypes.Type getParentType() {
 		return parentType;
 	}
-	public EntityTypes.Type getChildType() {
+
+    /**
+     *
+     * @return
+     */
+    public EntityTypes.Type getChildType() {
 		return childType;
 	}
-	public Ref<ParentType> getChildRefInParent() {
+
+    /**
+     *
+     * @return
+     */
+    public Ref<ParentType> getChildRefInParent() {
 		return childRefInParent;
 	}
-	public Ref<ChildType> getParentRefInChild() {
+
+    /**
+     *
+     * @return
+     */
+    public Ref<ChildType> getParentRefInChild() {
 		return parentRefInChild;
 	}
-	public boolean isDeleteChildrenOnDeleteParent() {
+
+    /**
+     *
+     * @return
+     */
+    public boolean isDeleteChildrenOnDeleteParent() {
 		switch (this.integrity) {
 			case ParentRequired:
 			case CascadeParentDelete:
@@ -95,7 +178,12 @@ public class Relationship<ParentType, ChildType> {
 				return false;
 		}
 	}
-	public boolean isParentRequired() {
+
+    /**
+     *
+     * @return
+     */
+    public boolean isParentRequired() {
 		switch (this.integrity) {
 			case ParentRequired:
 				return true;
@@ -106,7 +194,11 @@ public class Relationship<ParentType, ChildType> {
 		}
 	}
 	
-	public Integrity getIntegrity() {
+    /**
+     *
+     * @return
+     */
+    public Integrity getIntegrity() {
 		return this.integrity;
 	}
 }

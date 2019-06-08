@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2019 Ceridwen Limited.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,10 +22,16 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Matthew.Dovey
+ * @author Ceridwen Limited
  */
 public class AddReferenceHandler extends AbstractReferenceHandler {
 
+    /**
+     *
+     * @param entity
+     * @param urlPrefix
+     * @return
+     */
     public boolean addReferences(Object entity, String urlPrefix) {
         if (entity != null) {
             return iterateProperties(entity.getClass(), entity, null, null, urlPrefix, "");
@@ -34,6 +40,13 @@ public class AddReferenceHandler extends AbstractReferenceHandler {
         }      
     }
     
+    /**
+     *
+     * @param clazz
+     * @param instance
+     * @param propertyReference
+     * @param refprefix
+     */
     @Override
     protected void handleReference(Class clazz, Object instance, String propertyReference, String refprefix) {
         try {

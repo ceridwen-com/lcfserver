@@ -1,7 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright 2019 Ceridwen Limited.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.ceridwen.lcf.server.resources.memory;
 
@@ -14,7 +24,6 @@ import com.ceridwen.lcf.model.authentication.BasicAuthenticationToken;
 import com.ceridwen.lcf.model.exceptions.EXC02_InvalidUserCredentials;
 import com.ceridwen.lcf.model.exceptions.EXC03_InvalidTerminalCredentials;
 import com.ceridwen.lcf.model.exceptions.EXC04_UnableToProcessRequest;
-import com.ceridwen.lcf.model.exceptions.EXC05_InvalidEntityReference;
 import com.ceridwen.lcf.model.exceptions.EXC06_InvalidDataInElement;
 import com.ceridwen.lcf.model.responses.LCFResponse_CheckIn;
 import com.ceridwen.lcf.model.responses.LCFResponse_CheckOut;
@@ -210,7 +219,7 @@ class NameGenerator {
 
 /**
  *
- * @author Matthew
+ * @author Ceridwen Limited
  */
 public class MemoryResourceManager {
     
@@ -218,6 +227,10 @@ public class MemoryResourceManager {
     
     private Map<EntityTypes.Type, Map<String, Object>> database;
     
+    /**
+     *
+     * @return
+     */
     public static MemoryResourceManager getMemoryResourceManager() {
         if (mgr == null) {
             mgr = new MemoryResourceManager();
@@ -244,6 +257,10 @@ public class MemoryResourceManager {
 
     }
     
+    /**
+     *
+     * @param type
+     */
     public void generateRandomContent(EntityTypes.Type type) {
         EasyRandomParameters parameters = new EasyRandomParameters()
             .seed(123L)
@@ -264,8 +281,9 @@ public class MemoryResourceManager {
         }
     }
     
-    
-    
+    /**
+     *
+     */
     public MemoryResourceManager() {
         this.database = new HashMap<>();
         Logger.getLogger(MemoryResourceManager.class.getName()).info("Loading data");
@@ -295,7 +313,13 @@ public class MemoryResourceManager {
         }
     }
   
-   
+    /**
+     *
+     * @param type
+     * @param identifier
+     * @param authTokens
+     * @return
+     */
     public Object get(EntityTypes.Type type, String identifier, List<AuthenticationToken> authTokens) {
         Authenticator.getAuthenticator().authenticate(type, Operation.GET, authTokens);
 
@@ -319,7 +343,16 @@ public class MemoryResourceManager {
         return null;
     }
     
-  
+    /**
+     *
+     * @param type
+     * @param identifier
+     * @param parent
+     * @param data
+     * @param qualifiers
+     * @param authTokens
+     * @return
+     */
     public Object put(EntityTypes.Type type, String identifier, Object parent, Object data, List<CreationQualifier> qualifiers, List<AuthenticationToken> authTokens) {
         Authenticator.getAuthenticator().authenticate(type, Operation.PUT, authTokens);
         
@@ -365,6 +398,13 @@ public class MemoryResourceManager {
         return directGet(type, identifier);
     }    
     
+    /**
+     *
+     * @param type
+     * @param identifier
+     * @param authTokens
+     * @return
+     */
     public boolean delete(EntityTypes.Type type, String identifier, List<AuthenticationToken> authTokens) {
         Authenticator.getAuthenticator().authenticate(type, Operation.DELETE, authTokens);
 
@@ -379,6 +419,16 @@ public class MemoryResourceManager {
         return false;
     }
     
+    /**
+     *
+     * @param type
+     * @param parent
+     * @param startIndex
+     * @param count
+     * @param selection
+     * @param authTokens
+     * @return
+     */
     public QueryResults<? extends Object> list(EntityTypes.Type type, Object parent, int startIndex, int count, List<SelectionCriterion> selection, List<AuthenticationToken> authTokens) {
         Authenticator.getAuthenticator().authenticate(type, Operation.LIST, authTokens);
 
@@ -408,6 +458,15 @@ public class MemoryResourceManager {
         return queryResults;
     }
     
+    /**
+     *
+     * @param type
+     * @param identifier
+     * @param path
+     * @param value
+     * @param authTokens
+     * @return
+     */
     public boolean DirectValueUpdate(EntityTypes.Type type, String identifier, DirectUpdatePath path, String value, List<AuthenticationToken> authTokens) {
         if (type.equals(EntityTypes.Type.Patron) && (path.equals(DirectUpdatePath.PASSWORD) || path.equals(DirectUpdatePath.PIN))) {
             Patron patron = (Patron)this.directGet(type, identifier);

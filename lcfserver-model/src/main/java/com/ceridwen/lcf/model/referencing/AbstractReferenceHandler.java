@@ -1,7 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright 2019 Ceridwen Limited.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.ceridwen.lcf.model.referencing;
 
@@ -17,7 +27,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Matthew
+ * @author Ceridwen Limited
  */
 public abstract class AbstractReferenceHandler {
 
@@ -38,6 +48,17 @@ public abstract class AbstractReferenceHandler {
 //    }
 //    
 //
+
+    /**
+     *
+     * @param clazz
+     * @param instance
+     * @param parentClazz
+     * @param parent
+     * @param urlPrefix
+     * @param logPrefix
+     * @return
+     */
 
     
     protected boolean iterateProperties(Class clazz, Object instance, Class parentClazz, Object parent, String urlPrefix, String logPrefix) {
@@ -85,6 +106,18 @@ public abstract class AbstractReferenceHandler {
         return success;
     }
 
+    /**
+     *
+     * @param method
+     * @param clazz
+     * @param instance
+     * @param parentClazz
+     * @param parent
+     * @param urlPrefix
+     * @param logPrefix
+     * @param success
+     * @return
+     */
     protected boolean handleStringType(Method method, Class clazz, Object instance, Class parentClazz, Object parent, String urlPrefix, String logPrefix, boolean success) {
         String property = propertyFromPropertyReferenceGetter(method.getName());
         if (property != null) {
@@ -95,6 +128,11 @@ public abstract class AbstractReferenceHandler {
         return success;
     }
     
+    /**
+     *
+     * @param propertyReference
+     * @return
+     */
     protected String propertyFromPropertyReferenceGetter(String propertyReference) {
         for (String suffix: new String[]{"Ref", "Href"}) {
             if (propertyReference.endsWith(suffix)) {
@@ -104,6 +142,15 @@ public abstract class AbstractReferenceHandler {
         return null;
     }
         
+    /**
+     *
+     * @param clazz
+     * @param propertyReference
+     * @param property
+     * @param parentClazz
+     * @param parent
+     * @return
+     */
     protected EntityTypes.Type getPropertyType(Class clazz, String propertyReference, String property, Class parentClazz, Object parent) {
         for (EntityTypes.Type type: EntityTypes.Type.values()) {
             if (property.endsWith(type.name())) {
@@ -113,6 +160,18 @@ public abstract class AbstractReferenceHandler {
         return new SpecialReferenceCases().handle(clazz, propertyReference, property, parentClazz, parent);
     }
 
+    /**
+     *
+     * @param clazz
+     * @param instance
+     * @param parentClazz
+     * @param parent
+     * @param propertyReference
+     * @param property
+     * @param urlPrefix
+     * @param logPrefix
+     * @return
+     */
     protected boolean canHandleReference(Class clazz, Object instance, Class parentClazz, Object parent, String propertyReference, String property, String urlPrefix, String logPrefix) {
         EntityTypes.Type propertyType = getPropertyType(clazz, propertyReference, property, parentClazz, parent);
         if (propertyType == null) {
@@ -126,6 +185,13 @@ public abstract class AbstractReferenceHandler {
         }        
     }
     
+    /**
+     *
+     * @param clazz
+     * @param instance
+     * @param propertyReference
+     * @param refprefix
+     */
     abstract protected void handleReference(Class clazz, Object instance, String propertyReference, String refprefix);
         
 }

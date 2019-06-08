@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2019 Ceridwen Limited.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,12 +23,53 @@ import org.bic.ns.lcf.v1_0.SelectionCriterion;
 
 /**
  *
- * @author Matthew.Dovey
+ * @author Ceridwen Limited
+ * @param <E>
  */
 public interface ResourceFilterInterface<E> {
-	E Create(Map<AuthenticationCategory, AuthenticationToken> authTokens, Object parent, E entity);
-	E Retrieve(Map<AuthenticationCategory, AuthenticationToken> authTokens, E Entity);
-	E Modify(Map<AuthenticationCategory, AuthenticationToken> authTokens, String identifier, E entity);
-	void Delete(Map<AuthenticationCategory, AuthenticationToken> authTokens, String identifier);
-	List<E> Query(Map<AuthenticationCategory, AuthenticationToken> authTokens, Object parent, int startIndex, int count, List<SelectionCriterion> selection, List<E> results);
+
+    /**
+     *
+     * @param authTokens
+     * @param parent
+     * @param entity
+     * @return
+     */
+    E Create(Map<AuthenticationCategory, AuthenticationToken> authTokens, Object parent, E entity);
+
+    /**
+     *
+     * @param authTokens
+     * @param Entity
+     * @return
+     */
+    E Retrieve(Map<AuthenticationCategory, AuthenticationToken> authTokens, E Entity);
+
+    /**
+     *
+     * @param authTokens
+     * @param identifier
+     * @param entity
+     * @return
+     */
+    E Modify(Map<AuthenticationCategory, AuthenticationToken> authTokens, String identifier, E entity);
+
+    /**
+     *
+     * @param authTokens
+     * @param identifier
+     */
+    void Delete(Map<AuthenticationCategory, AuthenticationToken> authTokens, String identifier);
+
+    /**
+     *
+     * @param authTokens
+     * @param parent
+     * @param startIndex
+     * @param count
+     * @param selection
+     * @param results
+     * @return
+     */
+    List<E> Query(Map<AuthenticationCategory, AuthenticationToken> authTokens, Object parent, int startIndex, int count, List<SelectionCriterion> selection, List<E> results);
 }

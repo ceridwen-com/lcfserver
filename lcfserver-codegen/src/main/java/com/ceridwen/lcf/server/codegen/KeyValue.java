@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2019 Ceridwen Limited.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,29 +17,51 @@ package com.ceridwen.lcf.server.codegen;
 
 /**
  *
- * @author Matthew.Dovey
+ * @author Ceridwen Limited
+ * @param <K>
  */
 public class KeyValue<K extends Enum> {
     K key;
     String value;
     
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public KeyValue(K key, String value) {
         this.key = key;
         this.value = value;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getKey() {
         return key.name();
     }
 
+    /**
+     *
+     * @param key
+     */
     public void setKey(K key) {
         this.key = key;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     *
+     * @param value
+     */
     public void setValue(String value) {
         this.value = value;
     }
