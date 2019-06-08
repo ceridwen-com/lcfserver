@@ -33,7 +33,7 @@ public abstract interface AbstractResourceManagerInterface<E> {
 	String Create(List<AuthenticationToken> authTokens, Object parent, E entity, List<CreationQualifier> qualifiers);
 	E Retrieve(List<AuthenticationToken> authTokens, String identifier);
 	E Modify(List<AuthenticationToken> authTokens, String identifier, E entity);
-        void UpdateValue(List<AuthenticationToken> authTokens, String identifier, VirtualUpdatePath path, String value);
-	void Delete(List<AuthenticationToken> authTokens, String identifier);
+        boolean UpdateValue(List<AuthenticationToken> authTokens, String identifier, VirtualUpdatePath path, String value);
+	boolean Delete(List<AuthenticationToken> authTokens, String identifier);
 	QueryResults<E> Query(List<AuthenticationToken> authTokens, Object parent, int startIndex, int count, List<SelectionCriterion> selection);
 }

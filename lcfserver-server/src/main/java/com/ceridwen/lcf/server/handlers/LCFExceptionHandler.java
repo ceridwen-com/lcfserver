@@ -28,16 +28,18 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import com.ceridwen.lcf.model.exceptions.EXC00_LCF_Exception;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.jaxrs.annotation.JacksonFeatures;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.UriInfo;
 
 @Provider
 public class LCFExceptionHandler implements ExceptionMapper<EXC00_LCF_Exception>{
+    @Context
+    UriInfo uriInfo;
+    
     @Override
-    @JacksonFeatures(serializationEnable = {SerializationFeature.INDENT_OUTPUT}, serializationDisable = {SerializationFeature.WRITE_DATES_AS_TIMESTAMPS})    
     public Response toResponse(final EXC00_LCF_Exception exception) {
-	new AddReferenceHandler().addReferences(exception.getLcfException(), "<expandurl>");	// TODO need to check how data is marshalled
+	new AddReferenceHandler().addReferences(exception.getLcfException(), uriInfo.getBaseUri().toString());	// TODO need to check how data is marshalled
     	ResponseBuilder responseBuilder = Response.status(exception.getHTTPErrorCode());
         for (EXC00_LCF_Exception.CustomHeader customHeader: exception.getCustomHeaders()) {
             responseBuilder = responseBuilder.header(customHeader.header, customHeader.value);       

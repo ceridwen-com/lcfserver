@@ -23,10 +23,7 @@ public class <Entity>ResourceManager implements <Entity>ResourceManagerInterface
 
     @Override
     public String Create(List\<AuthenticationToken\> authTokens, Object parent, <Entity> entity, List\<CreationQualifier\> qualifiers) {
-        if (entity.getIdentifier() == null || entity.getIdentifier().isBlank()) {
-            entity.setIdentifier(UUID.randomUUID().toString());
-        }
-        MemoryResourceManager.getMemoryResourceManager().put(EntityTypes.Type.<Entity>, entity.getIdentifier(), parent, entity, qualifiers, authTokens);
+        MemoryResourceManager.getMemoryResourceManager().put(EntityTypes.Type.<Entity>, null, parent, entity, qualifiers, authTokens);
         return entity.getIdentifier();
     }
 
@@ -41,8 +38,8 @@ public class <Entity>ResourceManager implements <Entity>ResourceManagerInterface
     }
 
     @Override
-    public void Delete(List\<AuthenticationToken\> authTokens, String identifier) {
-        MemoryResourceManager.getMemoryResourceManager().delete(EntityTypes.Type.<Entity>, identifier, authTokens);
+    public boolean Delete(List\<AuthenticationToken\> authTokens, String identifier) {
+        return MemoryResourceManager.getMemoryResourceManager().delete(EntityTypes.Type.<Entity>, identifier, authTokens);
     }
 
     @Override
@@ -51,8 +48,8 @@ public class <Entity>ResourceManager implements <Entity>ResourceManagerInterface
     }
 
     @Override
-    public void UpdateValue(List\<AuthenticationToken\> authTokens, String identifier, VirtualUpdatePath path, String value) {
-        MemoryResourceManager.getMemoryResourceManager().UpdateValue(EntityTypes.Type.<Entity>, identifier, path, value, authTokens);
+    public boolean UpdateValue(List\<AuthenticationToken\> authTokens, String identifier, VirtualUpdatePath path, String value) {
+        return MemoryResourceManager.getMemoryResourceManager().UpdateValue(EntityTypes.Type.<Entity>, identifier, path, value, authTokens);
     }
 
 }

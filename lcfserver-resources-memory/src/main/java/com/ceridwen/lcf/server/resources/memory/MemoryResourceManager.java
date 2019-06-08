@@ -15,6 +15,9 @@ import com.ceridwen.lcf.model.exceptions.EXC02_InvalidUserCredentials;
 import com.ceridwen.lcf.model.exceptions.EXC03_InvalidTerminalCredentials;
 import com.ceridwen.lcf.model.exceptions.EXC04_UnableToProcessRequest;
 import com.ceridwen.lcf.model.exceptions.EXC05_InvalidEntityReference;
+import com.ceridwen.lcf.model.exceptions.EXC06_InvalidDataInElement;
+import com.ceridwen.lcf.model.responses.LCFResponse_CheckIn;
+import com.ceridwen.lcf.model.responses.LCFResponse_CheckOut;
 import com.ceridwen.lcf.server.resources.QueryResults;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,12 +28,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import org.bic.ns.lcf.v1_0.CardStatus;
 import org.bic.ns.lcf.v1_0.CardStatusInfo;
 import org.bic.ns.lcf.v1_0.Iso639LanguageCode;
+import org.bic.ns.lcf.v1_0.LcfCheckInResponse;
+import org.bic.ns.lcf.v1_0.LcfCheckOutResponse;
+import org.bic.ns.lcf.v1_0.Loan;
+import org.bic.ns.lcf.v1_0.LoanStatusCode;
 import org.bic.ns.lcf.v1_0.Patron;
 import org.bic.ns.lcf.v1_0.SelectionCriterion;
 import org.jeasy.random.EasyRandom;
@@ -251,31 +259,42 @@ public class MemoryResourceManager {
         int amount = (new Random()).nextInt(25)+5;
         for (int i=0; i < amount; i++) {
             Object o = easyRandom.nextObject(type.getTypeClass());
+            type.setIdentifier(o, UUID.randomUUID().toString());
             this.directPut(type, type.getIdentifier(o), o);
         }
     }
     
+    
+    
     public MemoryResourceManager() {
         this.database = new HashMap<>();
-        
-        int amount = (new Random()).nextInt(25)+5;
-//        for (int i=0; i < amount; i++) {
-//            Patron patron = this.GeneratePatron();
-//            this.put(EntityTypes.Type.Patron, patron.getIdentifier(), null, patron, new ArrayList<>(), new ArrayList<>());
-//            Authenticator.getAuthenticator().updatePassword(AuthenticationCategory.USER, patron.getBarcodeId(), "password");
-//        }
-        
-        for (EntityTypes.Type type: EntityTypes.Type.values()) {
-            generateRandomContent(type);
-        }
+        Logger.getLogger(MemoryResourceManager.class.getName()).info("Loading data");
+        loadData();
+        Logger.getLogger(MemoryResourceManager.class.getName()).info("Loading acls");
+        loadACLS();
+        Logger.getLogger(MemoryResourceManager.class.getName()).info("Initialisation complete");
+    }
 
-
+    private void loadACLS() {
         Authenticator.getAuthenticator().updatePassword(AuthenticationCategory.USER, "patron", "password");
         Authenticator.getAuthenticator().updatePassword(AuthenticationCategory.TERMINAL, "terminal", "password");
         
         Authenticator.getAuthenticator().addACL(EntityTypes.Type.Authorisation, AuthenticationCategory.USER);
         Authenticator.getAuthenticator().addACL(EntityTypes.Type.Authorisation, AuthenticationCategory.TERMINAL);
     }
+
+    private void loadData() {
+//        int amount = (new Random()).nextInt(25)+5;
+//        for (int i=0; i < amount; i++) {
+//            Patron patron = this.GeneratePatron();
+//            this.put(EntityTypes.Type.Patron, patron.getIdentifier(), null, patron, new ArrayList<>(), new ArrayList<>());
+//            Authenticator.getAuthenticator().updatePassword(AuthenticationCategory.USER, patron.getBarcodeId(), "password");
+//        }
+        for (EntityTypes.Type type: EntityTypes.Type.values()) {
+            generateRandomContent(type);
+        }
+    }
+  
    
     public Object get(EntityTypes.Type type, String identifier, List<AuthenticationToken> authTokens) {
         Authenticator.getAuthenticator().authenticate(type, Operation.GET, authTokens);
@@ -303,8 +322,32 @@ public class MemoryResourceManager {
   
     public Object put(EntityTypes.Type type, String identifier, Object parent, Object data, List<CreationQualifier> qualifiers, List<AuthenticationToken> authTokens) {
         Authenticator.getAuthenticator().authenticate(type, Operation.PUT, authTokens);
-
-        return directPut(type, identifier, data);
+        
+        if (identifier == null) {
+            String test = type.getIdentifier(data);
+            if (test != null) {
+                if (directGet(type, test) != null) {
+                    throw new EXC06_InvalidDataInElement("Entity already exists with that identifier", "", "", null);
+                }
+            } else {
+                type.setIdentifier(data, UUID.randomUUID().toString());
+            }
+        } else {
+            if (directGet(type, identifier) == null) {
+                return null;            
+            }
+            if (type.getIdentifier(data) != null && !identifier.equals(type.getIdentifier(data))) {
+                throw new EXC06_InvalidDataInElement("Change of identifier not permitted", "", "", null);
+            } else {
+                type.setIdentifier(data, identifier);
+            }
+        }
+       
+        if (type.equals(EntityTypes.Type.Loan)) {
+            doLoan(identifier, (Loan)data);
+        }
+        
+        return directPut(type, type.getIdentifier(data), data);
     }    
 
     private Object directPut(EntityTypes.Type type, String identifier, Object data) {
@@ -319,18 +362,21 @@ public class MemoryResourceManager {
             map.put(identifier, data);
         }
         
-        return data;
+        return directGet(type, identifier);
     }    
     
-    public void delete(EntityTypes.Type type, String identifier, List<AuthenticationToken> authTokens) {
+    public boolean delete(EntityTypes.Type type, String identifier, List<AuthenticationToken> authTokens) {
         Authenticator.getAuthenticator().authenticate(type, Operation.DELETE, authTokens);
 
         if (database.containsKey(type)) {
             Map<String, Object> map = database.get(type);
             if (map.containsKey(identifier)) {
                 map.remove(identifier);
+                return true;
             }
         }
+        
+        return false;
     }
     
     public QueryResults<? extends Object> list(EntityTypes.Type type, Object parent, int startIndex, int count, List<SelectionCriterion> selection, List<AuthenticationToken> authTokens) {
@@ -362,18 +408,45 @@ public class MemoryResourceManager {
         return queryResults;
     }
     
-    public void UpdateValue(EntityTypes.Type type, String identifier, VirtualUpdatePath path, String value, List<AuthenticationToken> authTokens) {
+    public boolean UpdateValue(EntityTypes.Type type, String identifier, VirtualUpdatePath path, String value, List<AuthenticationToken> authTokens) {
         if (type.equals(EntityTypes.Type.Patron) && (path.equals(VirtualUpdatePath.PASSWORD) || path.equals(VirtualUpdatePath.PIN))) {
             Patron patron = (Patron)this.directGet(type, identifier);
             if (patron == null) {
-                throw new EXC05_InvalidEntityReference("", "", "", null);
+                return false;
             }
             Authenticator.getAuthenticator().authenticate(patron.getBarcodeId(), authTokens);
             Authenticator.getAuthenticator().updatePassword(AuthenticationCategory.USER, patron.getBarcodeId(), value);
+            return true;
         } else {
             throw new EXC04_UnableToProcessRequest("Invalid request", "Request invalid for " + type.getEntityTypeCodeValue(), path.getPath(), null );
+        }        
+    }
+
+    private void doLoan(String identifier, Loan loan) {
+        EasyRandomParameters parameters = new EasyRandomParameters()
+            .seed(123L)
+            .objectPoolSize(100)
+            .randomizationDepth(3)
+            .stringLengthRange(5, 12)
+            .collectionSizeRange(1, 10)
+            .scanClasspathForConcreteTypes(true)
+            .overrideDefaultInitialization(false)
+            .ignoreRandomizationErrors(true);
+        EasyRandom easyRandom = new EasyRandom(parameters);
+
+        if (identifier == null) {
+            LcfCheckOutResponse response = easyRandom.nextObject(LcfCheckOutResponse.class);
+            response.setLoan((Loan)directPut(EntityTypes.Type.Loan, loan.getIdentifier(), loan));
+            response.setLoanRef(null);
+            throw new LCFResponse_CheckOut(response);
+        } else {
+            if (loan.getLoanStatus().contains(LoanStatusCode.VALUE_8)) {
+                LcfCheckInResponse response = easyRandom.nextObject(LcfCheckInResponse.class);
+                response.setLoanRef(((Loan)directPut(EntityTypes.Type.Loan, identifier, loan)).getIdentifier());
+                response.setReturnLocationRef(UUID.randomUUID().toString());
+                throw new LCFResponse_CheckIn(response);
+            }
         }
-        
     }
 
 }

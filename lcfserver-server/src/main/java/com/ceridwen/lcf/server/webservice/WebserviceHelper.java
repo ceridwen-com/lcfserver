@@ -70,6 +70,8 @@ public class WebserviceHelper<E> {
     Response Create(Object parent, E entity, List<CreationQualifier> qualifiers, List<AuthenticationToken> tokens, String baseUri) {
         new RemoveReferenceHandler().removeReferences(entity, baseUri + EntityTypes.LCF_PREFIX + "/");
         
+        nullEmptyIdentifier(entity);
+        
         String identifier = rm.Create(tokens, parent, entity, qualifiers);
         
         new AddReferenceHandler().addReferences(entity, baseUri + EntityTypes.LCF_PREFIX + "/");
@@ -91,8 +93,14 @@ public class WebserviceHelper<E> {
     
     Response Modify(String identifier, E entity, List<AuthenticationToken> tokens, String baseUri) {
         new RemoveReferenceHandler().removeReferences(entity, baseUri + EntityTypes.LCF_PREFIX + "/");
+
+        nullEmptyIdentifier(entity);
         
         E modified = rm.Modify(tokens, identifier, entity);
+
+        if (modified == null) {
+            throw new EXC05_InvalidEntityReference("Entity not found", "Entity not found", "", null);
+        }
         
         new AddReferenceHandler().addReferences(modified, baseUri + EntityTypes.LCF_PREFIX + "/");
         
@@ -100,7 +108,9 @@ public class WebserviceHelper<E> {
     }
     
     Response Delete(String identifier, List<AuthenticationToken> tokens) {
-        rm.Delete(tokens, identifier);
+        if (!rm.Delete(tokens, identifier)) {
+             throw new EXC05_InvalidEntityReference("Entity not found", "Entity not found", "", null);
+        }
         return Response.ok().header("lcf-version", EntityTypes.getLCFSpecVersion()).build();
     }
     
@@ -142,7 +152,9 @@ public class WebserviceHelper<E> {
     
     public Response updateVirtualValue(String identifier, VirtualUpdatePath path, String value, List<AuthenticationToken> tokens, String baseUri) {
         if (value != null) {
-            rm.UpdateValue(tokens, identifier, path, value);
+            if (!rm.UpdateValue(tokens, identifier, path, value)) {
+                 throw new EXC05_InvalidEntityReference("Entity not found", "Entity not found", "", null);
+            }            
         } else {
             throw new EXC04_UnableToProcessRequest("Invalid value", "Value cannot be empty", "", null);
         }
@@ -177,6 +189,13 @@ public class WebserviceHelper<E> {
             if (value.equalsIgnoreCase("y") || value.equalsIgnoreCase("1")) {
                 qualifiers.add(qualifier);
             }
+        }
+    }
+    
+    private void nullEmptyIdentifier(E entity) {
+        String id = EntityTypes.lookUpByClass(clazz).getIdentifier(entity);
+        if (id != null && (id.isBlank() || id.isEmpty())) {
+            EntityTypes.lookUpByClass(clazz).setIdentifier(entity, null);
         }
     }
 }
