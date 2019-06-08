@@ -1,7 +1,7 @@
-EntityWebservice(LCFPath, Entity, EntityPath, SubEntity, SelectionCriteria, AlternativePosts, AlternativePuts, AlternativeGets, AlternativeDeletes, CreationQualifiers, VirtualUpdatePaths, AuthenticationSchemes) ::= <<
+EntityWebservice(LCFPath, Entity, EntityPath, SubEntity, SelectionCriteria, AlternativePosts, AlternativePuts, AlternativeGets, AlternativeDeletes, CreationQualifiers, DirectUpdatePaths, AuthenticationSchemes) ::= <<
 package com.ceridwen.lcf.server.webservice;
 
-import com.ceridwen.lcf.model.enumerations.VirtualUpdatePath;
+import com.ceridwen.lcf.model.enumerations.DirectUpdatePath;
 import com.ceridwen.lcf.model.authentication.AuthenticationToken;
 import com.ceridwen.lcf.model.authentication.AuthenticationCategory;
 import com.ceridwen.lcf.server.resources.<Entity>ResourceManagerInterface;
@@ -116,7 +116,7 @@ public class <Entity>Webservice
         return helper.Delete(identifier, tokens);
     }
 
-<VirtualUpdatePaths: {path |
+<DirectUpdatePaths: {path |
 
 
     @Path("<path.value>")
@@ -126,7 +126,7 @@ public class <Entity>Webservice
     @ApiResponse(
         responseCode = "200",
         description = "Updated")
-    public Response Update<path.key>(
+    public Response DirectUpdate<path.key>(
 <AuthenticationSchemes: {authenticationscheme |
             @Parameter(hidden=true) @HeaderParam("<authenticationscheme.value>") String <authenticationscheme.key>,}>
             String data
@@ -136,7 +136,7 @@ public class <Entity>Webservice
 <AuthenticationSchemes: {authenticationscheme |
         helper.addAuthenthicationTokens(tokens, AuthenticationCategory.<authenticationscheme.key>, <authenticationscheme.key>);}>
 
-        return helper.updateVirtualValue(identifier, VirtualUpdatePath.<path.key>, data, tokens, uri.getBaseUri().toString());
+        return helper.directValueUpdate(identifier, DirectUpdatePath.<path.key>, data, tokens, uri.getBaseUri().toString());
     \}
 }>
 

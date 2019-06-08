@@ -3,7 +3,7 @@ package com.ceridwen.lcf.server.resources.memory;
 
 import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import com.ceridwen.lcf.model.enumerations.CreationQualifier;
-import com.ceridwen.lcf.model.enumerations.VirtualUpdatePath;
+import com.ceridwen.lcf.model.enumerations.DirectUpdatePath;
 import com.ceridwen.lcf.model.authentication.AuthenticationToken;
 import com.ceridwen.lcf.server.resources.<Entity>ResourceManagerInterface;
 import com.ceridwen.lcf.server.resources.QueryResults;
@@ -15,11 +15,6 @@ import org.bic.ns.lcf.v1_0.<Entity>;
 
 
 public class <Entity>ResourceManager implements <Entity>ResourceManagerInterface {
-
-    @Override
-    public Class getEntityClass() {
-        return <Entity>.class;
-    }
 
     @Override
     public String Create(List\<AuthenticationToken\> authTokens, Object parent, <Entity> entity, List\<CreationQualifier\> qualifiers) {
@@ -48,8 +43,8 @@ public class <Entity>ResourceManager implements <Entity>ResourceManagerInterface
     }
 
     @Override
-    public boolean UpdateValue(List\<AuthenticationToken\> authTokens, String identifier, VirtualUpdatePath path, String value) {
-        return MemoryResourceManager.getMemoryResourceManager().UpdateValue(EntityTypes.Type.<Entity>, identifier, path, value, authTokens);
+    public boolean DirectValueUpdate(List\<AuthenticationToken\> authTokens, String identifier, DirectUpdatePath path, String value) {
+        return MemoryResourceManager.getMemoryResourceManager().DirectValueUpdate(EntityTypes.Type.<Entity>, identifier, path, value, authTokens);
     }
 
 }

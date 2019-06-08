@@ -1,4 +1,4 @@
-EntityListWebservice(LCFPath, Entity, EntityPath, SubEntity, SelectionCriteria, AlternativePosts, AlternativePuts, AlternativeGets, AlternativeDeletes, CreationQualifiers, VirtualUpdatePaths, AuthenticationSchemes) ::= <<
+EntityListWebservice(LCFPath, Entity, EntityPath, SubEntity, SelectionCriteria, AlternativePosts, AlternativePuts, AlternativeGets, AlternativeDeletes, CreationQualifiers, DirectUpdatePaths, AuthenticationSchemes) ::= <<
 package com.ceridwen.lcf.server.webservice;
 
 import com.ceridwen.lcf.model.enumerations.CreationQualifier;

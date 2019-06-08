@@ -8,11 +8,10 @@ package com.ceridwen.lcf.server.codegen;
 import com.ceridwen.lcf.model.enumerations.AlternativeResponseFormats;
 import com.ceridwen.lcf.model.enumerations.CreationQualifier;
 import com.ceridwen.lcf.model.enumerations.EntityTypes;
-import com.ceridwen.lcf.model.enumerations.VirtualUpdatePath;
+import com.ceridwen.lcf.model.enumerations.DirectUpdatePath;
 import com.ceridwen.lcf.model.authentication.AuthenticationCategory;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -115,10 +114,10 @@ public class GenerateWebservices extends Generator {
         return list;
     }
     
-    List<KeyValue<VirtualUpdatePath>> getVirtualPaths(EntityTypes.Type entity) {
-        ArrayList<KeyValue<VirtualUpdatePath>> list = new ArrayList<>();
+    List<KeyValue<DirectUpdatePath>> getDirectUpdatePaths(EntityTypes.Type entity) {
+        ArrayList<KeyValue<DirectUpdatePath>> list = new ArrayList<>();
         
-        for (VirtualUpdatePath path: VirtualUpdatePath.values()) {
+        for (DirectUpdatePath path: DirectUpdatePath.values()) {
             if (path.isApplicable(entity)) {
                 list.add(new KeyValue<>(path, path.getPath()));
             }
@@ -168,7 +167,7 @@ public class GenerateWebservices extends Generator {
         map.put("AlternativeGets", getAlternativeGetResponses(entity));
         map.put("AlternativeDeletes", getAlternativeDeleteResponses(entity));
         map.put("CreationQualifiers", getCreationQualifiers(entity));
-        map.put("VirtualUpdatePaths", getVirtualPaths(entity));
+        map.put("DirectUpdatePaths", getDirectUpdatePaths(entity));
         map.put("AuthenticationSchemes", getAuthenticationSchemes(entity));
         
         return map;        

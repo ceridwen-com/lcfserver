@@ -7,7 +7,7 @@ package com.ceridwen.lcf.server.resources.memory;
 
 import com.ceridwen.lcf.model.enumerations.CreationQualifier;
 import com.ceridwen.lcf.model.enumerations.EntityTypes;
-import com.ceridwen.lcf.model.enumerations.VirtualUpdatePath;
+import com.ceridwen.lcf.model.enumerations.DirectUpdatePath;
 import com.ceridwen.lcf.model.authentication.AuthenticationToken;
 import com.ceridwen.lcf.model.authentication.AuthenticationCategory;
 import com.ceridwen.lcf.model.authentication.BasicAuthenticationToken;
@@ -408,8 +408,8 @@ public class MemoryResourceManager {
         return queryResults;
     }
     
-    public boolean UpdateValue(EntityTypes.Type type, String identifier, VirtualUpdatePath path, String value, List<AuthenticationToken> authTokens) {
-        if (type.equals(EntityTypes.Type.Patron) && (path.equals(VirtualUpdatePath.PASSWORD) || path.equals(VirtualUpdatePath.PIN))) {
+    public boolean DirectValueUpdate(EntityTypes.Type type, String identifier, DirectUpdatePath path, String value, List<AuthenticationToken> authTokens) {
+        if (type.equals(EntityTypes.Type.Patron) && (path.equals(DirectUpdatePath.PASSWORD) || path.equals(DirectUpdatePath.PIN))) {
             Patron patron = (Patron)this.directGet(type, identifier);
             if (patron == null) {
                 return false;
