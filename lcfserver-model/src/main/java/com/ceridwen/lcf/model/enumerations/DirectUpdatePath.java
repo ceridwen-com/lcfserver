@@ -22,14 +22,14 @@ import java.util.List;
  *
  * @author Matthew.Dovey
  */
-public enum VirtualUpdatePath {
+public enum DirectUpdatePath {
     PASSWORD("password", Arrays.asList(EntityTypes.Type.Patron)),
     PIN("pin", Arrays.asList(EntityTypes.Type.Patron));
 
     private String path;
     private List<EntityTypes.Type> applicable;
     
-    private VirtualUpdatePath(String path, List<EntityTypes.Type> applicable) {
+    private DirectUpdatePath(String path, List<EntityTypes.Type> applicable) {
         this.path = path;
         this.applicable = applicable;
     }

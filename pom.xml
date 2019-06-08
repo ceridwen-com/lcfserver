@@ -3,7 +3,7 @@
 
     <groupId>com.ceridwen.lcf</groupId>
     <artifactId>lcfserver</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.1.0-javadoc-refactor-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>lcfserver</name>
@@ -88,34 +88,34 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-        <!-- Force versions to avoid OWASP Identified Vulnerabilities -->
+            <!-- Force versions to avoid OWASP Identified Vulnerabilities -->
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
                 <version>2.9.9</version>
             </dependency>
-<!--
-            <dependency>
-                <groupId>org.igniterealtime.smack</groupId>
-                <artifactId>smack-core</artifactId>
-                <version>4.3.4</version>
-            </dependency>
-            <dependency>
-                <groupId>org.igniterealtime.smack</groupId>
-                <artifactId>smack-im</artifactId>
-                <version>4.3.4</version>
-            </dependency>
-            <dependency>
-                <groupId>org.igniterealtime.smack</groupId>
-                <artifactId>smack-tcp</artifactId>
-                <version>4.3.4</version>
-            </dependency>        
-            <dependency>
-                <groupId>org.igniterealtime.smack</groupId>
-                <artifactId>smack-extensions</artifactId>
-                <version>4.3.4</version>
-            </dependency> 
--->            
+            <!--
+                        <dependency>
+                            <groupId>org.igniterealtime.smack</groupId>
+                            <artifactId>smack-core</artifactId>
+                            <version>4.3.4</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.igniterealtime.smack</groupId>
+                            <artifactId>smack-im</artifactId>
+                            <version>4.3.4</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.igniterealtime.smack</groupId>
+                            <artifactId>smack-tcp</artifactId>
+                            <version>4.3.4</version>
+                        </dependency>        
+                        <dependency>
+                            <groupId>org.igniterealtime.smack</groupId>
+                            <artifactId>smack-extensions</artifactId>
+                            <version>4.3.4</version>
+                        </dependency> 
+            -->            
         </dependencies>
         
         
@@ -205,6 +205,9 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>3.1.0</version>
+                    <configuration>
+                        <failOnError>false</failOnError>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -297,6 +300,18 @@
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>javadoc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>    
         </plugins>
     </build>
 

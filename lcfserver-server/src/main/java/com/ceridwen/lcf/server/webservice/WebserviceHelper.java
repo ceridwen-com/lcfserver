@@ -9,7 +9,7 @@ import com.ceridwen.lcf.model.enumerations.CreationQualifier;
 import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import com.ceridwen.lcf.model.referencing.AddReferenceHandler;
 import com.ceridwen.lcf.model.referencing.RemoveReferenceHandler;
-import com.ceridwen.lcf.model.enumerations.VirtualUpdatePath;
+import com.ceridwen.lcf.model.enumerations.DirectUpdatePath;
 import com.ceridwen.lcf.model.authentication.AuthenticationToken;
 import com.ceridwen.lcf.model.authentication.AuthenticationCategory;
 import com.ceridwen.lcf.model.authentication.BasicAuthenticationToken;
@@ -20,7 +20,6 @@ import com.ceridwen.lcf.server.resources.QueryResults;
 import java.lang.reflect.Field;
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
 import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 import java.util.logging.Level;
@@ -150,9 +149,9 @@ public class WebserviceHelper<E> {
         return Response.ok(response).header("lcf-version", EntityTypes.getLCFSpecVersion()).build();        
     }
     
-    public Response updateVirtualValue(String identifier, VirtualUpdatePath path, String value, List<AuthenticationToken> tokens, String baseUri) {
+    public Response directValueUpdate(String identifier, DirectUpdatePath path, String value, List<AuthenticationToken> tokens, String baseUri) {
         if (value != null) {
-            if (!rm.UpdateValue(tokens, identifier, path, value)) {
+            if (!rm.DirectValueUpdate(tokens, identifier, path, value)) {
                  throw new EXC05_InvalidEntityReference("Entity not found", "Entity not found", "", null);
             }            
         } else {
