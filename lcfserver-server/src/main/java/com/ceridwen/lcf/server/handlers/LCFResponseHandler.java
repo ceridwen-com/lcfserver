@@ -21,21 +21,33 @@
  *******************************************************************************/
 package com.ceridwen.lcf.server.handlers;
 
+import com.ceridwen.lcf.model.enumerations.EntityTypes;
+import com.ceridwen.lcf.model.exceptions.EXC00_LCF_Exception;
+import com.ceridwen.lcf.model.referencing.AddReferenceHandler;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import com.ceridwen.lcf.server.responses.LCFResponse;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.jaxrs.annotation.JacksonFeatures;
+import com.ceridwen.lcf.model.responses.LCFResponse;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
 
 @Provider
 public class LCFResponseHandler implements ExceptionMapper<LCFResponse>{
+    @Context
+    UriInfo uriInfo;
+    
     @Override
-    @JacksonFeatures(serializationEnable = {SerializationFeature.INDENT_OUTPUT}, serializationDisable = {SerializationFeature.WRITE_DATES_AS_TIMESTAMPS})
     public Response toResponse(final LCFResponse exception) {
-        // TODO need to ensure ids in LCFResponse are referenced
-        // TODO need to check how data is marshalled
-        return Response.status(exception.getHTTPStatus()).entity(exception.getLCFResponse()).build(); //type(MediaType.APPLICATIOn_XML?
+	new AddReferenceHandler().addReferences(exception.getLCFResponse(), uriInfo.getBaseUri().toString());	// TODO need to check how data is marshalled
+    	Response.ResponseBuilder responseBuilder = Response.status(exception.getHTTPStatus());
+        for (EXC00_LCF_Exception.CustomHeader customHeader: exception.getCustomHeaders()) {
+            responseBuilder = responseBuilder.header(customHeader.header, customHeader.value);       
+        }
+        if (exception.getHTTPStatus() == 201) {
+            responseBuilder = responseBuilder.header("Created", uriInfo.getBaseUri().toString() + EntityTypes.LCF_PREFIX + "/" + exception.getEntityType().getEntityTypeCodeValue() + "/" + exception.getIdentifier());                   
+        }
+        responseBuilder = responseBuilder.header("lcf-version", EntityTypes.getLCFSpecVersion());       
+        return responseBuilder.entity(exception.getLCFResponse()).build(); //type(MediaType.APPLICATIOn_XML?
     }
 }

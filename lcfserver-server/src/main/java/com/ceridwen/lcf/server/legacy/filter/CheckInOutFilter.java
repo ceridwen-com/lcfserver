@@ -26,8 +26,8 @@ import com.ceridwen.lcf.model.enumerations.EntityTypes.Type;
 import com.ceridwen.lcf.server.resources.QueryResults;
 import com.ceridwen.lcf.server.legacy.EntitySourceInterface;
 import com.ceridwen.lcf.server.legacy.EntitySourcesInterface;
-import com.ceridwen.lcf.server.responses.LCFResponse_CheckIn;
-import com.ceridwen.lcf.server.responses.LCFResponse_CheckOut;
+import com.ceridwen.lcf.model.responses.LCFResponse_CheckIn;
+import com.ceridwen.lcf.model.responses.LCFResponse_CheckOut;
 import org.bic.ns.lcf.v1_0.LcfCheckInResponse;
 import org.bic.ns.lcf.v1_0.LcfCheckOutResponse;
 import org.bic.ns.lcf.v1_0.Loan;
@@ -89,7 +89,7 @@ public class CheckInOutFilter implements EntitySourcesFilter {
 				response.setMediaWarning(MediaWarningFlag.VALUE_1);
 				response.setSecurityDesensitize(SecurityDesensitize.VALUE_1);
 
-				throw new LCFResponse_CheckOut(201, response);
+				throw new LCFResponse_CheckOut(response);
 			}
 		}
 		
@@ -116,7 +116,7 @@ public class CheckInOutFilter implements EntitySourcesFilter {
 				response.setSpecialAttentionNote("No special attention");
 				
 				response.getChargeRef().addAll(data.getChargeRef());
-				throw new LCFResponse_CheckIn(200, response);
+				throw new LCFResponse_CheckIn(response);
 			}
 		}	
 
