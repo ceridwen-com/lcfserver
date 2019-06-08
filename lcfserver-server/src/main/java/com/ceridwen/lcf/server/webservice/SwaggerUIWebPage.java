@@ -101,6 +101,8 @@ page +=
 "        deepLinking: true,\n" +
 "        docExpansion: \"none\",\n" +
 "        filter: true,\n" +
+"        apisSorter: \"alpha\",\n" +
+"        operationsSorter: \"alpha\",\n" +
 "        presets: [\n" +
 "          SwaggerUIBundle.presets.apis,\n" +
 "          SwaggerUIStandalonePreset\n" +
