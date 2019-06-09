@@ -54,8 +54,7 @@ public class ApplicationConfig extends Application {
         // Hack to handle enums, namespaces properly etc.
         OpenApiConfiguration.Config(this);
     }
-            
-        
+                    
     /**
      *
      * @return
