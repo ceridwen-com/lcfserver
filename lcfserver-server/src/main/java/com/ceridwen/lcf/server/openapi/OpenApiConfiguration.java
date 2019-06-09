@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
  */
 public class OpenApiConfiguration {
 
-    public OpenApiConfiguration(Application application) {
+    public static void Config(Application application) {
         ObjectMapper mapper = Json.mapper();
         /* Configure Swagger Json\Yaml generation */
         mapper.registerModule(new JaxbAnnotationModule());

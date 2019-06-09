@@ -19,49 +19,56 @@ import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import com.ceridwen.lcf.model.referencing.AddReferenceHandler;
 import com.ceridwen.lcf.model.referencing.RemoveReferenceHandler;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
+import javax.ws.rs.ext.ReaderInterceptor;
+import javax.ws.rs.ext.ReaderInterceptorContext;
 
 /**
  *
  * @author Ceridwen Limited
  */
 @Provider
-public class ReferenceHandlingFilter implements ContainerRequestFilter, ContainerResponseFilter {
+public class ReferenceHandlingFilter implements ContainerRequestFilter, ReaderInterceptor, ContainerResponseFilter {
+    @Context
+    UriInfo uri;
+    
     List<String> ReferencableHeaders = Arrays.asList("Location");
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
-        String baseUrl = requestContext.getUriInfo().getBaseUri().toString() + EntityTypes.LCF_PREFIX;
+        String baseUrl = uri.getBaseUri().toString() + EntityTypes.LCF_PREFIX + "/";
 
         for (String header: ReferencableHeaders) {
             if (requestContext.getHeaders().containsKey(header)) {
                 requestContext.getHeaders().get(header).replaceAll(s -> baseUrl + s);
             }        
         }
+    }
+
+    @Override
+    public Object aroundReadFrom(ReaderInterceptorContext ric) throws IOException, WebApplicationException {
+        String baseUrl = uri.getBaseUri().toString() + EntityTypes.LCF_PREFIX + "/";
+
+        Object entity = ric.proceed();
         
-        if (requestContext.hasEntity()) {
-            try {
-                ObjectInputStream entityReader = new ObjectInputStream(requestContext.getEntityStream());
-                new RemoveReferenceHandler().removeReferences(entityReader.readObject(), baseUrl);
-                
-            } catch (IOException | ClassNotFoundException ex) {
-                Logger.getLogger(ReferenceHandlingFilter.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        new RemoveReferenceHandler().removeReferences(entity, baseUrl);
+        
+        return entity;
     }
 
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
-        String baseUrl = requestContext.getUriInfo().getBaseUri().toString() + EntityTypes.LCF_PREFIX;
+        String baseUrl = uri.getBaseUri().toString() + EntityTypes.LCF_PREFIX + "/";
+        
         new AddReferenceHandler().addReferences(responseContext.getEntity(), baseUrl);
         
         for (String header: ReferencableHeaders) {
@@ -70,5 +77,4 @@ public class ReferenceHandlingFilter implements ContainerRequestFilter, Containe
             }        
         }
     }
-    
 }

@@ -52,7 +52,7 @@ public class ApplicationConfig extends Application {
     public ApplicationConfig() {
         super();
         // Hack to handle enums, namespaces properly etc.
-        new OpenApiConfiguration(this);
+        OpenApiConfiguration.Config(this);
     }
             
         
@@ -78,7 +78,9 @@ public class ApplicationConfig extends Application {
         //Additional LCF resources
         resources.add(LCFExceptionHandler.class);
         resources.add(LCFResponseHandler.class);
+        // TODO: currently handled internally
         resources.add(GlobalHeadersFilter.class);
+        // TODO: currently handled internally
         resources.add(ReferenceHandlingFilter.class);
         
         // Main LCF resources
