@@ -48,7 +48,7 @@ import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 @Provider
 @Consumes(MediaType.WILDCARD) // NOTE: required to support "non-standard" JSON variants
 @Produces(MediaType.WILDCARD)
-public class MyJacksonJaxbJsonProvider extends JacksonJsonProvider {
+public class JacksonJaxbJsonConfigurationProvider extends JacksonJsonProvider {
     /**
      * Default annotation sets to use, if not explicitly defined during
      * construction: use Jackson annotations if found; if not, use
@@ -62,7 +62,7 @@ public class MyJacksonJaxbJsonProvider extends JacksonJsonProvider {
      * Default constructor, usually used when provider is automatically
      * configured to be used with JAX-RS implementation.
      */
-    public MyJacksonJaxbJsonProvider()
+    public JacksonJaxbJsonConfigurationProvider()
     {
         this(createDefaultObjectMapper(), DEFAULT_ANNOTATIONS);
     }
@@ -71,7 +71,7 @@ public class MyJacksonJaxbJsonProvider extends JacksonJsonProvider {
      * @param annotationsToUse Annotation set(s) to use for configuring
      *    data binding
      */
-    public MyJacksonJaxbJsonProvider(Annotations... annotationsToUse)
+    public JacksonJaxbJsonConfigurationProvider(Annotations... annotationsToUse)
     {
         this(createDefaultObjectMapper(), annotationsToUse);
     }
@@ -83,7 +83,7 @@ public class MyJacksonJaxbJsonProvider extends JacksonJsonProvider {
      * @param mapper
      * @param annotationsToUse
      */
-    public MyJacksonJaxbJsonProvider(ObjectMapper mapper, Annotations[] annotationsToUse)
+    public JacksonJaxbJsonConfigurationProvider(ObjectMapper mapper, Annotations[] annotationsToUse)
     {
         super(mapper, annotationsToUse);
     }
