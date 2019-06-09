@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ceridwen.lcf.server.webservice;
+package com.ceridwen.lcf.server.webpages;
 
 import com.ceridwen.lcf.model.enumerations.EntityTypes;
-import com.ceridwen.lcf.server.OpenApiFilter;
+import com.ceridwen.lcf.server.filters.OpenApiFilter;
 import io.swagger.v3.oas.annotations.Hidden;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

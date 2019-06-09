@@ -13,49 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ceridwen.lcf.server.webservice;
+package com.ceridwen.lcf.server.webservice.templates;
 
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.HeaderParam;
-import javax.ws.rs.PUT;
-
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import org.bic.ns.lcf.v1_0.LcfEntityListResponse;
 
 /**
  *
  * @author Ceridwen Limited
  * @param <E>
  */
-public interface EntityInterface<E> {
+@Path("")
+public interface EntityListInterface<E> {
 //	@GET
 
     /**
      *
+     * @param startIndex
+     * @param count
+     * @param uriInfo
      * @param authorization
      * @param lcfPatronCredential
      * @return
      */
-	public Response Retrieve(@HeaderParam("Authorization") String authorization, @HeaderParam("lcf-patron-credential") String lcfPatronCredential); 
-
-//	@PUT
+	public LcfEntityListResponse List(@DefaultValue("0") @QueryParam("os:startIndex") int startIndex, @DefaultValue("0") @QueryParam("os:count") int count, @Context UriInfo uriInfo, @HeaderParam("Authorization") String authorization, @HeaderParam("lcf-patron-credential") String lcfPatronCredential);
+	
+//	@POST
 
     /**
      *
      * @param data
+     * @param uriInfo
      * @param authorization
      * @param lcfPatronCredential
      * @return
      */
-	public Response Modify(E data, @HeaderParam("Authorization") String authorization, @HeaderParam("lcf-patron-credential") String lcfPatronCredential);
-
-//	@DELETE
-
-    /**
-     *
-     * @param authorization
-     * @param lcfPatronCredential
-     * @return
-     */
-	public Response Delete(@HeaderParam("Authorization") String authorization, @HeaderParam("lcf-patron-credential") String lcfPatronCredential); 
+	public Response Create(E data, @Context UriInfo uriInfo, @HeaderParam("Authorization") String authorization, @HeaderParam("lcf-patron-credential") String lcfPatronCredential);
 }

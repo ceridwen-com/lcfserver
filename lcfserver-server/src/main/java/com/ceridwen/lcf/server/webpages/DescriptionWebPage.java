@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ceridwen.lcf.server.webservice;
+package com.ceridwen.lcf.server.webpages;
 
 import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import io.swagger.v3.oas.annotations.Hidden;

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2019 Ceridwen Limited.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,26 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ceridwen.lcf.server.webservice;
+package com.ceridwen.lcf.server.filters;
 
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import com.ceridwen.lcf.model.enumerations.EntityTypes;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.ext.Provider;
 
 /**
  *
  * @author Ceridwen Limited
- * @param <E>
  */
-public interface EntityLocatorInterface<E> {
-//    @Path("{identifier}")
+@Provider
+public class GlobalHeadersFilter implements ContainerResponseFilter {
 
-    /**
-     *
-     * @param identifier
-     * @param authorization
-     * @param lcfPatronCredential
-     * @return
-     */
-    public EntityInterface<E> Locate(@PathParam("identifier") String identifier, @HeaderParam("Authorization") String authorization, @HeaderParam("lcf-patron-credential") String lcfPatronCredential);
+    @Override
+    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
+        responseContext.getHeaders().add("lcf-version", EntityTypes.getLCFSpecVersion());
+    }
+    
 }

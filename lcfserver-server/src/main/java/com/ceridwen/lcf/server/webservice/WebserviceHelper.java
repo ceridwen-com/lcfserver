@@ -90,7 +90,7 @@ public class WebserviceHelper<E> {
     Response Create(Object parent, E entity, List<CreationQualifier> qualifiers, List<AuthenticationToken> tokens, String baseUri) {
         new RemoveReferenceHandler().removeReferences(entity, baseUri + EntityTypes.LCF_PREFIX + "/");
         
-        nullEmptyIdentifier(entity);
+        nullifyEmptyIdentifier(entity);
         
         String identifier = rm.Create(tokens, parent, entity, qualifiers);
         
@@ -114,7 +114,7 @@ public class WebserviceHelper<E> {
     Response Modify(String identifier, E entity, List<AuthenticationToken> tokens, String baseUri) {
         new RemoveReferenceHandler().removeReferences(entity, baseUri + EntityTypes.LCF_PREFIX + "/");
 
-        nullEmptyIdentifier(entity);
+        nullifyEmptyIdentifier(entity);
         
         E modified = rm.Modify(tokens, identifier, entity);
 
@@ -239,7 +239,7 @@ public class WebserviceHelper<E> {
         }
     }
     
-    private void nullEmptyIdentifier(E entity) {
+    private void nullifyEmptyIdentifier(E entity) {
         String id = EntityTypes.lookUpByClass(clazz).getIdentifier(entity);
         if (id != null && (id.isBlank() || id.isEmpty())) {
             EntityTypes.lookUpByClass(clazz).setIdentifier(entity, null);

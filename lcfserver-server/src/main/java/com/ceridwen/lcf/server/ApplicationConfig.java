@@ -15,12 +15,16 @@
  */
 package com.ceridwen.lcf.server;
 
+import com.ceridwen.lcf.server.providers.MyJacksonJaxbJsonProvider;
+import com.ceridwen.lcf.server.filters.OpenApiFilter;
 import com.ceridwen.lcf.model.enumerations.EntityTypes;
+import com.ceridwen.lcf.server.filters.GlobalHeadersFilter;
+import com.ceridwen.lcf.server.filters.ReferenceHandlingFilter;
 import com.ceridwen.lcf.server.handlers.LCFExceptionHandler;
 import com.ceridwen.lcf.server.handlers.LCFResponseHandler;
 import com.ceridwen.lcf.server.resources.AbstractResourceManagerInterface;
-import com.ceridwen.lcf.server.webservice.DescriptionWebPage;
-import com.ceridwen.lcf.server.webservice.SwaggerUIWebPage;
+import com.ceridwen.lcf.server.webpages.DescriptionWebPage;
+import com.ceridwen.lcf.server.webpages.SwaggerUIWebPage;
 import com.ceridwen.lcf.server.webservice.WebserviceHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -127,7 +131,15 @@ public class ApplicationConfig extends Application {
         resources.add(DescriptionWebPage.class);
         resources.add(LCFExceptionHandler.class);
         resources.add(LCFResponseHandler.class);
+        resources.add(GlobalHeadersFilter.class);
+        resources.add(ReferenceHandlingFilter.class);
         
+        addLCFResources(resources);
+        
+        return resources;
+    }
+
+    private void addLCFResources(Set<Class<?>> resources) {
         for (EntityTypes.Type type: EntityTypes.Type.values()) {
             try {
                 Class entity = Class.forName("org.bic.ns.lcf.v1_0." + type.name());
@@ -145,8 +157,6 @@ public class ApplicationConfig extends Application {
                 Logger.getLogger(ApplicationConfig.class.getName()).log(Level.SEVERE, type.name() + "{0}: Error loading Resource Manager", ex);
             }
         }
-        
-        return resources;
     }
  
 }

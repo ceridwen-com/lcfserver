@@ -13,24 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ceridwen.lcf.server.webservice;
+package com.ceridwen.lcf.server.webservice.templates;
 
 import javax.ws.rs.HeaderParam;
-import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 
 /**
  *
  * @author Ceridwen Limited
- * @param <WS>
+ * @param <E>
  */
-public interface EntityListLocatorInterface<WS> {
-//    @Path("")
+public interface EntityLocatorInterface<E> {
+//    @Path("{identifier}")
 
     /**
      *
+     * @param identifier
      * @param authorization
      * @param lcfPatronCredential
      * @return
      */
-    public EntityListInterface<WS> Locate(@HeaderParam("Authorization") String authorization, @HeaderParam("lcf-patron-credential") String lcfPatronCredential);
+    public EntityInterface<E> Locate(@PathParam("identifier") String identifier, @HeaderParam("Authorization") String authorization, @HeaderParam("lcf-patron-credential") String lcfPatronCredential);
 }
