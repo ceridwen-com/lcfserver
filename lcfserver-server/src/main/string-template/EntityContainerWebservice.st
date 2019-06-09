@@ -44,7 +44,7 @@ public class <Entity>ContainerWebservice extends <Entity>ListWebservice {
 <AuthenticationSchemes: {authenticationscheme |
         helper.addAuthenthicationTokens(tokens, AuthenticationCategory.<authenticationscheme.key>, <authenticationscheme.key>);}>
 
-        return new <Entity>Webservice(identifier, tokens, uri);
+        return new <Entity>Webservice(identifier, tokens);
     }
 } 
 >>

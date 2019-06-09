@@ -15,7 +15,8 @@
  */
 package com.ceridwen.lcf.server.filters;
 
-import com.ceridwen.lcf.model.enumerations.EntityTypes;
+import com.ceridwen.lcf.model.Constants;
+import com.ceridwen.lcf.model.enumerations.ReferenceableHTTPHeaders;
 import com.ceridwen.lcf.model.referencing.AddReferenceHandler;
 import com.ceridwen.lcf.model.referencing.RemoveReferenceHandler;
 import java.io.IOException;
@@ -40,23 +41,21 @@ import javax.ws.rs.ext.ReaderInterceptorContext;
 public class ReferenceHandlingFilter implements ContainerRequestFilter, ReaderInterceptor, ContainerResponseFilter {
     @Context
     UriInfo uri;
-    
-    List<String> ReferencableHeaders = Arrays.asList("Location");
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
-        String baseUrl = uri.getBaseUri().toString() + EntityTypes.LCF_PREFIX + "/";
+        String baseUrl = uri.getBaseUri().toString() + Constants.LCF_PREFIX + "/";
 
-        for (String header: ReferencableHeaders) {
-            if (requestContext.getHeaders().containsKey(header)) {
-                requestContext.getHeaders().get(header).replaceAll(s -> baseUrl + s);
+        for (ReferenceableHTTPHeaders header: ReferenceableHTTPHeaders.values()) {
+            if (requestContext.getHeaders().containsKey(header.getParameter())) {
+                requestContext.getHeaders().get(header.getParameter()).replaceAll(s -> s.replaceFirst(baseUrl, ""));
             }        
         }
     }
 
     @Override
     public Object aroundReadFrom(ReaderInterceptorContext ric) throws IOException, WebApplicationException {
-        String baseUrl = uri.getBaseUri().toString() + EntityTypes.LCF_PREFIX + "/";
+        String baseUrl = uri.getBaseUri().toString() + Constants.LCF_PREFIX + "/";
 
         Object entity = ric.proceed();
         
@@ -67,13 +66,13 @@ public class ReferenceHandlingFilter implements ContainerRequestFilter, ReaderIn
 
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
-        String baseUrl = uri.getBaseUri().toString() + EntityTypes.LCF_PREFIX + "/";
+        String baseUrl = uri.getBaseUri().toString() + Constants.LCF_PREFIX + "/";
         
         new AddReferenceHandler().addReferences(responseContext.getEntity(), baseUrl);
         
-        for (String header: ReferencableHeaders) {
-            if (responseContext.getHeaders().containsKey(header)) {
-                responseContext.getHeaders().get(header).replaceAll(s -> baseUrl + s);
+        for (ReferenceableHTTPHeaders header: ReferenceableHTTPHeaders.values()) {
+            if (requestContext.getHeaders().containsKey(header.getParameter())) {
+                requestContext.getHeaders().get(header.getParameter()).replaceAll(s -> baseUrl + s);
             }        
         }
     }

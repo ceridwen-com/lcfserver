@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.ws.rs.ext.Provider;
+import org.bic.ns.lcf.v1_0.EntityType;
 
 /**
  *
@@ -57,7 +58,7 @@ public class OpenApiFilter extends AbstractSpecFilter {
                 List<Server> servers = new ArrayList<>();
                 servers.add(server);
                 api.setServers(servers);
-                api.getInfo().setVersion(EntityTypes.getLCFSpecVersion());
+                api.getInfo().setVersion(EntityType.class.getPackage().getSpecificationVersion());
             });
         }
         

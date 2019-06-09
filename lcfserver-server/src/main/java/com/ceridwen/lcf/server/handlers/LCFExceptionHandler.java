@@ -32,9 +32,6 @@ import javax.ws.rs.core.UriInfo;
  */
 @Provider
 public class LCFExceptionHandler implements ExceptionMapper<EXC00_LCF_Exception>{
-    @Context
-    UriInfo uriInfo;
-    
     /**
      *
      * @param exception
@@ -42,12 +39,10 @@ public class LCFExceptionHandler implements ExceptionMapper<EXC00_LCF_Exception>
      */
     @Override
     public Response toResponse(final EXC00_LCF_Exception exception) {
-	new AddReferenceHandler().addReferences(exception.getLcfException(), uriInfo.getBaseUri().toString());	// TODO need to check how data is marshalled
     	ResponseBuilder responseBuilder = Response.status(exception.getHTTPErrorCode());
         for (EXC00_LCF_Exception.CustomHeader customHeader: exception.getCustomHeaders()) {
             responseBuilder = responseBuilder.header(customHeader.header, customHeader.value);       
         }
-        responseBuilder = responseBuilder.header("lcf-version", EntityTypes.getLCFSpecVersion());       
         return responseBuilder.entity(exception.getLcfException()).build(); //type(MediaType.APPLICATIOn_XML?
     }
 }

@@ -75,12 +75,12 @@ public class ApplicationConfig extends Application {
         resources.add(DescriptionWebPage.class);
         resources.add(SwaggerUIWebPage.class);
 
-        //Additional LCF resources
+        //Add LCF Exception handlers
         resources.add(LCFExceptionHandler.class);
         resources.add(LCFResponseHandler.class);
-        // TODO: currently handled internally
+
+        // Add LCF filters
         resources.add(GlobalHeadersFilter.class);
-        // TODO: currently handled internally
         resources.add(ReferenceHandlingFilter.class);
         
         // Main LCF resources

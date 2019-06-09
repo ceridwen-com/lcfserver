@@ -15,7 +15,6 @@
  */
 package com.ceridwen.lcf.model.enumerations;
 
-import com.jcabi.manifests.Manifests;
 import java.util.HashMap;
 import java.util.Map;
 import org.bic.ns.lcf.v1_0.EntityType;
@@ -39,11 +38,6 @@ interface Setter<T> {
  */
 @SuppressWarnings("rawtypes")
 public class EntityTypes {
-
-    /**
-     *
-     */
-    public static final String LCF_PREFIX = "lcf/1.0";
 
     static Map<EntityType, Type> codetable = new HashMap<>();
     static Map<Class, Type> classtable = new HashMap<>();
@@ -217,17 +211,5 @@ public class EntityTypes {
      */
     public static Type lookUpByClass(Class typeClass) {
             return classtable.get(typeClass);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    public static String getLCFSpecVersion() {
-        if (Manifests.exists("BIC-LCF-Version")) {
-            return Manifests.read("BIC-LCF-Version");
-        } else {
-            return "1.x";
-        }
     }
 }

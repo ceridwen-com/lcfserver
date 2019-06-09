@@ -71,7 +71,6 @@ limitations under the License.
         <junit.jupiter.version>5.4.2</junit.jupiter.version>
         <commons.beanutils.version>1.9.3</commons.beanutils.version>
         <ceridwen.util.version>1.7-SNAPSHOT</ceridwen.util.version>
-        <jcabi.manifests.version>1.1</jcabi.manifests.version>
         <jeasy.random.version>4.0.0</jeasy.random.version>
     </properties>
 
@@ -200,11 +199,12 @@ limitations under the License.
                                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                                 <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                             </manifest>
+<!--
                             <manifestEntries>
                                 <Built-By>${user.name}</Built-By>
                                 <Build-Date>${maven.build.timestamp}</Build-Date>
-                                <BIC-LCF-Version>${lcf.schema.version}</BIC-LCF-Version>
                             </manifestEntries>
+-->
                         </archive>
                     </configuration>
                 </plugin>
