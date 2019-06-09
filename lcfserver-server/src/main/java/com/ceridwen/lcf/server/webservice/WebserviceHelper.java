@@ -15,10 +15,9 @@
  */
 package com.ceridwen.lcf.server.webservice;
 
+import com.ceridwen.lcf.model.Constants;
 import com.ceridwen.lcf.model.enumerations.CreationQualifier;
 import com.ceridwen.lcf.model.enumerations.EntityTypes;
-import com.ceridwen.lcf.model.referencing.AddReferenceHandler;
-import com.ceridwen.lcf.model.referencing.RemoveReferenceHandler;
 import com.ceridwen.lcf.model.enumerations.DirectUpdatePath;
 import com.ceridwen.lcf.model.authentication.AuthenticationToken;
 import com.ceridwen.lcf.model.authentication.AuthenticationCategory;
@@ -87,34 +86,26 @@ public class WebserviceHelper<E> {
         return rm;
     }
     
-    Response Create(Object parent, E entity, List<CreationQualifier> qualifiers, List<AuthenticationToken> tokens, String baseUri) {
-        new RemoveReferenceHandler().removeReferences(entity, baseUri + EntityTypes.LCF_PREFIX + "/");
-        
-        nullEmptyIdentifier(entity);
+    Response Create(Object parent, E entity, List<CreationQualifier> qualifiers, List<AuthenticationToken> tokens) {
+        nullifyEmptyIdentifier(entity);
         
         String identifier = rm.Create(tokens, parent, entity, qualifiers);
         
-        new AddReferenceHandler().addReferences(entity, baseUri + EntityTypes.LCF_PREFIX + "/");
-        
-        return Response.created(URI.create(baseUri + EntityTypes.LCF_PREFIX + "/" + EntityTypes.lookUpByClass(rm.getEntityClass()).getEntityTypeCodeValue() + "/" + identifier)).entity(entity).header("lcf-version", EntityTypes.getLCFSpecVersion()).build();
+        return Response.created(URI.create(Constants.LCF_PREFIX + "/" + EntityTypes.lookUpByClass(rm.getEntityClass()).getEntityTypeCodeValue() + "/" + identifier)).entity(entity).build();
     }
     
-    Response Retrieve(String identifier, List<AuthenticationToken> tokens, String baseUri) {
+    E Retrieve(String identifier, List<AuthenticationToken> tokens) {
         E entity = rm.Retrieve(tokens, identifier);
         
         if (entity == null) {
             throw new EXC05_InvalidEntityReference("Entity not found", "Entity not found", "", null);
         }
         
-        new AddReferenceHandler().addReferences(entity, baseUri + EntityTypes.LCF_PREFIX + "/");
-        
-        return Response.ok(entity).header("lcf-version", EntityTypes.getLCFSpecVersion()).build();
+        return entity;
     }
     
-    Response Modify(String identifier, E entity, List<AuthenticationToken> tokens, String baseUri) {
-        new RemoveReferenceHandler().removeReferences(entity, baseUri + EntityTypes.LCF_PREFIX + "/");
-
-        nullEmptyIdentifier(entity);
+    E Modify(String identifier, E entity, List<AuthenticationToken> tokens) {
+        nullifyEmptyIdentifier(entity);
         
         E modified = rm.Modify(tokens, identifier, entity);
 
@@ -122,19 +113,16 @@ public class WebserviceHelper<E> {
             throw new EXC05_InvalidEntityReference("Entity not found", "Entity not found", "", null);
         }
         
-        new AddReferenceHandler().addReferences(modified, baseUri + EntityTypes.LCF_PREFIX + "/");
-        
-        return Response.ok(modified).header("lcf-version", EntityTypes.getLCFSpecVersion()).build();        
+        return modified;
     }
     
-    Response Delete(String identifier, List<AuthenticationToken> tokens) {
+    void Delete(String identifier, List<AuthenticationToken> tokens) {
         if (!rm.Delete(tokens, identifier)) {
              throw new EXC05_InvalidEntityReference("Entity not found", "Entity not found", "", null);
         }
-        return Response.ok().header("lcf-version", EntityTypes.getLCFSpecVersion()).build();
     }
     
-    Response Query(Object parent, int startIndex, int count, List<SelectionCriterion> selectionCriterion, List<AuthenticationToken> tokens, String baseUri) {
+    LcfEntityListResponse Query(Object parent, int startIndex, int count, List<SelectionCriterion> selectionCriterion, List<AuthenticationToken> tokens) {
         LcfEntityListResponse response = new LcfEntityListResponse();
         
         EntityTypes.Type et = EntityTypes.lookUpByClass(clazz);
@@ -165,9 +153,7 @@ public class WebserviceHelper<E> {
         response.setStartIndex(queryResults.getSkippedResults());
         response.setItemsPerPage(queryResults.getResults().size());
         
-        new AddReferenceHandler().addReferences(response, baseUri + EntityTypes.LCF_PREFIX + "/");
-        
-        return Response.ok(response).header("lcf-version", EntityTypes.getLCFSpecVersion()).build();        
+        return response;        
     }
     
     /**
@@ -177,9 +163,8 @@ public class WebserviceHelper<E> {
      * @param value
      * @param tokens
      * @param baseUri
-     * @return
      */
-    public Response directValueUpdate(String identifier, DirectUpdatePath path, String value, List<AuthenticationToken> tokens, String baseUri) {
+    public void directValueUpdate(String identifier, DirectUpdatePath path, String value, List<AuthenticationToken> tokens) {
         if (value != null) {
             if (!rm.DirectValueUpdate(tokens, identifier, path, value)) {
                  throw new EXC05_InvalidEntityReference("Entity not found", "Entity not found", "", null);
@@ -187,8 +172,6 @@ public class WebserviceHelper<E> {
         } else {
             throw new EXC04_UnableToProcessRequest("Invalid value", "Value cannot be empty", "", null);
         }
-        
-        return Response.ok().header("lcf-version", EntityTypes.getLCFSpecVersion()).build();        
     }
     
     /**
@@ -239,7 +222,7 @@ public class WebserviceHelper<E> {
         }
     }
     
-    private void nullEmptyIdentifier(E entity) {
+    private void nullifyEmptyIdentifier(E entity) {
         String id = EntityTypes.lookUpByClass(clazz).getIdentifier(entity);
         if (id != null && (id.isBlank() || id.isEmpty())) {
             EntityTypes.lookUpByClass(clazz).setIdentifier(entity, null);

@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ceridwen.lcf.server.webservice;
+package com.ceridwen.lcf.server.webpages;
 
+import com.ceridwen.lcf.model.Constants;
 import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import io.swagger.v3.oas.annotations.Hidden;
 import javax.ws.rs.GET;
@@ -143,6 +144,7 @@ public class DescriptionWebPage {
 "<h1>BIC LCF Server</h1>\n" +
 "<hr>\n" +
 "<blockquote>\n" +
+"LCF Version: " + Constants.LCF_VERSION + "<br>\n" +
 "Documentation on the BIC LCF Standard can be found at <a href=\"https://bic-org-uk.github.io/bic-lcf/\">https://bic-org-uk.github.io/bic-lcf/</a><br>\n";
 String openapi = uriInfo.getBaseUri() +"openapi.json";
 String swaggerUI = uriInfo.getBaseUri() +"swagger-ui.html";
@@ -154,7 +156,7 @@ String swaggerUI = uriInfo.getBaseUri() +"swagger-ui.html";
 "<h2>Web Service Endpoints</h2>\n" +
 "<code>";
     for (EntityTypes.Type entity: EntityTypes.Type.values()) {
-      String href = uriInfo.getBaseUri() + EntityTypes.LCF_PREFIX + "/" + entity.getEntityTypeCodeValue() +"/";
+      String href = uriInfo.getBaseUri() + Constants.LCF_PREFIX + "/" + entity.getEntityTypeCodeValue() +"/";
       page += "<a href=\"" + href + "\">" + href + "</a>\n";
     }
   page +=

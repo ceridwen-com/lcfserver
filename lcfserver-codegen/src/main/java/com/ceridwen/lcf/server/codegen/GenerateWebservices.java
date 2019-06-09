@@ -15,6 +15,7 @@
  */
 package com.ceridwen.lcf.server.codegen;
 
+import com.ceridwen.lcf.model.Constants;
 import com.ceridwen.lcf.model.enumerations.AlternativeResponseFormats;
 import com.ceridwen.lcf.model.enumerations.CreationQualifier;
 import com.ceridwen.lcf.model.enumerations.EntityTypes;
@@ -151,7 +152,7 @@ public class GenerateWebservices extends Generator {
     Map getEntityMap(EntityTypes.Type entity) {
         Map<String, Object> map = new HashMap<>();
         
-        map.put("LCFPath", EntityTypes.LCF_PREFIX);
+        map.put("LCFPath", Constants.LCF_PREFIX);
         map.put("Entity", entity.name());        
         map.put("EntityPath", entity.getEntityTypeCodeValue());
         

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2019 Ceridwen Limited.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,34 +15,32 @@
  */
 package com.ceridwen.lcf.server.handlers;
 
-import com.ceridwen.lcf.model.referencing.AddReferenceHandler;
-import com.ceridwen.lcf.model.enumerations.EntityTypes;
+import com.ceridwen.lcf.model.Constants;
+import com.ceridwen.lcf.model.exceptions.EXC00_LCF_Exception;
+import com.ceridwen.lcf.model.exceptions.EXC01_ServiceUnavailable;
+import java.net.URI;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
-
-import com.ceridwen.lcf.model.exceptions.EXC00_LCF_Exception;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.UriInfo;
 
 /**
  *
  * @author Ceridwen Limited
  */
 @Provider
-public class LCFExceptionHandler implements ExceptionMapper<EXC00_LCF_Exception>{
-    /**
-     *
-     * @param exception
-     * @return
-     */
+public class LCFErrorHandler implements ExceptionMapper<Throwable>{
+
     @Override
-    public Response toResponse(final EXC00_LCF_Exception exception) {
-    	ResponseBuilder responseBuilder = Response.status(exception.getHTTPErrorCode());
+    public Response toResponse(Throwable e) {
+    	EXC00_LCF_Exception exception = new EXC01_ServiceUnavailable("Unknoen error", null, null, e);
+        
+        Response.ResponseBuilder responseBuilder;
+
+        responseBuilder= Response.status(exception.getHTTPErrorCode());
+        
         for (EXC00_LCF_Exception.CustomHeader customHeader: exception.getCustomHeaders()) {
             responseBuilder = responseBuilder.header(customHeader.header, customHeader.value);       
         }
-        return responseBuilder.entity(exception.getLcfException()).build(); //type(MediaType.APPLICATIOn_XML?
-    }
+
+        return responseBuilder.entity(exception.getLcfException()).build();    }
 }

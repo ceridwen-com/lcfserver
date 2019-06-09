@@ -26,6 +26,7 @@ import org.bic.ns.lcf.v1_0.LcfException;
 import org.bic.ns.lcf.v1_0.Message;
 import org.bic.ns.lcf.v1_0.MessageAlertType; // CONCERNED ABOUT TYPE HERE
 import org.bic.ns.lcf.v1_0.ReasonDeniedType;
+import org.jvnet.jaxb2_commons.lang.StringUtils;
 
 /**
  *
@@ -118,15 +119,14 @@ public abstract class EXC00_LCF_Exception extends RuntimeException {
     public LcfException getLcfException() {
 		LcfException exc = new LcfException();
 		
-		if (longMessage != null) {
-                    
+		if (!StringUtils.isEmpty(longMessage)) {
 			Message m = new Message();
 			m.setMessageType(MessageAlertType.VALUE_1);
 			m.getMessageText().add(longMessage);
 			exc.getMessage().add(m);
 		};
 
-		if (shortMessage != null) {
+		if (!StringUtils.isEmpty(shortMessage)) {
 			Message m = new Message();
 			m.setMessageType(MessageAlertType.VALUE_2);
 			m.getMessageText().add(shortMessage);

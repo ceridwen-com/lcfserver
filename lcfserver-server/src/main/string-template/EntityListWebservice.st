@@ -37,7 +37,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import org.bic.ns.lcf.v1_0.LcfEntityListResponse;
 import org.bic.ns.lcf.v1_0.SelectionCriterion;
 import org.bic.ns.lcf.v1_0.<Entity>;
@@ -48,16 +47,12 @@ public class <Entity>ListWebservice {
     private final Object parent;
     WebserviceHelper\<<Entity>\> helper = new WebserviceHelper\<\>(<Entity>.class, <Entity>ResourceManagerInterface.class);
 
-    @Context
-    UriInfo uri;
-
     public <Entity>ListWebservice() {
         this.parent = null;
     }
     
-    public <Entity>ListWebservice(Object parent, UriInfo uri) {
+    public <Entity>ListWebservice(Object parent) {
         this.parent = parent;
-        this.uri = uri;
     }
     
     @GET
@@ -68,7 +63,7 @@ public class <Entity>ListWebservice {
         responseCode = "200",
         description = "Retrieved",
         content = @Content(schema = @Schema(implementation = LcfEntityListResponse.class)))
-    public Response List(  
+    public LcfEntityListResponse List(  
 <AuthenticationSchemes: {authenticationscheme |
             @Parameter(hidden=true) @HeaderParam("<authenticationscheme.value>") String <authenticationscheme.key>,}>
 <SelectionCriteria: {criterion | 
@@ -87,7 +82,7 @@ public class <Entity>ListWebservice {
 <SelectionCriteria: {criterion | 
         helper.addSelectionCriterion(selectionCriterion, "<criterion.Parameter>", <criterion.Variable>);}>
 
-        return helper.Query(parent, startIndex, count, selectionCriterion, tokens, uri.getBaseUri().toString());
+        return helper.Query(parent, startIndex, count, selectionCriterion, tokens);
     }
 
     @POST
@@ -124,7 +119,7 @@ public class <Entity>ListWebservice {
 <CreationQualifiers: {qualifier |
         helper.addCreationQualifier(qualifiers, CreationQualifier.<qualifier.key>, <qualifier.key>);}>
 
-        return helper.Create(parent, data, qualifiers, tokens, uri.getBaseUri().toString());
+        return helper.Create(parent, data, qualifiers, tokens);
     }
 }
 >>

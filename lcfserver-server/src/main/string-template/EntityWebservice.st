@@ -34,8 +34,6 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.MediaType;
 import org.bic.ns.lcf.v1_0.<Entity>;
 
@@ -43,15 +41,12 @@ public class <Entity>Webservice
  {
     WebserviceHelper\<<Entity>\> helper = new WebserviceHelper\<\>(<Entity>.class, <Entity>ResourceManagerInterface.class);
 
-    UriInfo uri;
-
     private final String identifier;
     List\<AuthenticationToken\> tokens;
     
-    <Entity>Webservice(String identifier, List\<AuthenticationToken\> tokens, UriInfo uri) {
+    <Entity>Webservice(String identifier, List\<AuthenticationToken\> tokens) {
         this.tokens = tokens;
         this.identifier = identifier;
-        this.uri = uri;
     }
 
     @GET
@@ -67,7 +62,7 @@ public class <Entity>Webservice
         responseCode = "200",
         description = "<alternative>",
         content = @Content(schema = @Schema(implementation = <alternative>.class)))}>
-    public Response Retrieve(
+    public <Entity> Retrieve(
 <AuthenticationSchemes: {authenticationscheme |
             @Parameter(hidden=true) @HeaderParam("<authenticationscheme.value>") String <authenticationscheme.key>,}>
             @Parameter(hidden=true) @HeaderParam("dummy") String dummy    
@@ -77,7 +72,7 @@ public class <Entity>Webservice
 <AuthenticationSchemes: {authenticationscheme |
         helper.addAuthenthicationTokens(tokens, AuthenticationCategory.<authenticationscheme.key>, <authenticationscheme.key>);}>
 
-        return helper.Retrieve(identifier, tokens, uri.getBaseUri().toString());
+        return helper.Retrieve(identifier, tokens);
     }
 
     @PUT
@@ -94,7 +89,7 @@ public class <Entity>Webservice
         responseCode = "200",
         description = "<alternative>",
         content = @Content(schema = @Schema(implementation = <alternative>.class)))}>
-    public Response Modify(
+    public <Entity> Modify(
 <AuthenticationSchemes: {authenticationscheme |
             @Parameter(hidden=true) @HeaderParam("<authenticationscheme.value>") String <authenticationscheme.key>,}>
             <Entity> data
@@ -104,7 +99,7 @@ public class <Entity>Webservice
 <AuthenticationSchemes: {authenticationscheme |
         helper.addAuthenthicationTokens(tokens, AuthenticationCategory.<authenticationscheme.key>, <authenticationscheme.key>);}>
 
-        return helper.Modify(identifier, data, tokens, uri.getBaseUri().toString());
+        return helper.Modify(identifier, data, tokens);
     }
 
     @DELETE
@@ -118,7 +113,7 @@ public class <Entity>Webservice
         responseCode = "200",
         description = "<alternative>",
         content = @Content(schema = @Schema(implementation = <alternative>.class)))}>
-    public Response Delete(
+    public void Delete(
 <AuthenticationSchemes: {authenticationscheme |
             @Parameter(hidden=true) @HeaderParam("<authenticationscheme.value>") String <authenticationscheme.key>,}>
             @Parameter(hidden=true) @HeaderParam("dummy") String dummy    
@@ -128,7 +123,7 @@ public class <Entity>Webservice
 <AuthenticationSchemes: {authenticationscheme |
         helper.addAuthenthicationTokens(tokens, AuthenticationCategory.<authenticationscheme.key>, <authenticationscheme.key>);}>
         
-        return helper.Delete(identifier, tokens);
+        helper.Delete(identifier, tokens);
     }
 
 <DirectUpdatePaths: {path |
@@ -141,7 +136,7 @@ public class <Entity>Webservice
     @ApiResponse(
         responseCode = "200",
         description = "Updated")
-    public Response DirectUpdate<path.key>(
+    public void DirectUpdate<path.key>(
 <AuthenticationSchemes: {authenticationscheme |
             @Parameter(hidden=true) @HeaderParam("<authenticationscheme.value>") String <authenticationscheme.key>,}>
             String data
@@ -151,7 +146,7 @@ public class <Entity>Webservice
 <AuthenticationSchemes: {authenticationscheme |
         helper.addAuthenthicationTokens(tokens, AuthenticationCategory.<authenticationscheme.key>, <authenticationscheme.key>);}>
 
-        return helper.directValueUpdate(identifier, DirectUpdatePath.<path.key>, data, tokens, uri.getBaseUri().toString());
+        helper.directValueUpdate(identifier, DirectUpdatePath.<path.key>, data, tokens);
     \}
 }>
 
@@ -172,7 +167,7 @@ public class <Entity>Webservice
 <AuthenticationSchemes: {authenticationscheme |
         helper.addAuthenthicationTokens(tokens, AuthenticationCategory.<authenticationscheme.key>, <authenticationscheme.key>);}>
 
-        return new <subentity.Entity>ListWebservice(helper.Retrieve(identifier, tokens, uri.getBaseUri().toString()), uri);
+        return new <subentity.Entity>ListWebservice(helper.Retrieve(identifier, tokens));
     \}
 }>}
 >>

@@ -13,31 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ceridwen.lcf.server;
+package com.ceridwen.lcf.server.openapi;
 
-import com.ceridwen.lcf.model.enumerations.EntityTypes;
+import com.ceridwen.lcf.model.Constants;
 import io.swagger.v3.core.filter.AbstractSpecFilter;
-import io.swagger.v3.core.model.ApiDescription;
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.servers.Server;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.ext.Provider;
+import org.bic.ns.lcf.v1_0.EntityType;
 
 /**
  *
  * @author Ceridwen Limited
  */
-@Provider
 public class OpenApiFilter extends AbstractSpecFilter {
 
     /**
@@ -65,7 +57,7 @@ public class OpenApiFilter extends AbstractSpecFilter {
                 List<Server> servers = new ArrayList<>();
                 servers.add(server);
                 api.setServers(servers);
-                api.getInfo().setVersion(EntityTypes.getLCFSpecVersion());
+                api.getInfo().setVersion(Constants.LCF_VERSION);
             });
         }
         
