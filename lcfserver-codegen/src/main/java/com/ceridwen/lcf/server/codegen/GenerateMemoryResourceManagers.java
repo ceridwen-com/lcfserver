@@ -16,6 +16,7 @@
 package com.ceridwen.lcf.server.codegen;
 
 import com.ceridwen.lcf.model.enumerations.EntityTypes;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,8 +46,10 @@ public class GenerateMemoryResourceManagers extends Generator {
             GenerateMemoryResourceManagers generator = new GenerateMemoryResourceManagers();
             
             for (EntityTypes.Type entity: EntityTypes.Type.values()) {
-                for (String template: new String[]{"ResourceManager"}) {
-                    generator.generateTemplate(templatedir, template, targetdir, "", ".java", entity);
+                if (!Arrays.asList(EntityTypes.Type.Loan, EntityTypes.Type.Patron).contains(entity)) {
+                    for (String template: new String[]{"ResourceManager"}) {
+                        generator.generateTemplate(templatedir, template, targetdir, "", ".java", entity);
+                    }
                 }
             }
 

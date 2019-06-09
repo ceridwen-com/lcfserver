@@ -1,4 +1,3 @@
-EntityResourceManager(Entity) ::= <<
 /*
  * Copyright 2019 Ceridwen Limited.
  *
@@ -14,15 +13,12 @@ EntityResourceManager(Entity) ::= <<
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ceridwen.lcf.server.resources.memory;
-
-import com.ceridwen.lcf.server.resources.<Entity>ResourceManagerInterface;
-import org.bic.ns.lcf.v1_0.<Entity>;
+package com.ceridwen.lcf.server.resources.memory.database;
 
 /**
  *
  * @author Ceridwen Limited
  */
-public class <Entity>ResourceManager extends AbstractResourceManager\<<Entity>\> implements <Entity>ResourceManagerInterface {
-    
-}>>
+public enum Operation {
+    GET, POST, PUT, DELETE, LIST, UPDATE
+}
