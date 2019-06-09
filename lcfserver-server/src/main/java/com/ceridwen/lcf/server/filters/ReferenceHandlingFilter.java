@@ -20,8 +20,6 @@ import com.ceridwen.lcf.model.enumerations.ReferenceableHTTPHeaders;
 import com.ceridwen.lcf.model.referencing.AddReferenceHandler;
 import com.ceridwen.lcf.model.referencing.RemoveReferenceHandler;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;

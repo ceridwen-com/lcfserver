@@ -144,6 +144,7 @@ public class DescriptionWebPage {
 "<h1>BIC LCF Server</h1>\n" +
 "<hr>\n" +
 "<blockquote>\n" +
+"LCF Version: " + Constants.LCF_VERSION + "<br>\n" +
 "Documentation on the BIC LCF Standard can be found at <a href=\"https://bic-org-uk.github.io/bic-lcf/\">https://bic-org-uk.github.io/bic-lcf/</a><br>\n";
 String openapi = uriInfo.getBaseUri() +"openapi.json";
 String swaggerUI = uriInfo.getBaseUri() +"swagger-ui.html";

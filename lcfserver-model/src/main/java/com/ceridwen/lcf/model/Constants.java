@@ -15,6 +15,9 @@
  */
 package com.ceridwen.lcf.model;
 
+import java.util.Objects;
+import org.bic.ns.lcf.v1_0.EntityType;
+
 /**
  *
  * @author Ceridwen Limited
@@ -24,4 +27,6 @@ public class Constants {
      *
      */
     public static final String LCF_PREFIX = "lcf/1.0";
+    
+    public static String LCF_VERSION = Objects.requireNonNullElse(EntityType.class.getPackage().getSpecificationVersion(), "1.1.0");
 }

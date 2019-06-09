@@ -19,6 +19,7 @@ import com.ceridwen.lcf.server.providers.JacksonJaxbJsonConfigurationProvider;
 import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import com.ceridwen.lcf.server.filters.GlobalHeadersFilter;
 import com.ceridwen.lcf.server.filters.ReferenceHandlingFilter;
+import com.ceridwen.lcf.server.handlers.LCFErrorHandler;
 import com.ceridwen.lcf.server.handlers.LCFExceptionHandler;
 import com.ceridwen.lcf.server.handlers.LCFResponseHandler;
 import com.ceridwen.lcf.server.openapi.OpenApiConfiguration;
@@ -75,8 +76,9 @@ public class ApplicationConfig extends Application {
         resources.add(SwaggerUIWebPage.class);
 
         //Add LCF Exception handlers
-        resources.add(LCFExceptionHandler.class);
         resources.add(LCFResponseHandler.class);
+        resources.add(LCFExceptionHandler.class);
+        resources.add(LCFErrorHandler.class);
 
         // Add LCF filters
         resources.add(GlobalHeadersFilter.class);

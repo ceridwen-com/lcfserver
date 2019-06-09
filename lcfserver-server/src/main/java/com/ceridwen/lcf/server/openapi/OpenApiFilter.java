@@ -15,7 +15,7 @@
  */
 package com.ceridwen.lcf.server.openapi;
 
-import com.ceridwen.lcf.model.enumerations.EntityTypes;
+import com.ceridwen.lcf.model.Constants;
 import io.swagger.v3.core.filter.AbstractSpecFilter;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.media.Schema;
@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import javax.ws.rs.ext.Provider;
 import org.bic.ns.lcf.v1_0.EntityType;
 
 /**
@@ -58,7 +57,7 @@ public class OpenApiFilter extends AbstractSpecFilter {
                 List<Server> servers = new ArrayList<>();
                 servers.add(server);
                 api.setServers(servers);
-                api.getInfo().setVersion(EntityType.class.getPackage().getSpecificationVersion());
+                api.getInfo().setVersion(Constants.LCF_VERSION);
             });
         }
         
