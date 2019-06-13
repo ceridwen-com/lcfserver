@@ -17,6 +17,10 @@ package com.ceridwen.lcf.model.enumerations;
 
 import java.util.Arrays;
 import java.util.List;
+import org.bic.ns.lcf.v1_0.Charge;
+import org.bic.ns.lcf.v1_0.LcfEntity;
+import org.bic.ns.lcf.v1_0.Loan;
+import org.bic.ns.lcf.v1_0.Reservation;
 
 /**
  *
@@ -27,17 +31,17 @@ public enum CreationQualifier {
     /**
      *
      */
-    CONFIRMATION("confirmation", Arrays.asList(EntityTypes.Type.Charge, EntityTypes.Type.Loan, EntityTypes.Type.Reservation)),
+    CONFIRMATION("confirmation", Arrays.asList(Charge.class, Loan.class, Reservation.class)),
 
     /**
      *
      */
-    CHARGE_ACKNOWLEDGED("charge-acknowledged", Arrays.asList(EntityTypes.Type.Loan, EntityTypes.Type.Reservation));
+    CHARGE_ACKNOWLEDGED("charge-acknowledged", Arrays.asList(Loan.class, Reservation.class));
 
     private String parameter;
-    private List<EntityTypes.Type> applicable;
+    private List<Class<? extends LcfEntity>> applicable;
         
-    private CreationQualifier(String parameter, List<EntityTypes.Type> applicable) {
+    private CreationQualifier(String parameter, List<Class<? extends LcfEntity>> applicable) {
         this.parameter = parameter;
         this.applicable = applicable;
         
@@ -53,10 +57,10 @@ public enum CreationQualifier {
     
     /**
      *
-     * @param type
+     * @param clazz
      * @return
      */
-    public boolean isApplicable(EntityTypes.Type type) {
-        return applicable.contains(type);
+    public boolean isApplicable(Class<? extends LcfEntity> clazz) {
+        return applicable.contains(clazz);
     }
 }

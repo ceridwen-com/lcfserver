@@ -15,13 +15,13 @@
  */
 package com.ceridwen.lcf.server.resources.memory;
 
+import com.ceridwen.lcf.model.EntityCodeListClassMapping;
 import com.ceridwen.lcf.server.resources.memory.database.Operation;
 import com.ceridwen.lcf.server.resources.memory.database.Authenticator;
 import com.ceridwen.lcf.server.resources.memory.database.Database;
 import com.ceridwen.lcf.model.authentication.AuthenticationToken;
 import com.ceridwen.lcf.model.enumerations.CreationQualifier;
 import com.ceridwen.lcf.model.enumerations.DirectUpdatePath;
-import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import com.ceridwen.lcf.model.exceptions.EXC04_UnableToProcessRequest;
 import com.ceridwen.lcf.model.exceptions.EXC06_InvalidDataInElement;
 import com.ceridwen.lcf.server.resources.AbstractResourceManagerInterface;
@@ -29,6 +29,8 @@ import com.ceridwen.lcf.server.resources.QueryResults;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import org.bic.ns.lcf.v1_0.EntityType;
+import org.bic.ns.lcf.v1_0.LcfEntity;
 import org.bic.ns.lcf.v1_0.SelectionCriterion;
 
 /**
@@ -36,27 +38,27 @@ import org.bic.ns.lcf.v1_0.SelectionCriterion;
  * @author Ceridwen Limited
  * @param <E>
  */
-public abstract class AbstractResourceManager<E> implements AbstractResourceManagerInterface<E> {
+public abstract class AbstractResourceManager<E extends LcfEntity> implements AbstractResourceManagerInterface<E> {
 
-    protected EntityTypes.Type getType() {
-        return EntityTypes.lookUpByClass(this.getEntityClass());
+    protected EntityType getType() {
+        return EntityCodeListClassMapping.getEntityType(this.getEntityClass());
     }
-
+    
     @Override
-    public String Create(List<AuthenticationToken> authTokens, Object parent, E entity, List<CreationQualifier> qualifiers) {
+    public String Create(List<AuthenticationToken> authTokens, LcfEntity parent, E entity, List<CreationQualifier> qualifiers) {
         Authenticator.getAuthenticator().authenticate(getType(), Operation.POST, authTokens);
         
-        String test = getType().getIdentifier(entity);
+        String test = entity.getIdentifier();
         if (test != null) {
             if (Database.getDatabase().get(getType(), test) != null) {
                 throw new EXC06_InvalidDataInElement("Entity already exists with that identifier", "", "", null);
             }
         } else {
-            getType().setIdentifier(entity, UUID.randomUUID().toString());
+            entity.setIdentifier(UUID.randomUUID().toString());
         }
        
-        Database.getDatabase().put(getType(), getType().getIdentifier(entity), entity);
-        return getType().getIdentifier(entity);
+        Database.getDatabase().put(getType(), entity.getIdentifier(), entity);
+        return entity.getIdentifier();
     }
 
     @Override
@@ -77,18 +79,18 @@ public abstract class AbstractResourceManager<E> implements AbstractResourceMana
             return null; // This will trigger a 404 not found error         
         }
         
-        if (getType().getIdentifier(entity) != null && !identifier.equals(getType().getIdentifier(entity))) {
+        if (entity.getIdentifier() != null && !identifier.equals(entity.getIdentifier())) {
             throw new EXC06_InvalidDataInElement("Change of identifier not permitted", "", "", null);
         } else {
-            getType().setIdentifier(entity, identifier);
+            entity.setIdentifier(identifier);
         }
        
-        return (E)Database.getDatabase().put(getType(), getType().getIdentifier(entity), entity);
+        return (E)Database.getDatabase().put(getType(), entity.getIdentifier(), entity);
     }
 
     @Override
     public boolean DirectValueUpdate(List<AuthenticationToken> authTokens, String identifier, DirectUpdatePath path, String value) {
-        throw new EXC04_UnableToProcessRequest("Invalid request", "Request invalid for " + getType().getEntityTypeCodeValue(), path.getPath(), null );
+        throw new EXC04_UnableToProcessRequest("Invalid request", "Request invalid for " + getType().value(), path.getPath(), null );
     }
 
     @Override
@@ -99,7 +101,7 @@ public abstract class AbstractResourceManager<E> implements AbstractResourceMana
     }
 
     @Override
-    public QueryResults<E> Query(List<AuthenticationToken> authTokens, Object parent, int startIndex, int count, List<SelectionCriterion> selection) {
+    public QueryResults<E> Query(List<AuthenticationToken> authTokens, LcfEntity parent, int startIndex, int count, List<SelectionCriterion> selection) {
         Authenticator.getAuthenticator().authenticate(getType(), Operation.LIST, authTokens);
 
         QueryResults queryResults = new QueryResults();

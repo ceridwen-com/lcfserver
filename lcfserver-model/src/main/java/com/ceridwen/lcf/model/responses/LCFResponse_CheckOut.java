@@ -15,7 +15,7 @@
  */
 package com.ceridwen.lcf.model.responses;
 
-import com.ceridwen.lcf.model.enumerations.EntityTypes;
+import org.bic.ns.lcf.v1_0.EntityType;
 import org.bic.ns.lcf.v1_0.LcfCheckOutResponse;
 
 /**
@@ -75,8 +75,8 @@ public class LCFResponse_CheckOut extends LCFResponse {
      * @return
      */
     @Override
-    public EntityTypes.Type getEntityType() {
-        return EntityTypes.Type.Loan;
+    public EntityType getEntityType() {
+        return EntityType.LOANS;
     }
 
 }

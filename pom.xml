@@ -54,12 +54,12 @@ limitations under the License.
     </scm>
 
     <properties>
+        <lcf.schema.version>1.2.0-SNAPSHOT</lcf.schema.version>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.min.version>3.5</maven.min.version>
         <java.compiler.source>9</java.compiler.source>
         <java.compiler.target>9</java.compiler.target>
-        <lcf.schema.version>1.1.0</lcf.schema.version>
         <lcfserver.resourcemanager.groupid>${project.groupId}</lcfserver.resourcemanager.groupid>
         <lcfserver.resourcemanager.artifactid>lcfserver-resources-memory</lcfserver.resourcemanager.artifactid>
         <lcfserver.resourcemanager.version>${project.version}</lcfserver.resourcemanager.version>       

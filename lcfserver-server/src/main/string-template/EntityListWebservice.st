@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.headers.Header;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.Consumes;
@@ -37,6 +38,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.bic.ns.lcf.v1_0.LcfEntity;
 import org.bic.ns.lcf.v1_0.LcfEntityListResponse;
 import org.bic.ns.lcf.v1_0.SelectionCriterion;
 import org.bic.ns.lcf.v1_0.<Entity>;
@@ -44,14 +46,14 @@ import org.bic.ns.lcf.v1_0.<Entity>;
 
 public class <Entity>ListWebservice {
     
-    private final Object parent;
+    private final LcfEntity parent;
     WebserviceHelper\<<Entity>\> helper = new WebserviceHelper\<\>(<Entity>.class, <Entity>ResourceManagerInterface.class);
 
     public <Entity>ListWebservice() {
         this.parent = null;
     }
     
-    public <Entity>ListWebservice(Object parent) {
+    public <Entity>ListWebservice(LcfEntity parent) {
         this.parent = parent;
     }
     
@@ -60,6 +62,7 @@ public class <Entity>ListWebservice {
 <AuthenticationSchemes: {authenticationscheme |
     @SecurityRequirement(name = "<authenticationscheme.key>")}>
     @ApiResponse(
+        headers = @Header(name="lcf-version", description="LCF Specification Version", required=true, schema=@Schema(type="string")),
         responseCode = "200",
         description = "Retrieved",
         content = @Content(schema = @Schema(implementation = LcfEntityListResponse.class)))
@@ -91,14 +94,17 @@ public class <Entity>ListWebservice {
 <AuthenticationSchemes: {authenticationscheme |
     @SecurityRequirement(name = "<authenticationscheme.key>")}>
     @ApiResponse(
+        headers = @Header(name="lcf-version", description="LCF Specification Version", required=true, schema=@Schema(type="string")),
         responseCode = "201",
         description = "Without content")    
     @ApiResponse(
+        headers = @Header(name="lcf-version", description="LCF Specification Version", required=true, schema=@Schema(type="string")),
         responseCode = "201",
         description = "With echoed content",
         content = @Content(schema = @Schema(implementation = <Entity>.class))) 
 <AlternativePosts: {alternative |
     @ApiResponse(
+        headers = @Header(name="lcf-version", description="LCF Specification Version", required=true, schema=@Schema(type="string")),
         responseCode = "201",
         description = "<alternative>",
         content = @Content(schema = @Schema(implementation = <alternative>.class)))}>

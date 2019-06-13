@@ -15,10 +15,10 @@
  */
 package com.ceridwen.lcf.server.codegen;
 
-import com.ceridwen.lcf.model.Constants;
+import com.ceridwen.lcf.model.LcfConstants;
+import com.ceridwen.lcf.model.EntityCodeListClassMapping;
 import com.ceridwen.lcf.model.enumerations.AlternativeResponseFormats;
 import com.ceridwen.lcf.model.enumerations.CreationQualifier;
-import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import com.ceridwen.lcf.model.enumerations.DirectUpdatePath;
 import com.ceridwen.lcf.model.authentication.AuthenticationCategory;
 import java.lang.reflect.Method;
@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bic.ns.lcf.v1_0.EntityType;
 import org.bic.ns.lcf.v1_0.SelectionCriteria;
 
 /**
@@ -57,19 +58,19 @@ public class GenerateWebservices extends Generator {
     }
     
     
-    List<StringTemplateSelectionCriterion> getSelectionCriteria(EntityTypes.Type entity) {
+    List<StringTemplateSelectionCriterion> getSelectionCriteria(EntityType entity) {
             List<StringTemplateSelectionCriterion> list = new ArrayList<>();
                         
             for (SelectionCriteria criterion: SelectionCriteria.values()) {
                 String property = dashedToCamel(criterion.value());
                 try {
-                    entity.getTypeClass().getMethod("get" + property);
+                    EntityCodeListClassMapping.getEntityClass(entity).getMethod("get" + property);
                     StringTemplateSelectionCriterion criteria = new StringTemplateSelectionCriterion();
                     criteria.setParameter(criterion.value());
                     criteria.setVariable(criterion.name());
                     list.add(criteria);
                 } catch (NoSuchMethodException | SecurityException ex) {
-                    Logger.getLogger(GenerateWebservices.class.getName()).log(Level.INFO, "Selection Criteria {0} not applicable to {1}", new String[]{criterion.value(), entity.getEntityTypeCodeValue()});
+                    Logger.getLogger(GenerateWebservices.class.getName()).log(Level.INFO, "Selection Criteria {0} not applicable to {1}", new String[]{criterion.value(), EntityCodeListClassMapping.getEntityClass(entity).getSimpleName()});
                 }
             }
             
@@ -77,47 +78,47 @@ public class GenerateWebservices extends Generator {
             
     }
     
-    List<String> getAlternativePostResponses(EntityTypes.Type entity) {
+    List<String> getAlternativePostResponses(EntityType entity) {
         List<String> formats = new ArrayList<>();
-        for (Class format: new AlternativeResponseFormats().getAlternativePostFormat(entity)) {
+        for (Class format: new AlternativeResponseFormats().getAlternativePostFormat(EntityCodeListClassMapping.getEntityClass(entity))) {
             formats.add(format.getName());
         }
         
         return formats;
     }
 
-    List<String> getAlternativePutResponses(EntityTypes.Type entity) {
+    List<String> getAlternativePutResponses(EntityType entity) {
         List<String> formats = new ArrayList<>();
-        for (Class format: new AlternativeResponseFormats().getAlternativePutFormat(entity)) {
+        for (Class format: new AlternativeResponseFormats().getAlternativePutFormat(EntityCodeListClassMapping.getEntityClass(entity))) {
             formats.add(format.getName());
         }
         
         return formats;
     }
 
-    List<String> getAlternativeGetResponses(EntityTypes.Type entity) {
+    List<String> getAlternativeGetResponses(EntityType entity) {
         List<String> formats = new ArrayList<>();
-        for (Class format: new AlternativeResponseFormats().getAlternativeGetFormat(entity)) {
+        for (Class format: new AlternativeResponseFormats().getAlternativeGetFormat(EntityCodeListClassMapping.getEntityClass(entity))) {
             formats.add(format.getName());
         }
         
         return formats;
     }
 
-    List<String> getAlternativeDeleteResponses(EntityTypes.Type entity) {
+    List<String> getAlternativeDeleteResponses(EntityType entity) {
         List<String> formats = new ArrayList<>();
-        for (Class format: new AlternativeResponseFormats().getAlternativeDeleteFormat(entity)) {
+        for (Class format: new AlternativeResponseFormats().getAlternativeDeleteFormat(EntityCodeListClassMapping.getEntityClass(entity))) {
             formats.add(format.getName());
         }
         
         return formats;
     }
     
-    List<KeyValue<CreationQualifier>> getCreationQualifiers(EntityTypes.Type entity) {
+    List<KeyValue<CreationQualifier>> getCreationQualifiers(EntityType entity) {
         ArrayList<KeyValue<CreationQualifier>> list = new ArrayList<>();
         
         for (CreationQualifier qualifier: CreationQualifier.values()) {
-            if (qualifier.isApplicable(entity)) {
+            if (qualifier.isApplicable(EntityCodeListClassMapping.getEntityClass(entity))) {
                 list.add(new KeyValue<>(qualifier, qualifier.getParameterText()));
             }
         }
@@ -125,11 +126,11 @@ public class GenerateWebservices extends Generator {
         return list;
     }
     
-    List<KeyValue<DirectUpdatePath>> getDirectUpdatePaths(EntityTypes.Type entity) {
+    List<KeyValue<DirectUpdatePath>> getDirectUpdatePaths(EntityType entity) {
         ArrayList<KeyValue<DirectUpdatePath>> list = new ArrayList<>();
         
         for (DirectUpdatePath path: DirectUpdatePath.values()) {
-            if (path.isApplicable(entity)) {
+            if (path.isApplicable(EntityCodeListClassMapping.getEntityClass(entity))) {
                 list.add(new KeyValue<>(path, path.getPath()));
             }
         }
@@ -137,7 +138,7 @@ public class GenerateWebservices extends Generator {
         return list;
     }
     
-    List<KeyValue<AuthenticationCategory>> getAuthenticationSchemes(EntityTypes.Type entity) {
+    List<KeyValue<AuthenticationCategory>> getAuthenticationSchemes() {
         ArrayList<KeyValue<AuthenticationCategory>> list = new ArrayList<>();
         
         for (AuthenticationCategory category: AuthenticationCategory.values()) {
@@ -149,23 +150,22 @@ public class GenerateWebservices extends Generator {
     
     
     @Override
-    Map getEntityMap(EntityTypes.Type entity) {
+    Map getEntityMap(EntityType entity) {
         Map<String, Object> map = new HashMap<>();
         
-        map.put("LCFPath", Constants.LCF_PREFIX);
-        map.put("Entity", entity.name());        
-        map.put("EntityPath", entity.getEntityTypeCodeValue());
+        map.put("LCFPath", LcfConstants.LCF_PREFIX);
+        map.put("Entity", EntityCodeListClassMapping.getEntityClass(entity).getSimpleName());        
+        map.put("EntityPath", entity.value());
         
         List<StringTemplateSubEntity> subentities = new ArrayList<>();
         
-        for (Method method: entity.getTypeClass().getMethods()) {
+        for (Method method: EntityCodeListClassMapping.getEntityClass(entity).getMethods()) {
             try {
                 if (method.getName().startsWith("get") && method.getName().endsWith("Ref") && method.getReturnType().isAssignableFrom(List.class)) {
                     StringTemplateSubEntity subentity = new StringTemplateSubEntity();
                     String entname = method.getName().substring(3, method.getName().length()-3);
-                    EntityTypes.Type enttype = EntityTypes.Type.valueOf(entname);
-                    subentity.setEntity(enttype.name());
-                    subentity.setEntityPath(enttype.getEntityTypeCodeValue());                
+                    subentity.setEntity(entname);
+                    subentity.setEntityPath(EntityCodeListClassMapping.getEntityType(entname).value());                
                     subentities.add(subentity);
                 }
             } catch (IllegalArgumentException ex) {
@@ -179,7 +179,7 @@ public class GenerateWebservices extends Generator {
         map.put("AlternativeDeletes", getAlternativeDeleteResponses(entity));
         map.put("CreationQualifiers", getCreationQualifiers(entity));
         map.put("DirectUpdatePaths", getDirectUpdatePaths(entity));
-        map.put("AuthenticationSchemes", getAuthenticationSchemes(entity));
+        map.put("AuthenticationSchemes", getAuthenticationSchemes());
         
         return map;        
     }
@@ -195,7 +195,7 @@ public class GenerateWebservices extends Generator {
             
             GenerateWebservices generator = new GenerateWebservices();
             
-            for (EntityTypes.Type entity: EntityTypes.Type.values()) {
+            for (EntityType entity: EntityType.values()) {
                 for (String template: new String[]{"Webservice", "ListWebservice", "ContainerWebservice"}) {
                     generator.generateTemplate(templatedir, template, targetdir, "", ".java", entity);
                 }

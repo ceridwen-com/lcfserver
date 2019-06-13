@@ -17,11 +17,13 @@ package com.ceridwen.lcf.model.enumerations;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.bic.ns.lcf.v1_0.LcfCheckInResponse;
 import org.bic.ns.lcf.v1_0.LcfCheckOutResponse;
+import org.bic.ns.lcf.v1_0.LcfEntity;
+import org.bic.ns.lcf.v1_0.Loan;
 
 /**
  *
@@ -42,24 +44,24 @@ public class AlternativeResponseFormats {
         private List<Class> DELETE;
     }
     
-    Map<EntityTypes.Type, ResponseFormats> alternativeFormats = new EnumMap<>(EntityTypes.Type.class);
+    Map<Class<? extends LcfEntity>, ResponseFormats> alternativeFormats = new HashMap<>();
     
     /**
      *
      */
     public AlternativeResponseFormats() 
     {
-        alternativeFormats.put(EntityTypes.Type.Loan, new ResponseFormats(new ArrayList<>(), Arrays.asList(LcfCheckOutResponse.class), Arrays.asList(LcfCheckInResponse.class), new ArrayList<>()));
+        alternativeFormats.put(Loan.class, new ResponseFormats(new ArrayList<>(), Arrays.asList(LcfCheckOutResponse.class), Arrays.asList(LcfCheckInResponse.class), new ArrayList<>()));
     }
     
     /**
      *
-     * @param type
+     * @param clazz
      * @return
      */
-    public List<Class> getAlternativeGetFormat(EntityTypes.Type type) {
-        if (alternativeFormats.containsKey(type)) {
-            return alternativeFormats.get(type).GET;
+    public List<Class> getAlternativeGetFormat(Class<? extends LcfEntity> clazz) {
+        if (alternativeFormats.containsKey(clazz)) {
+            return alternativeFormats.get(clazz).GET;
         } else {
             return new ArrayList<>();
         }
@@ -67,12 +69,12 @@ public class AlternativeResponseFormats {
 
     /**
      *
-     * @param type
+     * @param clazz
      * @return
      */
-    public List<Class> getAlternativePostFormat(EntityTypes.Type type) {
-        if (alternativeFormats.containsKey(type)) {
-            return alternativeFormats.get(type).POST;
+    public List<Class> getAlternativePostFormat(Class<? extends LcfEntity> clazz) {
+        if (alternativeFormats.containsKey(clazz)) {
+            return alternativeFormats.get(clazz).POST;
         } else {
             return new ArrayList<>();
         }
@@ -80,12 +82,12 @@ public class AlternativeResponseFormats {
 
     /**
      *
-     * @param type
+     * @param clazz
      * @return
      */
-    public List<Class> getAlternativePutFormat(EntityTypes.Type type) {
-        if (alternativeFormats.containsKey(type)) {
-            return alternativeFormats.get(type).PUT;
+    public List<Class> getAlternativePutFormat(Class<? extends LcfEntity> clazz) {
+        if (alternativeFormats.containsKey(clazz)) {
+            return alternativeFormats.get(clazz).PUT;
         } else {
             return new ArrayList<>();
         }
@@ -93,12 +95,12 @@ public class AlternativeResponseFormats {
 
     /**
      *
-     * @param type
+     * @param clazz
      * @return
      */
-    public List<Class> getAlternativeDeleteFormat(EntityTypes.Type type) {
-        if (alternativeFormats.containsKey(type)) {
-            return alternativeFormats.get(type).DELETE;
+    public List<Class> getAlternativeDeleteFormat(Class<? extends LcfEntity> clazz) {
+        if (alternativeFormats.containsKey(clazz)) {
+            return alternativeFormats.get(clazz).DELETE;
         } else {
             return new ArrayList<>();
         }

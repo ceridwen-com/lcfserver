@@ -15,10 +15,10 @@
  */
 package com.ceridwen.lcf.model.referencing;
 
-import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import java.util.HashMap;
 import java.util.Map;
 import org.bic.ns.lcf.v1_0.Entity;
+import org.bic.ns.lcf.v1_0.EntityType;
 import org.bic.ns.lcf.v1_0.Item;
 import org.bic.ns.lcf.v1_0.LcfEntityListResponse;
 
@@ -29,7 +29,7 @@ import org.bic.ns.lcf.v1_0.LcfEntityListResponse;
 
 
 interface SpecialCase {
-    EntityTypes.Type handle(String propertyReference, String property, Class parentClazz, Object parent);
+    EntityType handle(String propertyReference, String property, Class parentClazz, Object parent);
 }
 
 class EntityProperty {
@@ -55,8 +55,8 @@ class EntityProperty {
  * @author Ceridwen Limited
  */
 public class SpecialReferenceCases {
-    private Map<String, EntityTypes.Type> globalMap = new HashMap<>();
-    private Map<EntityProperty, EntityTypes.Type> localMap = new HashMap<>();
+    private Map<String, EntityType> globalMap = new HashMap<>();
+    private Map<EntityProperty, EntityType> localMap = new HashMap<>();
     private Map<Class, SpecialCase> cases = new HashMap<>();
     
     /**
@@ -64,19 +64,19 @@ public class SpecialReferenceCases {
      */
     public SpecialReferenceCases() {
         
-        globalMap.put("Institution", EntityTypes.Type.Authority);
-        globalMap.put("Message", EntityTypes.Type.MessageAlert);
+        globalMap.put("Institution", EntityType.AUTHORITIES);
+        globalMap.put("Message", EntityType.MESSAGES);
         
-        localMap.put(new EntityProperty(Item.class, "Owner"), EntityTypes.Type.Authority);
+        localMap.put(new EntityProperty(Item.class, "Owner"), EntityType.AUTHORITIES);
         
         cases.put(Entity.class, (propertyReference, property, parentClazz, parent) -> {
             if (parentClazz != null) {
                 if (parentClazz.equals(LcfEntityListResponse.class)) {
                     if (propertyReference.equals("getHref")) {
                         if (parent == null) {
-                            return EntityTypes.Type.Patron;
+                            return EntityType.PATRONS;
                         } else {
-                            return EntityTypes.lookUpByEntityTypeCode(((LcfEntityListResponse)parent).getEntityType());
+                            return ((LcfEntityListResponse)parent).getEntityType();
                         }
                     }
                 }
@@ -94,7 +94,7 @@ public class SpecialReferenceCases {
      * @param parent
      * @return
      */
-    public EntityTypes.Type handle(Class clazz, String propertyReference, String property, Class parentClazz, Object parent) {
+    public EntityType handle(Class clazz, String propertyReference, String property, Class parentClazz, Object parent) {
         for (String mapping: globalMap.keySet()) {
             if (property.endsWith(mapping)) {
                 return globalMap.get(mapping);

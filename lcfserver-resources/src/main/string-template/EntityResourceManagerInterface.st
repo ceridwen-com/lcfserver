@@ -20,6 +20,7 @@ import com.ceridwen.lcf.model.authentication.AuthenticationToken;
 import com.ceridwen.lcf.model.enumerations.CreationQualifier;
 import com.ceridwen.lcf.model.enumerations.DirectUpdatePath;
 import java.util.List;
+import org.bic.ns.lcf.v1_0.LcfEntity;
 import org.bic.ns.lcf.v1_0.<Entity>;
 import org.bic.ns.lcf.v1_0.SelectionCriterion;
 
@@ -35,7 +36,7 @@ public interface <Entity>ResourceManagerInterface extends AbstractResourceManage
      * @return  LCF <Entity> class 
      */
     @Override
-    default public Class getEntityClass() {
+    default public Class\<? extends LcfEntity\> getEntityClass() {
         return <Entity>.class;
     }    
 
@@ -49,7 +50,7 @@ public interface <Entity>ResourceManagerInterface extends AbstractResourceManage
      * @return              id of <Entity> created
      */
     @Override
-    String Create(List\<AuthenticationToken\> authTokens, Object parent, <Entity> entity, List\<CreationQualifier\> qualifiers);
+    String Create(List\<AuthenticationToken\> authTokens, LcfEntity parent, <Entity> entity, List\<CreationQualifier\> qualifiers);
 
     /**
      * Handle request to retrieve an existing LCF <Entity>
@@ -105,7 +106,7 @@ public interface <Entity>ResourceManagerInterface extends AbstractResourceManage
      * @return              Result list
      */
     @Override
-    QueryResults\<<Entity>\> Query(List\<AuthenticationToken\> authTokens, Object parent, int startIndex, int count, List\<SelectionCriterion\> selection);
+    QueryResults\<<Entity>\> Query(List\<AuthenticationToken\> authTokens, LcfEntity parent, int startIndex, int count, List\<SelectionCriterion\> selection);
 
 }
 >>

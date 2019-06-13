@@ -15,7 +15,7 @@
  */
 package com.ceridwen.lcf.server.filters;
 
-import com.ceridwen.lcf.model.Constants;
+import com.ceridwen.lcf.model.LcfConstants;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
@@ -30,7 +30,7 @@ public class GlobalHeadersFilter implements ContainerResponseFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
-        responseContext.getHeaders().add("lcf-version", Constants.LCF_VERSION);
+        responseContext.getHeaders().add("lcf-version", LcfConstants.LCF_VERSION);
     }
     
 }

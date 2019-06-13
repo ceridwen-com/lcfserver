@@ -15,13 +15,14 @@
  */
 package com.ceridwen.lcf.server.codegen;
 
-import com.ceridwen.lcf.model.enumerations.EntityTypes;
+import com.ceridwen.lcf.model.EntityCodeListClassMapping;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bic.ns.lcf.v1_0.EntityType;
 import org.stringtemplate.v4.AutoIndentWriter;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
@@ -60,7 +61,7 @@ public abstract class Generator {
     }
     
 
-    abstract Map getEntityMap(EntityTypes.Type entity);  
+    abstract Map getEntityMap(EntityType entity);  
 
     /**
      *
@@ -71,7 +72,7 @@ public abstract class Generator {
      * @param suffix
      * @param entityType
      */
-    protected void generateTemplate(String templatedir, String template, String targetdir, String prefix, String suffix, EntityTypes.Type entityType) {
+    protected void generateTemplate(String templatedir, String template, String targetdir, String prefix, String suffix, EntityType entityType) {
         File templateDirectory = new File(templatedir);
         STGroup group = new STGroupDir(templateDirectory.getAbsolutePath());
         ErrorBuffer errorBuffer = new ErrorBuffer();
@@ -85,10 +86,12 @@ public abstract class Generator {
             Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, "Unable to execute template. {0}", errorBuffer.toString());
             return;
         }
-        Logger.getLogger(Generator.class.getName()).log(Level.INFO, "Generating {0} to {1}", new String[]{prefix + entityType.name() + template + suffix, targetdir} );      
-        render(st, targetdir, prefix + entityType.name() + template + suffix);
+        Logger.getLogger(Generator.class.getName()).log(Level.INFO, "Generating {0} to {1}", new String[]{prefix + EntityCodeListClassMapping.getEntityClass(entityType).getSimpleName() + template + suffix, targetdir} );      
+        render(st, targetdir, prefix + EntityCodeListClassMapping.getEntityClass(entityType).getSimpleName() + template + suffix);
     }
 
+    
+    
     /**
      *
      * @param st

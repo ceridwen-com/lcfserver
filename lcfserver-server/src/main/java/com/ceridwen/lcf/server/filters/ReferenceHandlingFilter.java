@@ -15,7 +15,7 @@
  */
 package com.ceridwen.lcf.server.filters;
 
-import com.ceridwen.lcf.model.Constants;
+import com.ceridwen.lcf.model.LcfConstants;
 import com.ceridwen.lcf.model.enumerations.ReferenceableHTTPHeaders;
 import com.ceridwen.lcf.model.referencing.AddReferenceHandler;
 import com.ceridwen.lcf.model.referencing.RemoveReferenceHandler;
@@ -42,7 +42,7 @@ public class ReferenceHandlingFilter implements ContainerRequestFilter, ReaderIn
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
-        String baseUrl = uri.getBaseUri().toString() + Constants.LCF_PREFIX + "/";
+        String baseUrl = uri.getBaseUri().toString() + LcfConstants.LCF_PREFIX + "/";
 
         for (ReferenceableHTTPHeaders header: ReferenceableHTTPHeaders.values()) {
             if (requestContext.getHeaders().containsKey(header.getParameter())) {
@@ -53,7 +53,7 @@ public class ReferenceHandlingFilter implements ContainerRequestFilter, ReaderIn
 
     @Override
     public Object aroundReadFrom(ReaderInterceptorContext ric) throws IOException, WebApplicationException {
-        String baseUrl = uri.getBaseUri().toString() + Constants.LCF_PREFIX + "/";
+        String baseUrl = uri.getBaseUri().toString() + LcfConstants.LCF_PREFIX + "/";
 
         Object entity = ric.proceed();
         
@@ -64,7 +64,7 @@ public class ReferenceHandlingFilter implements ContainerRequestFilter, ReaderIn
 
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
-        String baseUrl = uri.getBaseUri().toString() + Constants.LCF_PREFIX + "/";
+        String baseUrl = uri.getBaseUri().toString() + LcfConstants.LCF_PREFIX + "/";
         
         new AddReferenceHandler().addReferences(responseContext.getEntity(), baseUrl);
         

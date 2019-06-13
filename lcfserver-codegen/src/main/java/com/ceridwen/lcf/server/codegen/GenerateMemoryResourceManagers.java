@@ -15,10 +15,11 @@
  */
 package com.ceridwen.lcf.server.codegen;
 
-import com.ceridwen.lcf.model.enumerations.EntityTypes;
+import com.ceridwen.lcf.model.EntityCodeListClassMapping;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import org.bic.ns.lcf.v1_0.EntityType;
 
 /**
  *
@@ -26,10 +27,10 @@ import java.util.Map;
  */
 public class GenerateMemoryResourceManagers extends Generator {
     @Override
-    Map getEntityMap(EntityTypes.Type entity) {
+    Map getEntityMap(EntityType entity) {
         Map<String, Object> map = new HashMap<>();
         
-        map.put("Entity", entity.name());      
+        map.put("Entity", EntityCodeListClassMapping.getEntityClass(entity).getSimpleName());      
         
         return map;
     }
@@ -45,8 +46,8 @@ public class GenerateMemoryResourceManagers extends Generator {
             
             GenerateMemoryResourceManagers generator = new GenerateMemoryResourceManagers();
             
-            for (EntityTypes.Type entity: EntityTypes.Type.values()) {
-                if (!Arrays.asList(EntityTypes.Type.Loan, EntityTypes.Type.Patron).contains(entity)) {
+            for (EntityType entity: EntityType.values()) {
+                if (!Arrays.asList(EntityType.LOANS, EntityType.PATRONS).contains(entity)) {
                     for (String template: new String[]{"ResourceManager"}) {
                         generator.generateTemplate(templatedir, template, targetdir, "", ".java", entity);
                     }
@@ -55,7 +56,7 @@ public class GenerateMemoryResourceManagers extends Generator {
 
             targetdir = args[1] + "\\META-INF\\services";
 
-            for (EntityTypes.Type entity: EntityTypes.Type.values()) {
+            for (EntityType entity: EntityType.values()) {
                 for (String template: new String[]{"ResourceManagerInterface"}) {
                     generator.generateTemplate(templatedir, template, targetdir, "com.ceridwen.lcf.server.resources.", "", entity);
                 }

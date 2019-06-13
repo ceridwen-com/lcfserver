@@ -17,6 +17,8 @@ package com.ceridwen.lcf.model.enumerations;
 
 import java.util.Arrays;
 import java.util.List;
+import org.bic.ns.lcf.v1_0.LcfEntity;
+import org.bic.ns.lcf.v1_0.Patron;
 
 /**
  *
@@ -27,17 +29,17 @@ public enum DirectUpdatePath {
     /**
      *
      */
-    PASSWORD("password", Arrays.asList(EntityTypes.Type.Patron)),
+    PASSWORD("password", Arrays.asList(Patron.class)),
 
     /**
      *
      */
-    PIN("pin", Arrays.asList(EntityTypes.Type.Patron));
+    PIN("pin", Arrays.asList(Patron.class));
 
     private String path;
-    private List<EntityTypes.Type> applicable;
+    private List<Class<? extends LcfEntity>> applicable;
     
-    private DirectUpdatePath(String path, List<EntityTypes.Type> applicable) {
+    private DirectUpdatePath(String path, List<Class<? extends LcfEntity>> applicable) {
         this.path = path;
         this.applicable = applicable;
     }
@@ -52,11 +54,11 @@ public enum DirectUpdatePath {
     
     /**
      *
-     * @param type
+     * @param clazz
      * @return
      */
-    public boolean isApplicable(EntityTypes.Type type) {
-        return applicable.contains(type);
+    public boolean isApplicable(Class<? extends LcfEntity> clazz) {
+        return applicable.contains(clazz);
     }
 
 }

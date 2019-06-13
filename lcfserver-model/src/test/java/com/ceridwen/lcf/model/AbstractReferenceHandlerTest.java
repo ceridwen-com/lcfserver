@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ceridwen.lcf.lcfserver.model;
+package com.ceridwen.lcf.model;
 
+import com.ceridwen.lcf.model.EntityCodeListClassMapping;
 import com.ceridwen.lcf.model.referencing.AbstractReferenceHandler;
-import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bic.ns.lcf.v1_0.EntityType;
 import org.bic.ns.lcf.v1_0.LcfCheckInResponse;
 import org.bic.ns.lcf.v1_0.LcfCheckOutResponse;
 import org.bic.ns.lcf.v1_0.LcfEntityListResponse;
@@ -97,8 +98,8 @@ public class AbstractReferenceHandlerTest {
     public void testCheckReferences() {
         Logger.getLogger(AbstractReferenceHandlerTest.class.getName()).log(Level.INFO, "Checking references");      
         List<Class> clazzes = new ArrayList<>();
-        for (EntityTypes.Type type: EntityTypes.Type.values()) {
-            clazzes.add(type.getTypeClass());
+        for (EntityType type: EntityType.values()) {
+            clazzes.add(EntityCodeListClassMapping.getEntityClass(type));
         }
         
         clazzes.add(LcfEntityListResponse.class);
