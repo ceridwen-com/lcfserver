@@ -15,93 +15,86 @@
  */
 package com.ceridwen.lcf.server.legacy.filter;
 
-import com.ceridwen.lcf.model.enumerations.EntityTypes;
-import com.ceridwen.lcf.model.enumerations.EntityTypes.Type;
-import com.ceridwen.lcf.model.exceptions.EXC04_UnableToProcessRequest;
-import com.ceridwen.lcf.server.legacy.EntitySourceInterface;
-import com.ceridwen.lcf.server.legacy.EntitySourcesInterface;
-import com.ceridwen.lcf.server.resources.QueryResults;
-
 /**
  *
  * @author Ceridwen Limited
  */
 @SuppressWarnings("rawtypes")
-public class ReadOnlyFilter implements EntitySourcesFilter {
-
-	private Class managedClass;
-
-    /**
-     *
-     * @param managedClass
-     */
-    public ReadOnlyFilter(Class managedClass) {
-		this.managedClass = managedClass;
-	}
-	
-    /**
-     *
-     * @param entitySources
-     * @return
-     */
-    @Override
-	public EntitySourcesInterface filters(EntitySourcesInterface entitySources) {
-		
-		return new EntitySourcesInterface() {
-			@SuppressWarnings({ "unchecked" })
-			@Override
-			public <T> EntitySourceInterface<T> getEntitySource(Type type, Class<T> clazz) {
-				if (clazz == managedClass) {
-					return (EntitySourceInterface<T>) new ReadOnlyManagedtEntitySource(entitySources.getEntitySource(type, clazz));
-				} else {
-					return entitySources.getEntitySource(type, clazz);
-				}
-			}
-		};
-	}
-
-	class ReadOnlyManagedtEntitySource<E> implements EntitySourceInterface<E> {
-		private EntitySourceInterface<E> wrapped;
-	
-		public ReadOnlyManagedtEntitySource(EntitySourceInterface<E> wrapped) {
-			this.wrapped = wrapped;
-		}
-	
-		@Override
-		public String Create(Object parent, E entity) {
-			throw new EXC04_UnableToProcessRequest(EntityTypes.lookUpByClass(entity.getClass()).getEntityTypeCodeValue() + " are read only", EntityTypes.lookUpByClass(entity.getClass()).getEntityTypeCodeValue() + " are read only", null, null);
-		}
-
-	
-		@Override
-		public String Create(E entity) {
-			throw new EXC04_UnableToProcessRequest(EntityTypes.lookUpByClass(entity.getClass()).getEntityTypeCodeValue() + " are read only", EntityTypes.lookUpByClass(entity.getClass()).getEntityTypeCodeValue() + " are read only", null, null);
-		}
-	
-		@Override
-		public E Retrieve(String identifier) {
-			return wrapped.Retrieve(identifier);
-		}
-	
-		@Override
-		public E Modify(String identifier, E entity) {
-			throw new EXC04_UnableToProcessRequest(EntityTypes.lookUpByClass(entity.getClass()).getEntityTypeCodeValue() + " are read only", EntityTypes.lookUpByClass(entity.getClass()).getEntityTypeCodeValue() + " are read only", null, null);
-		}
-	
-		@Override
-		public void Delete(String identifier) {
-			throw new EXC04_UnableToProcessRequest("Read only", "Read only", null, null);
-		}
-	
-		@Override
-		public QueryResults<E> Query(Object parent, int start, int max, String query) {
-			return wrapped.Query(parent, start, max, query);
-		}
-	
-		@Override
-		public QueryResults<E> Query(String query, int start, int max) {
-			return wrapped.Query(query, start, max);
-		}
-	}
+public class ReadOnlyFilter {//implements EntitySourcesFilter {
+//
+//	private Class managedClass;
+//
+//    /**
+//     *
+//     * @param managedClass
+//     */
+//    public ReadOnlyFilter(Class managedClass) {
+//		this.managedClass = managedClass;
+//	}
+//	
+//    /**
+//     *
+//     * @param entitySources
+//     * @return
+//     */
+//    @Override
+//	public EntitySourcesInterface filters(EntitySourcesInterface entitySources) {
+//		
+//		return new EntitySourcesInterface() {
+//			@SuppressWarnings({ "unchecked" })
+//			@Override
+//			public <T> EntitySourceInterface<T> getEntitySource(Type type, Class<T> clazz) {
+//				if (clazz == managedClass) {
+//					return (EntitySourceInterface<T>) new ReadOnlyManagedtEntitySource(entitySources.getEntitySource(type, clazz));
+//				} else {
+//					return entitySources.getEntitySource(type, clazz);
+//				}
+//			}
+//		};
+//	}
+//
+//	class ReadOnlyManagedtEntitySource<E> implements EntitySourceInterface<E> {
+//		private EntitySourceInterface<E> wrapped;
+//	
+//		public ReadOnlyManagedtEntitySource(EntitySourceInterface<E> wrapped) {
+//			this.wrapped = wrapped;
+//		}
+//	
+//		@Override
+//		public String Create(Object parent, E entity) {
+//			throw new EXC04_UnableToProcessRequest(EntityTypes.lookUpByClass(entity.getClass()).getEntityTypeCodeValue() + " are read only", EntityTypes.lookUpByClass(entity.getClass()).getEntityTypeCodeValue() + " are read only", null, null);
+//		}
+//
+//	
+//		@Override
+//		public String Create(E entity) {
+//			throw new EXC04_UnableToProcessRequest(EntityTypes.lookUpByClass(entity.getClass()).getEntityTypeCodeValue() + " are read only", EntityTypes.lookUpByClass(entity.getClass()).getEntityTypeCodeValue() + " are read only", null, null);
+//		}
+//	
+//		@Override
+//		public E Retrieve(String identifier) {
+//			return wrapped.Retrieve(identifier);
+//		}
+//	
+//		@Override
+//		public E Modify(String identifier, E entity) {
+//			throw new EXC04_UnableToProcessRequest(EntityTypes.lookUpByClass(entity.getClass()).getEntityTypeCodeValue() + " are read only", EntityTypes.lookUpByClass(entity.getClass()).getEntityTypeCodeValue() + " are read only", null, null);
+//		}
+//	
+//		@Override
+//		public void Delete(String identifier) {
+//			throw new EXC04_UnableToProcessRequest("Read only", "Read only", null, null);
+//		}
+//	
+//		@Override
+//		public QueryResults<E> Query(Object parent, int start, int max, String query) {
+//			return wrapped.Query(parent, start, max, query);
+//		}
+//	
+//		@Override
+//		public QueryResults<E> Query(String query, int start, int max) {
+//			return wrapped.Query(query, start, max);
+//		}
+//	}
 }
 

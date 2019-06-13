@@ -15,10 +15,11 @@
  */
 package com.ceridwen.lcf.model.responses;
 
-import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import com.ceridwen.lcf.model.exceptions.EXC00_LCF_Exception;
 import java.util.ArrayList;
 import java.util.List;
+import org.bic.ns.lcf.v1_0.EntityType;
+import org.bic.ns.lcf.v1_0.LcfEntity;
 
 /**
  *
@@ -42,7 +43,7 @@ public abstract class LCFResponse extends RuntimeException {
      *
      * @return
      */
-    public abstract EntityTypes.Type getEntityType();
+    public abstract EntityType getEntityType();
 
     /**
      *

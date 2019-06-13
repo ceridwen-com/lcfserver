@@ -15,7 +15,7 @@
  */
 package com.ceridwen.lcf.server.openapi;
 
-import com.ceridwen.lcf.model.Constants;
+import com.ceridwen.lcf.model.LcfConstants;
 import io.swagger.v3.core.filter.AbstractSpecFilter;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.media.Schema;
@@ -57,7 +57,7 @@ public class OpenApiFilter extends AbstractSpecFilter {
                 List<Server> servers = new ArrayList<>();
                 servers.add(server);
                 api.setServers(servers);
-                api.getInfo().setVersion(Constants.LCF_VERSION);
+                api.getInfo().setVersion(LcfConstants.LCF_VERSION);
             });
         }
         

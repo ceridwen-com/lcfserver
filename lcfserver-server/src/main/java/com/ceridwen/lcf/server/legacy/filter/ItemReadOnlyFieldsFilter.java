@@ -15,55 +15,48 @@
  */
 package com.ceridwen.lcf.server.legacy.filter;
 
-import com.ceridwen.lcf.model.enumerations.EntityTypes;
-import java.util.TreeSet;
 
-import org.bic.ns.lcf.v1_0.Item;
-import org.bic.ns.lcf.v1_0.Reservation;
-
-import com.ceridwen.lcf.server.resources.QueryResults;
-import com.ceridwen.lcf.server.legacy.EntitySourcesInterface;
 
 /**
  *
  * @author Ceridwen Limited
  */
-public class ItemReadOnlyFieldsFilter extends AbstractReadOnlyFieldsFilter<Item> {
+public class ItemReadOnlyFieldsFilter {// extends AbstractReadOnlyFieldsFilter<Item> {
 
-	@Override
-	Class<Item> getHandledClass() {
-		return Item.class;
-	}
-
-	@Override
-	Item updateReadOnlyFields(EntitySourcesInterface entitySources, Item entity) {
-		TreeSet<String> holds = new TreeSet<>();
-		
-		QueryResults<Reservation> reservations = entitySources.getEntitySource(EntityTypes.Type.Reservation, Reservation.class).Query(entity, 0, Integer.MAX_VALUE, null);
-		for (Reservation r: reservations.getResults()) {
-			switch (r.getReservationStatus()) {
-				case VALUE_1: // Item available
-					holds.add(r.getPatronRef());
-					break;
-				case VALUE_2: // Item unavailable
-					holds.add(r.getPatronRef()); // TODO check?
-					break;
-				case VALUE_3: // Cancelled by patron
-					break;
-				case VALUE_4: // Cancelled by staff
-					break;
-				case VALUE_5: // Ended by check-out to patron
-					break;
-				case VALUE_6: // Expired
-					break;
-				default:
-					break;
-			}
-		}
-		
-		entity.setPatronsInHoldQueue(holds.size());
-		
-		return entity;
-	}
+//	@Override
+//	Class<Item> getHandledClass() {
+//		return Item.class;
+//	}
+//
+//	@Override
+//	Item updateReadOnlyFields(EntitySourcesInterface entitySources, Item entity) {
+//		TreeSet<String> holds = new TreeSet<>();
+//		
+//		QueryResults<Reservation> reservations = entitySources.getEntitySource(EntityTypes.Type.Reservation, Reservation.class).Query(entity, 0, Integer.MAX_VALUE, null);
+//		for (Reservation r: reservations.getResults()) {
+//			switch (r.getReservationStatus()) {
+//				case VALUE_1: // Item available
+//					holds.add(r.getPatronRef());
+//					break;
+//				case VALUE_2: // Item unavailable
+//					holds.add(r.getPatronRef()); // TODO check?
+//					break;
+//				case VALUE_3: // Cancelled by patron
+//					break;
+//				case VALUE_4: // Cancelled by staff
+//					break;
+//				case VALUE_5: // Ended by check-out to patron
+//					break;
+//				case VALUE_6: // Expired
+//					break;
+//				default:
+//					break;
+//			}
+//		}
+//		
+//		entity.setPatronsInHoldQueue(holds.size());
+//		
+//		return entity;
+//	}
 
 }

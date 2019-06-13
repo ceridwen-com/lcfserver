@@ -15,7 +15,7 @@
  */
 package com.ceridwen.lcf.server.resources.memory.database;
 
-import com.ceridwen.lcf.model.enumerations.EntityTypes;
+import com.ceridwen.lcf.model.EntityCodeListClassMapping;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumMap;
@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.logging.Logger;
+import org.bic.ns.lcf.v1_0.EntityType;
+import org.bic.ns.lcf.v1_0.LcfEntity;
 import org.jeasy.random.EasyRandom;
 import org.jeasy.random.EasyRandomParameters;
 
@@ -35,7 +37,7 @@ public class Database {
     
     private static Database db = null;
     
-    private Map<EntityTypes.Type, Map<String, Object>> database = new EnumMap<>(EntityTypes.Type.class);
+    private Map<EntityType, Map<String, Object>> database = new EnumMap<>(EntityType.class);
     
     /**
      *
@@ -56,7 +58,7 @@ public class Database {
      *
      * @param type
      */
-    private void generateRandomContent(EntityTypes.Type type) {
+    private void generateRandomContent(EntityType type) {
         EasyRandomParameters parameters = new EasyRandomParameters()
             .seed(123L)
             .objectPoolSize(100)
@@ -70,21 +72,21 @@ public class Database {
 
         int amount = (new Random()).nextInt(25)+5;
         for (int i=0; i < amount; i++) {
-            Object o = easyRandom.nextObject(type.getTypeClass());
-            type.setIdentifier(o, UUID.randomUUID().toString());
-            this.put(type, type.getIdentifier(o), o);
+            LcfEntity o = easyRandom.nextObject(EntityCodeListClassMapping.getEntityClass(type));
+            o.setIdentifier(UUID.randomUUID().toString());
+            this.put(type, o.getIdentifier(), o);
         }
     }
     
     public void Config() {
         Logger.getLogger(Database.class.getName()).info("Loading Default Data");
-        for (EntityTypes.Type type: EntityTypes.Type.values()) {
+        for (EntityType type: EntityType.values()) {
             generateRandomContent(type);
         }
         Logger.getLogger(Database.class.getName()).info("Default Data Load Complete");
     }
     
-    public boolean contains(EntityTypes.Type type, String identifier) {
+    public boolean contains(Class<? extends LcfEntity> type, String identifier) {
         if (database.containsKey(type)) {
             Map<String, Object> map = database.get(type);
             return map.containsKey(identifier);
@@ -93,7 +95,7 @@ public class Database {
         return false;                
     }
 
-    public Object put(EntityTypes.Type type, String identifier, Object data) {
+    public Object put(EntityType type, String identifier, Object data) {
         if (!database.containsKey(type)) {
             database.put(type, new HashMap<>());
         }    
@@ -108,7 +110,7 @@ public class Database {
         return get(type, identifier);        
     }
    
-    public Object get(EntityTypes.Type type, String identifier) {
+    public Object get(EntityType type, String identifier) {
         if (database.containsKey(type)) {
             Map<String, Object> map = database.get(type);
             if (map.containsKey(identifier)) {
@@ -118,7 +120,7 @@ public class Database {
         return null;
     }
 
-    public boolean delete(EntityTypes.Type type, String identifier) {
+    public boolean delete(EntityType type, String identifier) {
         if (database.containsKey(type)) {
             Map<String, Object> map = database.get(type);
             if (map.containsKey(identifier)) {
@@ -130,7 +132,7 @@ public class Database {
         return false;        
     }
     
-    public Collection<Object> list(EntityTypes.Type type) {
+    public Collection<Object> list(EntityType type) {
         if (database.containsKey(type)) {
             return database.get(type).values();
         } else {

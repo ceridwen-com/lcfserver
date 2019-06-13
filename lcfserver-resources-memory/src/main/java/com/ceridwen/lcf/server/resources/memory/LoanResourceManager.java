@@ -18,14 +18,15 @@ package com.ceridwen.lcf.server.resources.memory;
 import com.ceridwen.lcf.server.resources.memory.database.Database;
 import com.ceridwen.lcf.model.authentication.AuthenticationToken;
 import com.ceridwen.lcf.model.enumerations.CreationQualifier;
-import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import com.ceridwen.lcf.model.responses.LCFResponse_CheckIn;
 import com.ceridwen.lcf.model.responses.LCFResponse_CheckOut;
 import com.ceridwen.lcf.server.resources.LoanResourceManagerInterface;
 import java.util.List;
 import java.util.UUID;
+import org.bic.ns.lcf.v1_0.EntityType;
 import org.bic.ns.lcf.v1_0.LcfCheckInResponse;
 import org.bic.ns.lcf.v1_0.LcfCheckOutResponse;
+import org.bic.ns.lcf.v1_0.LcfEntity;
 import org.bic.ns.lcf.v1_0.Loan;
 import org.bic.ns.lcf.v1_0.LoanStatusCode;
 import org.jeasy.random.EasyRandom;
@@ -52,13 +53,13 @@ public class LoanResourceManager extends AbstractResourceManager<Loan> implement
     }
 
     @Override
-    public String Create(List<AuthenticationToken> authTokens, Object parent, Loan entity, List<CreationQualifier> qualifiers) {
+    public String Create(List<AuthenticationToken> authTokens, LcfEntity parent, Loan entity, List<CreationQualifier> qualifiers) {
         String loanid = super.Create(authTokens, parent, entity, qualifiers); 
         
         Loan loan = (Loan)Database.getDatabase().get(getType(), loanid);
 
         LcfCheckOutResponse response = getEasyRandom().nextObject(LcfCheckOutResponse.class);
-        response.setLoan((Loan)Database.getDatabase().put(EntityTypes.Type.Loan, loanid, loan));
+        response.setLoan((Loan)Database.getDatabase().put(EntityType.LOANS, loanid, loan));
         throw new LCFResponse_CheckOut(response);
     }
     
