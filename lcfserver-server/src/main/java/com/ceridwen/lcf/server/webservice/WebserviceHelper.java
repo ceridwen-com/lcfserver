@@ -26,7 +26,6 @@ import com.ceridwen.lcf.model.exceptions.EXC04_UnableToProcessRequest;
 import com.ceridwen.lcf.model.exceptions.EXC05_InvalidEntityReference;
 import com.ceridwen.lcf.server.resources.AbstractResourceManagerInterface;
 import com.ceridwen.lcf.server.resources.QueryResults;
-import java.lang.reflect.Field;
 import java.net.URI;
 import java.util.List;
 import java.util.ServiceConfigurationError;
