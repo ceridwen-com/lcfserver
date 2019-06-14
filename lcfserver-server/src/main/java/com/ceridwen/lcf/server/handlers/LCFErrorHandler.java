@@ -15,10 +15,8 @@
  */
 package com.ceridwen.lcf.server.handlers;
 
-import com.ceridwen.lcf.model.Constants;
 import com.ceridwen.lcf.model.exceptions.EXC00_LCF_Exception;
 import com.ceridwen.lcf.model.exceptions.EXC01_ServiceUnavailable;
-import java.net.URI;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -32,7 +30,7 @@ public class LCFErrorHandler implements ExceptionMapper<Throwable>{
 
     @Override
     public Response toResponse(Throwable e) {
-    	EXC00_LCF_Exception exception = new EXC01_ServiceUnavailable("Unknoen error", null, null, e);
+    	EXC00_LCF_Exception exception = new EXC01_ServiceUnavailable("Unknown error", null, null, e);
         
         Response.ResponseBuilder responseBuilder;
 

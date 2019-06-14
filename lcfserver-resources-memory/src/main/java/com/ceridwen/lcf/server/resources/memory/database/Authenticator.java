@@ -54,10 +54,13 @@ public class Authenticator {
     
     public void Config() {
         Logger.getLogger(Authenticator.class.getName()).info("Loading Default ACLS Data");
-        updatePassword(AuthenticationCategory.USER, "patron", "password");
-        updatePassword(AuthenticationCategory.TERMINAL, "terminal", "password");       
-        addACL(EntityTypes.Type.Authorisation, AuthenticationCategory.USER);
-        addACL(EntityTypes.Type.Authorisation, AuthenticationCategory.TERMINAL);
+        updatePassword(AuthenticationCategory.TERMINAL, "terminal", "password");     
+        
+        addACL(Operation.DELETE, AuthenticationCategory.TERMINAL);
+        addACL(Operation.POST, AuthenticationCategory.TERMINAL);
+        addACL(Operation.PUT, AuthenticationCategory.TERMINAL);
+        removeACL(EntityTypes.Type.Patron, Operation.PUT, AuthenticationCategory.TERMINAL);
+        
         Logger.getLogger(Authenticator.class.getName()).info("ACLS Data Load Complete");
     }
 
@@ -158,6 +161,13 @@ public class Authenticator {
         }
     }
 
+    public void addACL(Operation operation, AuthenticationCategory category) {
+        for (EntityTypes.Type type: EntityTypes.Type.values()) {
+            addACL(type, operation, category);
+        }
+    }
+
+    
     public void removeACL(EntityTypes.Type type, Operation operation, AuthenticationCategory category) {
         if (!acls.containsKey(type)) {
             acls.put(type, new EnumMap<>(Operation.class));
@@ -178,6 +188,12 @@ public class Authenticator {
 
     public void removeACL(EntityTypes.Type type, AuthenticationCategory category) {
         for (Operation operation: Operation.values()) {
+            removeACL(type, operation, category);
+        }
+    }
+    
+    public void removeACL(Operation operation, AuthenticationCategory category) {
+        for (EntityTypes.Type type: EntityTypes.Type.values()) {
             removeACL(type, operation, category);
         }
     }

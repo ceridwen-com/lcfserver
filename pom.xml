@@ -54,15 +54,16 @@ limitations under the License.
     </scm>
 
     <properties>
-        <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.min.version>3.5</maven.min.version>
-        <java.compiler.source>9</java.compiler.source>
-        <java.compiler.target>9</java.compiler.target>
         <lcf.schema.version>1.1.0</lcf.schema.version>
+
         <lcfserver.resourcemanager.groupid>${project.groupId}</lcfserver.resourcemanager.groupid>
         <lcfserver.resourcemanager.artifactid>lcfserver-resources-memory</lcfserver.resourcemanager.artifactid>
         <lcfserver.resourcemanager.version>${project.version}</lcfserver.resourcemanager.version>       
+
+        <maven.min.version>3.5</maven.min.version>
+        <java.compiler.source>9</java.compiler.source>
+        <java.compiler.target>9</java.compiler.target>
+
         <java.ee.version>7.0</java.ee.version>
         <openapi.swagger.version>2.0.8</openapi.swagger.version>      
         <jersey.container.version>2.28</jersey.container.version>
@@ -72,6 +73,9 @@ limitations under the License.
         <commons.beanutils.version>1.9.3</commons.beanutils.version>
         <ceridwen.util.version>1.7-SNAPSHOT</ceridwen.util.version>
         <jeasy.random.version>4.0.0</jeasy.random.version>
+
+        <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <prerequisites>

@@ -35,7 +35,7 @@ import org.jeasy.random.EasyRandomParameters;
  *
  * @author Ceridwen Limited
  */
-public class LoanResourceManager extends AbstractResourceManager<Loan> implements LoanResourceManagerInterface{
+public class LoanResourceManager extends AbstractResourceManager<Loan> implements LoanResourceManagerInterface {
 
     @Override
     public Loan Modify(List<AuthenticationToken> authTokens, String identifier, Loan entity) {
