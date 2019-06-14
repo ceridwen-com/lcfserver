@@ -72,12 +72,6 @@ limitations under the License.
             <artifactId>jaxb-runtime</artifactId>
             <version>${jersey.jaxb-runtime.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.ceridwen.util</groupId>
-            <artifactId>ceridwen-util</artifactId>
-            <version>${ceridwen.util.version}</version>
-        </dependency>
     </dependencies>
 
     <build>

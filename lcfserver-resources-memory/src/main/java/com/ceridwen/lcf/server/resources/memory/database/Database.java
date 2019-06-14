@@ -37,7 +37,7 @@ public class Database {
     
     private static Database db = null;
     
-    private Map<EntityType, Map<String, Object>> database = new EnumMap<>(EntityType.class);
+    private Map<EntityType, Map<String, LcfEntity>> database = new EnumMap<>(EntityType.class);
     
     /**
      *
@@ -88,18 +88,18 @@ public class Database {
     
     public boolean contains(Class<? extends LcfEntity> type, String identifier) {
         if (database.containsKey(type)) {
-            Map<String, Object> map = database.get(type);
+            Map<String, LcfEntity> map = database.get(type);
             return map.containsKey(identifier);
         }
         
         return false;                
     }
 
-    public Object put(EntityType type, String identifier, Object data) {
+    public Object put(EntityType type, String identifier, LcfEntity data) {
         if (!database.containsKey(type)) {
             database.put(type, new HashMap<>());
         }    
-        Map<String, Object> map = database.get(type);
+        Map<String, LcfEntity> map = database.get(type);
         if (map.containsKey(identifier)) {
             map.replace(identifier, data);
         }
@@ -110,9 +110,9 @@ public class Database {
         return get(type, identifier);        
     }
    
-    public Object get(EntityType type, String identifier) {
+    public LcfEntity get(EntityType type, String identifier) {
         if (database.containsKey(type)) {
-            Map<String, Object> map = database.get(type);
+            Map<String, LcfEntity> map = database.get(type);
             if (map.containsKey(identifier)) {
                 return map.get(identifier);
             }
@@ -122,7 +122,7 @@ public class Database {
 
     public boolean delete(EntityType type, String identifier) {
         if (database.containsKey(type)) {
-            Map<String, Object> map = database.get(type);
+            Map<String, LcfEntity> map = database.get(type);
             if (map.containsKey(identifier)) {
                 map.remove(identifier);
                 return true;
@@ -132,7 +132,7 @@ public class Database {
         return false;        
     }
     
-    public Collection<Object> list(EntityType type) {
+    public Collection<LcfEntity> list(EntityType type) {
         if (database.containsKey(type)) {
             return database.get(type).values();
         } else {
