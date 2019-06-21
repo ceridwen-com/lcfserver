@@ -61,7 +61,12 @@ public class GenerateWebservices extends Generator {
             List<StringTemplateSelectionCriterion> list = new ArrayList<>();
                         
             for (SelectionCriteria criterion: SelectionCriteria.values()) {
-                String property = dashedToCamel(criterion.value());
+                String property;
+                if (criterion.value().startsWith("alt-")) {
+                    property = dashedToCamel(criterion.value().replace("^alt-", "additional-").replace("-type$", ""));                    
+                } else {
+                    property = dashedToCamel(criterion.value());
+                }
                 try {
                     entity.getTypeClass().getMethod("get" + property);
                     StringTemplateSelectionCriterion criteria = new StringTemplateSelectionCriterion();
