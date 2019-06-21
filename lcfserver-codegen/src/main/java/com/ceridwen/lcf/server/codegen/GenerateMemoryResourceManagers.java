@@ -46,7 +46,7 @@ public class GenerateMemoryResourceManagers extends Generator {
             GenerateMemoryResourceManagers generator = new GenerateMemoryResourceManagers();
             
             for (EntityTypes.Type entity: EntityTypes.Type.values()) {
-                if (!Arrays.asList(EntityTypes.Type.Authorisation, EntityTypes.Type.Loan, EntityTypes.Type.Patron).contains(entity)) {
+                if (!Arrays.asList(EntityTypes.Type.Loan, EntityTypes.Type.Patron).contains(entity)) {
                     for (String template: new String[]{"ResourceManager"}) {
                         generator.generateTemplate(templatedir, template, targetdir, "", ".java", entity);
                     }
