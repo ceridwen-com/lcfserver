@@ -35,6 +35,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.Response;
 import org.bic.ns.lcf.v1_0.Entity;
+import org.bic.ns.lcf.v1_0.LcfEntity;
 import org.bic.ns.lcf.v1_0.LcfEntityListResponse;
 import org.bic.ns.lcf.v1_0.SelectionCriteria;
 import org.bic.ns.lcf.v1_0.SelectionCriterion;
@@ -44,7 +45,7 @@ import org.bic.ns.lcf.v1_0.SelectionCriterion;
  * @author Ceridwen Limited
  * @param <E>
  */
-public class WebserviceHelper<E> {
+public class WebserviceHelper<E extends LcfEntity> {
     
     AbstractResourceManagerInterface<E> rm = null;
     Class<E> clazz;
@@ -138,13 +139,11 @@ public class WebserviceHelper<E> {
         
         for (E e : queryResults.getResults()) {
             try {
-                Field field = e.getClass().getDeclaredField("identifier");
-                field.setAccessible(true);
-                String ref = (String) field.get(e);
+                String ref = ((LcfEntity)e).getIdentifier();
                 Entity entity = new Entity();
                 entity.setHref(ref);
                 response.getEntity().add(entity);
-            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+            } catch (SecurityException | IllegalArgumentException  ex) {
                 Logger.getLogger(WebserviceHelper.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
