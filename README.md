@@ -8,8 +8,8 @@ The Library Communications Framework (LCF) is a set of library interoperability 
 
 **Pre-requisites:**
 * [Git](https://git-scm.com/)
-* [JDK (>= 1.8)](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
-* [Maven (>= 3.3)](https://maven.apache.org/)
+* [JDK (>= 1.9)](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+* [Maven (>= 3.5)](https://maven.apache.org/)
 
 **To install and run:**
 ```bash
