@@ -63,7 +63,7 @@ public class LCFResponse_CheckIn extends LCFResponse {
      */
     @Override
     public String getIdentifier() {
-        return response.getLoanRef();
+        return response.getLoan().getIdentifier();
     }
 
     /**

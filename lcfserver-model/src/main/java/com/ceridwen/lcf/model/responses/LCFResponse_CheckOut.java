@@ -63,11 +63,7 @@ public class LCFResponse_CheckOut extends LCFResponse {
      */
     @Override
     public String getIdentifier() {
-        if (response.getLoan() != null) {
-            return response.getLoan().getIdentifier();
-        } else {
-            return response.getLoanRef();
-        }
+        return response.getLoan().getIdentifier();
     }
 
     /**
