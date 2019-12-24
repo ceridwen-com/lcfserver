@@ -84,7 +84,7 @@ public class CheckInOutFilter implements EntitySourcesFilter {
 		public void CheckOut(Loan data) {
 			if (data.getLoanStatus().contains(LoanStatusCode.VALUE_1)) {
 				LcfCheckOutResponse response = new LcfCheckOutResponse();
-				response.setLoanRef(data.getIdentifier());
+				response.setLoan(data);
 				response.setMediaWarning(MediaWarningFlag.VALUE_1);
 				response.setSecurityDesensitize(SecurityDesensitize.VALUE_1);
 
@@ -108,7 +108,7 @@ public class CheckInOutFilter implements EntitySourcesFilter {
 		public void CheckIn(Loan data) {
 			if (!data.getLoanStatus().contains(LoanStatusCode.VALUE_1)) {
 				LcfCheckInResponse response = new LcfCheckInResponse();
-				response.setLoanRef(data.getIdentifier());
+				response.setLoan(data);
 				response.setMediaWarning(MediaWarningFlag.VALUE_1);
 				response.setReturnLocationRef("GA");
 				response.setSpecialAttention(SpecialAttention.VALUE_1);
