@@ -62,6 +62,7 @@ limitations under the License.
         <java.compiler.target>9</java.compiler.target>
 
 
+
         <lcfserver.resourcemanager.groupid>${project.groupId}</lcfserver.resourcemanager.groupid>
         <lcfserver.resourcemanager.artifactid>lcfserver-resources-memory</lcfserver.resourcemanager.artifactid>
         <lcfserver.resourcemanager.version>${project.version}</lcfserver.resourcemanager.version>       
@@ -80,6 +81,9 @@ limitations under the License.
         <commons.beanutils.version>1.9.4</commons.beanutils.version>
         <ceridwen.util.version>1.7.1</ceridwen.util.version>
         <jeasy.random.version>4.1.0</jeasy.random.version>
+
+        <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
