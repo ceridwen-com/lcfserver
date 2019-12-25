@@ -44,7 +44,7 @@ public class LoanResourceManager extends AbstractResourceManager<Loan> implement
 
         if (loan.getLoanStatus().contains(LoanStatusCode.VALUE_8)) {
             LcfCheckInResponse response = getEasyRandom().nextObject(LcfCheckInResponse.class);
-            response.setLoan((Loan)Database.getDatabase().put(EntityTypes.Type.Loan, identifier, loan));
+            response.setLoan((Loan)Database.getDatabase().put(EntityType.LOANS, identifier, loan));
             response.setReturnLocationRef(UUID.randomUUID().toString());
             throw new LCFResponse_CheckIn(response);
         }
