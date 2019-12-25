@@ -21,7 +21,7 @@ limitations under the License.
     <parent>
         <groupId>com.ceridwen.lcf</groupId>
         <artifactId>lcfserver</artifactId>
-        <version>1.2.0-authentication-update-SNAPSHOT</version>
+        <version>1.2.0-SNAPSHOT</version>
     </parent>  
     <artifactId>lcfserver-server</artifactId>
     <packaging>war</packaging>
