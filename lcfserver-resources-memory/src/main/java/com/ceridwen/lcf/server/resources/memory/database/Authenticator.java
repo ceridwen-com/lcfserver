@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import org.bic.ns.lcf.v1_0.EntityType;
 import org.bic.ns.lcf.v1_0.Patron;
 
 /**
@@ -64,15 +65,15 @@ public class Authenticator {
         addACL(Operation.DELETE, AuthenticationCategory.TERMINAL);
         addACL(Operation.POST, AuthenticationCategory.TERMINAL);
         addACL(Operation.PUT, AuthenticationCategory.TERMINAL);
-        removeACL(EntityTypes.Type.Patron, Operation.PUT, AuthenticationCategory.TERMINAL);
-        removeACL(EntityTypes.Type.Loan, AuthenticationCategory.TERMINAL);
-        removeACL(EntityTypes.Type.Reservation, AuthenticationCategory.TERMINAL);
-        addACL(EntityTypes.Type.Patron, Operation.PUT, AuthenticationCategory.USER);
-        addACL(EntityTypes.Type.Patron, Operation.GET, AuthenticationCategory.USER);
-        addACL(EntityTypes.Type.Patron, Operation.UPDATE, AuthenticationCategory.USER);
-        addACL(EntityTypes.Type.Loan, AuthenticationCategory.USER);
-        addACL(EntityTypes.Type.Reservation, AuthenticationCategory.USER);
-        addACL(EntityTypes.Type.Charge, AuthenticationCategory.USER);
+        removeACL(EntityType.PATRONS, Operation.PUT, AuthenticationCategory.TERMINAL);
+        removeACL(EntityType.LOANS, AuthenticationCategory.TERMINAL);
+        removeACL(EntityType.RESERVATIONS, AuthenticationCategory.TERMINAL);
+        addACL(EntityType.PATRONS, Operation.PUT, AuthenticationCategory.USER);
+        addACL(EntityType.PATRONS, Operation.GET, AuthenticationCategory.USER);
+        addACL(EntityType.PATRONS, Operation.UPDATE, AuthenticationCategory.USER);
+        addACL(EntityType.LOANS, AuthenticationCategory.USER);
+        addACL(EntityType.RESERVATIONS, AuthenticationCategory.USER);
+        addACL(EntityType.CHARGES, AuthenticationCategory.USER);
        
         Logger.getLogger(Authenticator.class.getName()).info("ACLS Data Load Complete");
     }
@@ -112,7 +113,7 @@ public class Authenticator {
         return false;
     }
 
-    public void authenticate(EntityTypes.Type type, Operation operation, List<AuthenticationToken> tokens, Object entity) {
+    public void authenticate(EntityType type, Operation operation, List<AuthenticationToken> tokens, Object entity) {
         if (acls.containsKey(type)) {
             Map<Operation, List<AuthenticationCategory>> ops = acls.get(type);
             if (ops.containsKey(operation)) {
@@ -160,7 +161,7 @@ public class Authenticator {
             Class returnType = method.getReturnType();
             if (returnType.equals(String.class)) {
                 String ref = (String)method.invoke(entity);
-                Patron patron = (Patron)Database.getDatabase().get(EntityTypes.Type.Patron, ref);
+                Patron patron = (Patron)Database.getDatabase().get(EntityType.PATRONS, ref);
                 return patron.getBarcodeId();
             }
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
@@ -194,13 +195,13 @@ public class Authenticator {
     }
 
     public void addACL(Operation operation, AuthenticationCategory category) {
-        for (EntityTypes.Type type: EntityTypes.Type.values()) {
+        for (EntityType type: EntityType.values()) {
             addACL(type, operation, category);
         }
     }
 
     
-    public void removeACL(EntityTypes.Type type, Operation operation, AuthenticationCategory category) {
+    public void removeACL(EntityType type, Operation operation, AuthenticationCategory category) {
         if (!acls.containsKey(type)) {
             acls.put(type, new EnumMap<>(Operation.class));
         }
@@ -225,7 +226,7 @@ public class Authenticator {
     }
     
     public void removeACL(Operation operation, AuthenticationCategory category) {
-        for (EntityTypes.Type type: EntityTypes.Type.values()) {
+        for (EntityType type: EntityType.values()) {
             removeACL(type, operation, category);
         }
     }
