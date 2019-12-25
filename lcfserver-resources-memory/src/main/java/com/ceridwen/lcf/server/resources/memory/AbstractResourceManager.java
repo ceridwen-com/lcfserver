@@ -46,7 +46,7 @@ public abstract class AbstractResourceManager<E extends LcfEntity> implements Ab
     
     @Override
     public String Create(List<AuthenticationToken> authTokens, LcfEntity parent, E entity, List<CreationQualifier> qualifiers) {
-        Authenticator.getAuthenticator().authenticate(getType(), Operation.POST, authTokens);
+        Authenticator.getAuthenticator().authenticate(getType(), Operation.POST, authTokens, parent);
         
         String test = entity.getIdentifier();
         if (test != null) {
@@ -63,21 +63,22 @@ public abstract class AbstractResourceManager<E extends LcfEntity> implements Ab
 
     @Override
     public E Retrieve(List<AuthenticationToken> authTokens, String identifier) {
-        Authenticator.getAuthenticator().authenticate(getType(), Operation.GET, authTokens);
-
         E response = (E)Database.getDatabase().get(getType(), identifier);
+
+        Authenticator.getAuthenticator().authenticate(getType(), Operation.GET, authTokens, response);
         
         return response;
     }
 
     @Override
     public E Modify(List<AuthenticationToken> authTokens, String identifier, E entity) {
-        Authenticator.getAuthenticator().authenticate(getType(), Operation.PUT, authTokens);
-        
+        Object original = Database.getDatabase().get(getType(), identifier);
 
-        if (Database.getDatabase().get(getType(), identifier) == null) {
+        if (original == null) {
             return null; // This will trigger a 404 not found error         
         }
+
+        Authenticator.getAuthenticator().authenticate(getType(), Operation.PUT, authTokens, original);
         
         if (entity.getIdentifier() != null && !identifier.equals(entity.getIdentifier())) {
             throw new EXC06_InvalidDataInElement("Change of identifier not permitted", "", "", null);
@@ -95,14 +96,16 @@ public abstract class AbstractResourceManager<E extends LcfEntity> implements Ab
 
     @Override
     public boolean Delete(List<AuthenticationToken> authTokens, String identifier) {
-        Authenticator.getAuthenticator().authenticate(getType(), Operation.DELETE, authTokens);
+        Object original = Database.getDatabase().get(getType(), identifier);
+ 
+        Authenticator.getAuthenticator().authenticate(getType(), Operation.DELETE, authTokens, original);
         
         return Database.getDatabase().delete(getType(), identifier);
     }
 
     @Override
     public QueryResults<E> Query(List<AuthenticationToken> authTokens, LcfEntity parent, int startIndex, int count, List<SelectionCriterion> selection) {
-        Authenticator.getAuthenticator().authenticate(getType(), Operation.LIST, authTokens);
+        Authenticator.getAuthenticator().authenticate(getType(), Operation.LIST, authTokens, parent);
 
         QueryResults queryResults = new QueryResults();
         Collection results = Database.getDatabase().list(getType());

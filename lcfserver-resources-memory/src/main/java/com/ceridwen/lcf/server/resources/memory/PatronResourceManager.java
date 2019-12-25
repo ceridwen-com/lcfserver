@@ -36,20 +36,8 @@ public class PatronResourceManager extends AbstractResourceManager<Patron> imple
         if (patron == null) {
             return false;
         }
-        Authenticator.getAuthenticator().authenticate(patron.getBarcodeId(), authTokens);
+        Authenticator.getAuthenticator().authenticate(AuthenticationCategory.USER, authTokens, patron);
         Authenticator.getAuthenticator().updatePassword(AuthenticationCategory.USER, patron.getBarcodeId(), value);
         return true;
     }
-
-//    @Override
-//    public Patron Retrieve(List<AuthenticationToken> authTokens, String identifier) {
-//        Authenticator.getAuthenticator().authenticate(getType(), Operation.GET, authTokens);
-//
-//        Patron response = (Patron)Database.getDatabase().get(getType(), identifier);
-//        
-//        Authenticator.getAuthenticator().authenticate(((Patron)response).getBarcodeId(), authTokens);
-//
-//        return response;
-//    }
-    
 }
