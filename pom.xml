@@ -20,7 +20,7 @@ limitations under the License.
 
     <groupId>com.ceridwen.lcf</groupId>
     <artifactId>lcfserver</artifactId>
-    <version>1.2.0-entitytypes-refactor-SNAPSHOT</version>
+    <version>1.2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>lcfserver</name>
