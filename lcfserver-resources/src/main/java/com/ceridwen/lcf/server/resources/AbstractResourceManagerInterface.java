@@ -19,6 +19,7 @@ import com.ceridwen.lcf.model.enumerations.CreationQualifier;
 import com.ceridwen.lcf.model.enumerations.DirectUpdatePath;
 import com.ceridwen.lcf.model.authentication.AuthenticationToken;
 import java.util.List;
+import org.bic.ns.lcf.v1_0.LcfEntity;
 import org.bic.ns.lcf.v1_0.SelectionCriterion;
 
 /**
@@ -28,13 +29,13 @@ import org.bic.ns.lcf.v1_0.SelectionCriterion;
  * 
  * @param <E>   LCF Entity class
  */
-public abstract interface AbstractResourceManagerInterface<E> {
+public abstract interface AbstractResourceManagerInterface<E extends LcfEntity> {
 
     /**
      *
      * @return  LCF Entity class
      */
-    Class getEntityClass();
+    Class<? extends LcfEntity> getEntityClass();
 
     /**
      * Handle request to create a new LCF Entity
@@ -45,7 +46,7 @@ public abstract interface AbstractResourceManagerInterface<E> {
      * @param qualifiers    Any query paraemters passed during REST operation
      * @return              id of Entity created
      */
-    String Create(List<AuthenticationToken> authTokens, Object parent, E entity, List<CreationQualifier> qualifiers);
+    String Create(List<AuthenticationToken> authTokens, LcfEntity parent, E entity, List<CreationQualifier> qualifiers);
 
     /**
      * Handle request to retrieve an existing LCF Entity
@@ -96,5 +97,5 @@ public abstract interface AbstractResourceManagerInterface<E> {
      * @param selection     selection query parameters passed in REST request
      * @return              Result list
      */
-    QueryResults<E> Query(List<AuthenticationToken> authTokens, Object parent, int startIndex, int count, List<SelectionCriterion> selection);
+    QueryResults<E> Query(List<AuthenticationToken> authTokens, LcfEntity parent, int startIndex, int count, List<SelectionCriterion> selection);
 }

@@ -18,7 +18,6 @@ package com.ceridwen.lcf.server.resources.memory.database;
 import com.ceridwen.lcf.model.authentication.AuthenticationCategory;
 import com.ceridwen.lcf.model.authentication.AuthenticationToken;
 import com.ceridwen.lcf.model.authentication.BasicAuthenticationToken;
-import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import com.ceridwen.lcf.model.exceptions.EXC02_InvalidUserCredentials;
 import com.ceridwen.lcf.model.exceptions.EXC03_InvalidTerminalCredentials;
 import java.util.ArrayList;
@@ -29,13 +28,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import org.bic.ns.lcf.v1_0.Authorisation;
+import org.bic.ns.lcf.v1_0.EntityType;
+import org.bic.ns.lcf.v1_0.LcfEntity;
 
 /**
  *
  * @author Ceridwen Limited
  */
 public class Authenticator {
-    Map<EntityTypes.Type, Map<Operation, List<AuthenticationCategory>>> acls = new EnumMap<>(EntityTypes.Type.class);
+    Map<EntityType, Map<Operation, List<AuthenticationCategory>>> acls = new EnumMap<>(EntityType.class);
     Map<String, String> terminalAccounts = new HashMap<>();
     Map<String, String> userAccounts =new HashMap<>();
     
@@ -56,8 +58,8 @@ public class Authenticator {
         Logger.getLogger(Authenticator.class.getName()).info("Loading Default ACLS Data");
         updatePassword(AuthenticationCategory.USER, "patron", "password");
         updatePassword(AuthenticationCategory.TERMINAL, "terminal", "password");       
-        addACL(EntityTypes.Type.Authorisation, AuthenticationCategory.USER);
-        addACL(EntityTypes.Type.Authorisation, AuthenticationCategory.TERMINAL);
+        addACL(EntityType.AUTHORISATIONS, AuthenticationCategory.USER);
+        addACL(EntityType.AUTHORISATIONS, AuthenticationCategory.TERMINAL);
         Logger.getLogger(Authenticator.class.getName()).info("ACLS Data Load Complete");
     }
 
@@ -87,7 +89,7 @@ public class Authenticator {
         return false;
     }
 
-    public void authenticate(EntityTypes.Type type, Operation operation, List<AuthenticationToken> tokens) {
+    public void authenticate(EntityType type, Operation operation, List<AuthenticationToken> tokens) {
         if (acls.containsKey(type)) {
             Map<Operation, List<AuthenticationCategory>> ops = acls.get(type);
             if (ops.containsKey(operation)) {
@@ -134,7 +136,7 @@ public class Authenticator {
         }
     }
     
-    public void addACL(EntityTypes.Type type, Operation operation, AuthenticationCategory category) {
+    public void addACL(EntityType type, Operation operation, AuthenticationCategory category) {
         if (!acls.containsKey(type)) {
             acls.put(type, new EnumMap<>(Operation.class));
         }
@@ -152,13 +154,13 @@ public class Authenticator {
         }
     }
 
-    public void addACL(EntityTypes.Type type, AuthenticationCategory category) {
+    public void addACL(EntityType type, AuthenticationCategory category) {
         for (Operation operation: Operation.values()) {
             addACL(type, operation, category);
         }
     }
 
-    public void removeACL(EntityTypes.Type type, Operation operation, AuthenticationCategory category) {
+    public void removeACL(EntityType type, Operation operation, AuthenticationCategory category) {
         if (!acls.containsKey(type)) {
             acls.put(type, new EnumMap<>(Operation.class));
         }
@@ -176,7 +178,7 @@ public class Authenticator {
         }
     }
 
-    public void removeACL(EntityTypes.Type type, AuthenticationCategory category) {
+    public void removeACL(EntityType type, AuthenticationCategory category) {
         for (Operation operation: Operation.values()) {
             removeACL(type, operation, category);
         }

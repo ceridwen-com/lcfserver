@@ -15,7 +15,7 @@
  */
 package com.ceridwen.lcf.server.handlers;
 
-import com.ceridwen.lcf.model.Constants;
+import com.ceridwen.lcf.model.LcfConstants;
 import com.ceridwen.lcf.model.exceptions.EXC00_LCF_Exception;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -38,7 +38,7 @@ public class LCFResponseHandler implements ExceptionMapper<LCFResponse>{
     public Response toResponse(final LCFResponse exception) {
     	Response.ResponseBuilder responseBuilder;
         if (exception.getHTTPStatus() == 201) {
-            responseBuilder = Response.created(URI.create(Constants.LCF_PREFIX + "/" + exception.getEntityType().getEntityTypeCodeValue() + "/" + exception.getIdentifier()));
+            responseBuilder = Response.created(URI.create(LcfConstants.LCF_PREFIX + "/" + exception.getEntityType().value() + "/" + exception.getIdentifier()));
         } else {
             responseBuilder= Response.status(exception.getHTTPStatus());
         }

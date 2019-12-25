@@ -15,8 +15,8 @@
  */
 package com.ceridwen.lcf.server;
 
+import com.ceridwen.lcf.model.EntityCodeListClassMapping;
 import com.ceridwen.lcf.server.providers.JacksonJaxbJsonConfigurationProvider;
-import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import com.ceridwen.lcf.server.filters.GlobalHeadersFilter;
 import com.ceridwen.lcf.server.filters.ReferenceHandlingFilter;
 import com.ceridwen.lcf.server.handlers.LCFErrorHandler;
@@ -39,6 +39,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.Application;
+import org.bic.ns.lcf.v1_0.EntityType;
 
 /**
  *
@@ -91,21 +92,21 @@ public class ApplicationConfig extends Application {
     }
 
     private void addLCFResources(Set<Class<?>> resources) {
-        for (EntityTypes.Type type: EntityTypes.Type.values()) {
+        for (EntityType type: EntityType.values()) {
             try {
-                Class entity = Class.forName("org.bic.ns.lcf.v1_0." + type.name());
-                Class rmi = Class.forName("com.ceridwen.lcf.server.resources." + type.name() + "ResourceManagerInterface");
+                Class entity = EntityCodeListClassMapping.getEntityClass(type);
+                Class rmi = Class.forName("com.ceridwen.lcf.server.resources." + entity.getSimpleName() + "ResourceManagerInterface");
                 WebserviceHelper helper = new WebserviceHelper(entity, rmi);
                 AbstractResourceManagerInterface rm = helper.getResourceManager();
                 if (rm != null) {
-                    Class webservice = Class.forName("com.ceridwen.lcf.server.webservice." + type.name() + "ContainerWebservice");
+                    Class webservice = Class.forName("com.ceridwen.lcf.server.webservice." + entity.getSimpleName() + "ContainerWebservice");
                     resources.add(webservice);
-                    Logger.getLogger(ApplicationConfig.class.getName()).log(Level.INFO, "{0}: Resource Manager loaded", type.name());
+                    Logger.getLogger(ApplicationConfig.class.getName()).log(Level.INFO, "{0}: Resource Manager loaded", type.value());
                 } else {
-                    Logger.getLogger(ApplicationConfig.class.getName()).log(Level.INFO, "{0}: No Resource Manager available", type.name());                    
+                    Logger.getLogger(ApplicationConfig.class.getName()).log(Level.INFO, "{0}: No Resource Manager available", type.value());                    
                 }
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(ApplicationConfig.class.getName()).log(Level.SEVERE, type.name() + "{0}: Error loading Resource Manager", ex);
+                Logger.getLogger(ApplicationConfig.class.getName()).log(Level.SEVERE, type.value() + "{0}: Error loading Resource Manager", ex);
             }
         }
     }

@@ -15,9 +15,9 @@
  */
 package com.ceridwen.lcf.server.webservice;
 
-import com.ceridwen.lcf.model.Constants;
+import com.ceridwen.lcf.model.LcfConstants;
+import com.ceridwen.lcf.model.EntityCodeListClassMapping;
 import com.ceridwen.lcf.model.enumerations.CreationQualifier;
-import com.ceridwen.lcf.model.enumerations.EntityTypes;
 import com.ceridwen.lcf.model.enumerations.DirectUpdatePath;
 import com.ceridwen.lcf.model.authentication.AuthenticationToken;
 import com.ceridwen.lcf.model.authentication.AuthenticationCategory;
@@ -26,7 +26,6 @@ import com.ceridwen.lcf.model.exceptions.EXC04_UnableToProcessRequest;
 import com.ceridwen.lcf.model.exceptions.EXC05_InvalidEntityReference;
 import com.ceridwen.lcf.server.resources.AbstractResourceManagerInterface;
 import com.ceridwen.lcf.server.resources.QueryResults;
-import java.lang.reflect.Field;
 import java.net.URI;
 import java.util.List;
 import java.util.ServiceConfigurationError;
@@ -35,6 +34,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.Response;
 import org.bic.ns.lcf.v1_0.Entity;
+import org.bic.ns.lcf.v1_0.EntityType;
 import org.bic.ns.lcf.v1_0.LcfEntity;
 import org.bic.ns.lcf.v1_0.LcfEntityListResponse;
 import org.bic.ns.lcf.v1_0.SelectionCriteria;
@@ -87,12 +87,12 @@ public class WebserviceHelper<E extends LcfEntity> {
         return rm;
     }
     
-    Response Create(Object parent, E entity, List<CreationQualifier> qualifiers, List<AuthenticationToken> tokens) {
+    Response Create(LcfEntity parent, E entity, List<CreationQualifier> qualifiers, List<AuthenticationToken> tokens) {
         nullifyEmptyIdentifier(entity);
         
         String identifier = rm.Create(tokens, parent, entity, qualifiers);
         
-        return Response.created(URI.create(Constants.LCF_PREFIX + "/" + EntityTypes.lookUpByClass(rm.getEntityClass()).getEntityTypeCodeValue() + "/" + identifier)).entity(entity).build();
+        return Response.created(URI.create(LcfConstants.LCF_PREFIX + "/" + EntityCodeListClassMapping.getEntityType(rm.getEntityClass()).value() + "/" + identifier)).entity(entity).build();
     }
     
     E Retrieve(String identifier, List<AuthenticationToken> tokens) {
@@ -123,12 +123,12 @@ public class WebserviceHelper<E extends LcfEntity> {
         }
     }
     
-    LcfEntityListResponse Query(Object parent, int startIndex, int count, List<SelectionCriterion> selectionCriterion, List<AuthenticationToken> tokens) {
+    LcfEntityListResponse Query(LcfEntity parent, int startIndex, int count, List<SelectionCriterion> selectionCriterion, List<AuthenticationToken> tokens) {
         LcfEntityListResponse response = new LcfEntityListResponse();
         
-        EntityTypes.Type et = EntityTypes.lookUpByClass(clazz);
+        EntityType et = EntityCodeListClassMapping.getEntityType(clazz);
         if (et != null) {
-            response.setEntityType(et.getEntityTypeCode());
+            response.setEntityType(et);
         }
         
         for (SelectionCriterion criterion : selectionCriterion) {
@@ -138,14 +138,9 @@ public class WebserviceHelper<E extends LcfEntity> {
         QueryResults<E> queryResults = rm.Query(tokens, parent, startIndex, count, selectionCriterion);
         
         for (E e : queryResults.getResults()) {
-            try {
-                String ref = ((LcfEntity)e).getIdentifier();
-                Entity entity = new Entity();
-                entity.setHref(ref);
-                response.getEntity().add(entity);
-            } catch (SecurityException | IllegalArgumentException  ex) {
-                Logger.getLogger(WebserviceHelper.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Entity entity = new Entity();
+            entity.setHref(e.getIdentifier());
+            response.getEntity().add(entity);
         }
         
         response.setTotalResults(queryResults.getTotalResults());
@@ -222,9 +217,9 @@ public class WebserviceHelper<E extends LcfEntity> {
     }
     
     private void nullifyEmptyIdentifier(E entity) {
-        String id = EntityTypes.lookUpByClass(clazz).getIdentifier(entity);
+        String id = entity.getIdentifier();
         if (id != null && (id.isBlank() || id.isEmpty())) {
-            EntityTypes.lookUpByClass(clazz).setIdentifier(entity, null);
+            entity.setIdentifier(null);
         }
     }
 }

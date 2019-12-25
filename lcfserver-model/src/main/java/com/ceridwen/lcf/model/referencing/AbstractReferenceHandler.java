@@ -15,7 +15,7 @@
  */
 package com.ceridwen.lcf.model.referencing;
 
-import com.ceridwen.lcf.model.enumerations.EntityTypes;
+import com.ceridwen.lcf.model.EntityCodeListClassMapping;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -23,6 +23,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bic.ns.lcf.v1_0.EntityType;
 
 
 /**
@@ -151,9 +152,9 @@ public abstract class AbstractReferenceHandler {
      * @param parent
      * @return
      */
-    protected EntityTypes.Type getPropertyType(Class clazz, String propertyReference, String property, Class parentClazz, Object parent) {
-        for (EntityTypes.Type type: EntityTypes.Type.values()) {
-            if (property.endsWith(type.name())) {
+    protected EntityType getPropertyType(Class clazz, String propertyReference, String property, Class parentClazz, Object parent) {
+        for (EntityType type: EntityType.values()) {
+            if (property.endsWith(EntityCodeListClassMapping.getEntityClass(type).getSimpleName())) {
                 return type;
             }
         }
@@ -173,12 +174,12 @@ public abstract class AbstractReferenceHandler {
      * @return
      */
     protected boolean canHandleReference(Class clazz, Object instance, Class parentClazz, Object parent, String propertyReference, String property, String urlPrefix, String logPrefix) {
-        EntityTypes.Type propertyType = getPropertyType(clazz, propertyReference, property, parentClazz, parent);
+        EntityType propertyType = getPropertyType(clazz, propertyReference, property, parentClazz, parent);
         if (propertyType == null) {
             Logger.getLogger(AbstractReferenceHandler.class.getName()).log(Level.WARNING, "{0}{1}: {2} -> UNKNOWN", new Object[]{logPrefix, clazz.getName(), propertyReference});
             return false;
         } else {
-            handleReference(clazz, instance, propertyReference, urlPrefix + propertyType.getEntityTypeCodeValue() + "/");
+            handleReference(clazz, instance, propertyReference, urlPrefix + propertyType.value() + "/");
             Logger.getLogger(AbstractReferenceHandler.class.getName()).log(Level.FINE, "{0}{1}: {2} -> {3}", new Object[]{logPrefix, clazz.getName(), propertyReference, propertyType.name()});
             return true;
             

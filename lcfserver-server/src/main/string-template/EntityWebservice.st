@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.headers.Header;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.Consumes;
@@ -54,11 +55,13 @@ public class <Entity>Webservice
 <AuthenticationSchemes: {authenticationscheme |
     @SecurityRequirement(name = "<authenticationscheme.key>")}>
     @ApiResponse(
+        headers = @Header(name="lcf-version", description="LCF Specification Version", required=true, schema=@Schema(type="string")),
         responseCode = "200",
         description = "Retrieved",
         content = @Content(schema = @Schema(implementation = <Entity>.class)))
 <AlternativeGets: {alternative |
     @ApiResponse(
+        headers = @Header(name="lcf-version", description="LCF Specification Version", required=true, schema=@Schema(type="string")),
         responseCode = "200",
         description = "<alternative>",
         content = @Content(schema = @Schema(implementation = <alternative>.class)))}>
@@ -81,11 +84,13 @@ public class <Entity>Webservice
 <AuthenticationSchemes: {authenticationscheme |
     @SecurityRequirement(name = "<authenticationscheme.key>")}>
     @ApiResponse(
+        headers = @Header(name="lcf-version", description="LCF Specification Version", required=true, schema=@Schema(type="string")),
         responseCode = "200",
         description = "Modified",
         content = @Content(schema = @Schema(implementation = <Entity>.class)))
 <AlternativePuts: {alternative |
     @ApiResponse(
+        headers = @Header(name="lcf-version", description="LCF Specification Version", required=true, schema=@Schema(type="string")),
         responseCode = "200",
         description = "<alternative>",
         content = @Content(schema = @Schema(implementation = <alternative>.class)))}>
@@ -106,10 +111,12 @@ public class <Entity>Webservice
 <AuthenticationSchemes: {authenticationscheme |
     @SecurityRequirement(name = "<authenticationscheme.key>")}>
     @ApiResponse(
+        headers = @Header(name="lcf-version", description="LCF Specification Version", required=true, schema=@Schema(type="string")),
         responseCode = "200",
         description = "Deleted")
 <AlternativeDeletes: {alternative |
     @ApiResponse(
+        headers = @Header(name="lcf-version", description="LCF Specification Version", required=true, schema=@Schema(type="string")),
         responseCode = "200",
         description = "<alternative>",
         content = @Content(schema = @Schema(implementation = <alternative>.class)))}>
@@ -134,6 +141,7 @@ public class <Entity>Webservice
 <AuthenticationSchemes: {authenticationscheme |
     @SecurityRequirement(name = "<authenticationscheme.key>")}>
     @ApiResponse(
+        headers = @Header(name="lcf-version", description="LCF Specification Version", required=true, schema=@Schema(type="string")),
         responseCode = "200",
         description = "Updated")
     public void DirectUpdate<path.key>(

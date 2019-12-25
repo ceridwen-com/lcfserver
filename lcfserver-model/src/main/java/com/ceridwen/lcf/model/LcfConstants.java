@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2019 Ceridwen Limited.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,12 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ceridwen.lcf.server.legacy.integrity;
+package com.ceridwen.lcf.model;
+
+import java.util.Objects;
+import org.bic.ns.lcf.v1_0.EntityType;
 
 /**
  *
  * @author Ceridwen Limited
- * @param <T>
  */
-public abstract class Ref<T> {
+public class LcfConstants {
+    /**
+     *
+     */
+    public static final String LCF_PREFIX = "lcf/1.0";
+    
+    public static final String LCF_VERSION = Objects.requireNonNullElse(EntityType.class.getPackage().getSpecificationVersion(), "1.x.x");
 }
