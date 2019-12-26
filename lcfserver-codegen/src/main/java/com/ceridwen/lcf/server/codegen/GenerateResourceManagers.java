@@ -16,6 +16,7 @@
 package com.ceridwen.lcf.server.codegen;
 
 import com.ceridwen.lcf.model.EntityCodeListClassMapping;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import org.bic.ns.lcf.v1_0.EntityType;
@@ -42,7 +43,7 @@ public class GenerateResourceManagers extends Generator {
     public static void main(String [] args)
     {
             String templatedir = args[0];
-            String targetdir = args[1] + "\\com\\ceridwen\\lcf\\server\\resources";
+            String targetdir = args[1] + File.separator + "com" + File.separator + "ceridwen" + File.separator + "lcf" + File.separator + "server" + File.separator + "resources";
             
             GenerateResourceManagers generator = new GenerateResourceManagers();
             

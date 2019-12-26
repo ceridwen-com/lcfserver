@@ -16,6 +16,7 @@
 package com.ceridwen.lcf.server.codegen;
 
 import com.ceridwen.lcf.model.EntityCodeListClassMapping;
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class GenerateMemoryResourceManagers extends Generator {
     public static void main(String [] args)
     {
             String templatedir = args[0];
-            String targetdir = args[1] + "\\com\\ceridwen\\lcf\\server\\resources\\memory";
+            String targetdir = args[1] + File.separator + "com" + File.separator + "ceridwen" + File.separator + "lcf" + File.separator + "server" + File.separator + "resources" + File.separator + "memory";
             
             GenerateMemoryResourceManagers generator = new GenerateMemoryResourceManagers();
             
@@ -54,7 +55,7 @@ public class GenerateMemoryResourceManagers extends Generator {
                 }
             }
 
-            targetdir = args[1] + "\\META-INF\\services";
+            targetdir = args[1] + File.separator + "META-INF" + File.separator + "services";
 
             for (EntityType entity: EntityType.values()) {
                 for (String template: new String[]{"ResourceManagerInterface"}) {
