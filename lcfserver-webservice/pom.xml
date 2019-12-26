@@ -23,46 +23,56 @@ limitations under the License.
         <artifactId>lcfserver</artifactId>
         <version>1.2.0-deployment-refactor-SNAPSHOT</version>
     </parent>  
-    <artifactId>lcfserver-server</artifactId>
-    <packaging>war</packaging>
+    <artifactId>lcfserver-webservice</artifactId>
+    <packaging>jar</packaging>
   
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>lcfserver-resources-memory</artifactId>
+            <artifactId>lcfserver-resources</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>lcfserver-webservice</artifactId>
+            <artifactId>lcfserver-codegen</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.glassfish.jersey.containers</groupId>
-            <artifactId>jersey-container-servlet</artifactId>
-            <version>${jersey.container.version}</version>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-core</artifactId>
+            <version>${openapi.swagger.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.glassfish.jersey.inject</groupId>
-            <artifactId>jersey-hk2</artifactId>
-            <version>${jersey.container.version}</version>
-        </dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-jaxrs2</artifactId>
+            <version>${openapi.swagger.version}</version>
+        </dependency>  
+        
         <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-runtime</artifactId>
-            <version>${jersey.jaxb-runtime.version}</version>
-        </dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.1.1</version>
+            <scope>compile</scope>
+        </dependency>                        
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
                 <configuration>
-                    <skip>false</skip>
+                    <mainClass>com.ceridwen.lcf.server.codegen.GenerateWebservices</mainClass>
+                    <arguments>
+                        <argument>${basedir}/src/main/string-template</argument>
+                        <argument>${basedir}/target/generated-sources/string-template</argument>
+                    </arguments>
+                    <sourceRoot>${basedir}/target/generated-sources/string-template</sourceRoot>
+                    <classpathScope>compile</classpathScope>
                 </configuration>
             </plugin>
         </plugins>
