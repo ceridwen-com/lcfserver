@@ -358,6 +358,7 @@ limitations under the License.
         <module>lcfserver-codegen</module>
         <module>lcfserver-resources</module>
         <module>lcfserver-resources-memory</module>
+        <module>lcfserver-webservice</module>
         <module>lcfserver-server</module>
     </modules>
 

@@ -29,7 +29,7 @@ limitations under the License.
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>lcfserver-resources</artifactId>
+            <artifactId>lcfserver-webservice</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -37,25 +37,6 @@ limitations under the License.
             <artifactId>${lcfserver.resourcemanager.artifactid}</artifactId>
             <version>${lcfserver.resourcemanager.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>lcfserver-codegen</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>io.swagger.core.v3</groupId>
-            <artifactId>swagger-core</artifactId>
-            <version>${openapi.swagger.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.swagger.core.v3</groupId>
-            <artifactId>swagger-jaxrs2</artifactId>
-            <version>${openapi.swagger.version}</version>
-        </dependency>          
 
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
@@ -81,19 +62,6 @@ limitations under the License.
                 <artifactId>jetty-maven-plugin</artifactId>
                 <configuration>
                     <skip>false</skip>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <configuration>
-                    <mainClass>com.ceridwen.lcf.server.codegen.GenerateWebservices</mainClass>
-                    <arguments>
-                        <argument>${basedir}/src/main/string-template</argument>
-                        <argument>${basedir}/target/generated-sources/string-template</argument>
-                    </arguments>
-                    <sourceRoot>${basedir}/target/generated-sources/string-template</sourceRoot>
-                    <classpathScope>compile</classpathScope>
                 </configuration>
             </plugin>
         </plugins>
