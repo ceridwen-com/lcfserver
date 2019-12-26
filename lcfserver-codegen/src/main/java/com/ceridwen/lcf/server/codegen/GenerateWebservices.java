@@ -21,6 +21,7 @@ import com.ceridwen.lcf.model.enumerations.AlternativeResponseFormats;
 import com.ceridwen.lcf.model.enumerations.CreationQualifier;
 import com.ceridwen.lcf.model.enumerations.DirectUpdatePath;
 import com.ceridwen.lcf.model.authentication.AuthenticationCategory;
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -196,7 +197,7 @@ public class GenerateWebservices extends Generator {
     public static void main(String [] args)
     {
             String templatedir = args[0];
-            String targetdir = args[1] + "\\com\\ceridwen\\lcf\\server\\webservice";
+            String targetdir = args[1] + File.separator + "com" + File.separator + "ceridwen" + File.separator + "lcf" + File.separator + "server" + File.separator + "webservice";
             
             GenerateWebservices generator = new GenerateWebservices();
             

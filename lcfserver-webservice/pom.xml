@@ -17,41 +17,56 @@ limitations under the License.
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-  
+
     <parent>
         <groupId>com.ceridwen.lcf</groupId>
         <artifactId>lcfserver</artifactId>
         <version>1.2.0-deployment-refactor-SNAPSHOT</version>
     </parent>  
-    <artifactId>lcfserver-resources-memory</artifactId>
+    <artifactId>lcfserver-webservice</artifactId>
     <packaging>jar</packaging>
   
-    <dependencies> 
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>lcfserver-resources</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>lcfserver-codegen</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
+
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>lcfserver-resources</artifactId>
-            <version>${project.version}</version>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-core</artifactId>
+            <version>${openapi.swagger.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.jeasy</groupId>
-            <artifactId>easy-random-core</artifactId>
-            <version>${jeasy.random.version}</version>
-        </dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-jaxrs2</artifactId>
+            <version>${openapi.swagger.version}</version>
+        </dependency>  
+        
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.1.1</version>
+            <scope>compile</scope>
+        </dependency>                        
     </dependencies>
-    
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.ceridwen.lcf.server.codegen.GenerateMemoryResourceManagers</mainClass>
+                    <mainClass>com.ceridwen.lcf.server.codegen.GenerateWebservices</mainClass>
                     <arguments>
                         <argument>${basedir}/src/main/string-template</argument>
                         <argument>${basedir}/target/generated-sources/string-template</argument>
@@ -61,12 +76,6 @@ limitations under the License.
                 </configuration>
             </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <directory>target/generated-sources/string-template/META-INF/services</directory>
-                <targetPath>META-INF/services</targetPath>
-            </resource> 
-        </resources>
     </build>
     <properties>
         <netbeans.hint.license>apache20</netbeans.hint.license>
