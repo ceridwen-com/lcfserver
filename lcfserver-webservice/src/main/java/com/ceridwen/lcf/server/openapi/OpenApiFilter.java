@@ -16,8 +16,11 @@
 package com.ceridwen.lcf.server.openapi;
 
 import com.ceridwen.lcf.model.LcfConstants;
+import com.ceridwen.lcf.server.ImplementedOperations;
 import io.swagger.v3.core.filter.AbstractSpecFilter;
+import io.swagger.v3.core.model.ApiDescription;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.servers.Server;
 import java.util.ArrayList;
@@ -53,7 +56,7 @@ public class OpenApiFilter extends AbstractSpecFilter {
             openApi.ifPresent((OpenAPI api) -> {
                 Server server = new Server();
                 server.setUrl(uri);
-                server.setDescription("Demo Server");
+                server.setDescription("Demo Server"); //TDOD
                 List<Server> servers = new ArrayList<>();
                 servers.add(server);
                 api.setServers(servers);
@@ -64,9 +67,15 @@ public class OpenApiFilter extends AbstractSpecFilter {
         return openApi;
     }
     
-    
-    
-    
+    @Override
+    public Optional<Operation> filterOperation(io.swagger.v3.oas.models.Operation operation, ApiDescription api, Map<String, List<String>> params, Map<String, String> cookies, Map<String, List<String>> headers) {
+        for (EntityType unimplemented: ImplementedOperations.getUnimplemented()) {
+            if (api.getPath().contains("/" + unimplemented.value() + "/") || api.getPath().endsWith("/" + unimplemented.value())) {
+                return Optional.empty();
+            }
+        }
+        return Optional.of(operation);
+    }
 
 //    public static final String WADL = "/application.wadl";
 //
