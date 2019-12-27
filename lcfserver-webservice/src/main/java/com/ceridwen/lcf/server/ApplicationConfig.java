@@ -15,7 +15,6 @@
  */
 package com.ceridwen.lcf.server;
 
-import com.ceridwen.lcf.model.EntityCodeListClassMapping;
 import com.ceridwen.lcf.server.providers.JacksonJaxbJsonConfigurationProvider;
 import com.ceridwen.lcf.server.filters.GlobalHeadersFilter;
 import com.ceridwen.lcf.server.filters.ReferenceHandlingFilter;
@@ -23,10 +22,8 @@ import com.ceridwen.lcf.server.handlers.LCFErrorHandler;
 import com.ceridwen.lcf.server.handlers.LCFExceptionHandler;
 import com.ceridwen.lcf.server.handlers.LCFResponseHandler;
 import com.ceridwen.lcf.server.openapi.OpenApiConfiguration;
-import com.ceridwen.lcf.server.resources.AbstractResourceManagerInterface;
 import com.ceridwen.lcf.server.webpages.DescriptionWebPage;
 import com.ceridwen.lcf.server.webpages.SwaggerUIWebPage;
-import com.ceridwen.lcf.server.webservice.WebserviceHelper;
 import io.swagger.v3.jaxrs2.integration.resources.AcceptHeaderOpenApiResource;
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
@@ -36,10 +33,8 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ws.rs.core.Application;
-import org.bic.ns.lcf.v1_0.EntityType;
+import javax.ws.rs.core.Context;
 
 /**
  *
@@ -92,22 +87,9 @@ public class ApplicationConfig extends Application {
     }
 
     private void addLCFResources(Set<Class<?>> resources) {
-        for (EntityType type: EntityType.values()) {
-            try {
-                Class entity = EntityCodeListClassMapping.getEntityClass(type);
-                Class rmi = Class.forName("com.ceridwen.lcf.server.resources." + entity.getSimpleName() + "ResourceManagerInterface");
-                WebserviceHelper helper = new WebserviceHelper(entity, rmi);
-                AbstractResourceManagerInterface rm = helper.getResourceManager();
-                if (rm != null) {
-                    Class webservice = Class.forName("com.ceridwen.lcf.server.webservice." + entity.getSimpleName() + "ContainerWebservice");
-                    resources.add(webservice);
-                    Logger.getLogger(ApplicationConfig.class.getName()).log(Level.INFO, "{0}: Resource Manager loaded", type.value());
-                } else {
-                    Logger.getLogger(ApplicationConfig.class.getName()).log(Level.INFO, "{0}: No Resource Manager available", type.value());                    
-                }
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(ApplicationConfig.class.getName()).log(Level.SEVERE, type.value() + "{0}: Error loading Resource Manager", ex);
-            }
+        ImplementedOperations.init();
+        for (Class clazz: ImplementedOperations.getResources()) {
+            resources.add(clazz);
         }
     }
  

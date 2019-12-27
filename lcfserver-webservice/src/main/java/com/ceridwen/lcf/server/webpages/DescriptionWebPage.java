@@ -16,7 +16,9 @@
 package com.ceridwen.lcf.server.webpages;
 
 import com.ceridwen.lcf.model.LcfConstants;
+import com.ceridwen.lcf.server.ImplementedOperations;
 import io.swagger.v3.oas.annotations.Hidden;
+import java.util.Set;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -155,15 +157,24 @@ String swaggerUI = uriInfo.getBaseUri() +"swagger-ui.html";
 "<hr>\n" +
 "<h2>Web Service Endpoints</h2>\n" +
 "<code>";
-    for (EntityType entity: EntityType.values()) {
+    Set<EntityType> unimplemented = ImplementedOperations.getUnimplemented();
+    for (EntityType entity: ImplementedOperations.getImplemented()) {
       String href = uriInfo.getBaseUri() + LcfConstants.LCF_PREFIX + "/" + entity.value() +"/";
-      page += "<a href=\"" + href + "\">" + href + "</a>\n";
+      if (unimplemented.contains(entity)) {
+          page += "<i>[ ";
+      }
+      page += "<a href=\"" + href + "\">" + href + "</a>";
+      if (unimplemented.contains(entity)) {
+          page += " ] (deprecated)</i>";
+      }
+      page += "\n";
     }
   page +=
 "</code>\n" +
 "</div>\n" +
 "</body>\n" +
 "</html>";    
+  
     return page;
   }
 }
