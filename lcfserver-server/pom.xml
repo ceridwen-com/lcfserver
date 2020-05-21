@@ -42,17 +42,17 @@ limitations under the License.
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
-            <version>${jersey.container.version}</version>
+            <version>${glassfish.jersey.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.inject</groupId>
             <artifactId>jersey-hk2</artifactId>
-            <version>${jersey.container.version}</version>
+            <version>${glassfish.jersey.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
-            <version>${jersey.jaxb-runtime.version}</version>
+            <version>${glassfish.jaxb-runtime.version}</version>
         </dependency>
     </dependencies>
 
