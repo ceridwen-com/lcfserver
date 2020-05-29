@@ -20,5 +20,5 @@ package com.ceridwen.lcf.server.resources.memory.database;
  * @author Ceridwen Limited
  */
 public enum Operation {
-    GET, POST, PUT, DELETE, LIST, UPDATE
+    READ, WRITE, CREATE, DELETE, LIST
 }

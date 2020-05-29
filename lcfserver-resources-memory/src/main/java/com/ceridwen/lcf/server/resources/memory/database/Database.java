@@ -36,6 +36,7 @@ import org.jeasy.random.EasyRandomParameters;
 public class Database {
     
     private static Database db = null;
+    private static final Logger LOG = Logger.getLogger(Database.class.getName());
     
     private Map<EntityType, Map<String, LcfEntity>> database = new EnumMap<>(EntityType.class);
     
@@ -74,46 +75,40 @@ public class Database {
         for (int i=0; i < amount; i++) {
             LcfEntity o = easyRandom.nextObject(EntityCodeListClassMapping.getEntityClass(type));
             o.setIdentifier(UUID.randomUUID().toString());
-            this.put(type, o.getIdentifier(), o);
+            this.write(type, o.getIdentifier(), o);
         }
     }
     
     public void Config() {
-        Logger.getLogger(Database.class.getName()).info("Loading Default Data");
+        LOG.info("Loading Default Data");
         for (EntityType type: EntityType.values()) {
             generateRandomContent(type);
         }
-        Logger.getLogger(Database.class.getName()).info("Default Data Load Complete");
-    }
-    
-    public boolean contains(Class<? extends LcfEntity> type, String identifier) {
-        if (database.containsKey(type)) {
-            Map<String, LcfEntity> map = database.get(type);
-            return map.containsKey(identifier);
-        }
-        
-        return false;                
+        LOG.info("Default Data Load Complete");
     }
 
-    public Object put(EntityType type, String identifier, LcfEntity data) {
+    public LcfEntity write(EntityType type, String identifier, LcfEntity data) {
         if (!database.containsKey(type)) {
             database.put(type, new HashMap<>());
         }    
         Map<String, LcfEntity> map = database.get(type);
         if (map.containsKey(identifier)) {
             map.replace(identifier, data);
+            LOG.info(new TransactionalSupplier(Operation.WRITE, data));
         }
         else {
             map.put(identifier, data);
+            LOG.info(new TransactionalSupplier(Operation.CREATE, data));
         }
         
-        return get(type, identifier);        
+        return read(type, identifier);        
     }
    
-    public LcfEntity get(EntityType type, String identifier) {
+    public LcfEntity read(EntityType type, String identifier) {
         if (database.containsKey(type)) {
             Map<String, LcfEntity> map = database.get(type);
             if (map.containsKey(identifier)) {
+                LOG.info(new TransactionalSupplier(Operation.READ, map.get(identifier)));
                 return map.get(identifier);
             }
         }
@@ -125,6 +120,7 @@ public class Database {
             Map<String, LcfEntity> map = database.get(type);
             if (map.containsKey(identifier)) {
                 map.remove(identifier);
+                LOG.info(new TransactionalSupplier(Operation.DELETE, map.get(identifier)));
                 return true;
             }
         }
@@ -134,6 +130,7 @@ public class Database {
     
     public Collection<LcfEntity> list(EntityType type) {
         if (database.containsKey(type)) {
+            LOG.info(new TransactionalSupplier(Operation.LIST, database.get(type).values()));
             return database.get(type).values();
         } else {
             return new ArrayList();

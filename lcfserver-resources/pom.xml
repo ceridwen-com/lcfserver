@@ -21,7 +21,7 @@ limitations under the License.
     <parent>
         <groupId>com.ceridwen.lcf</groupId>
         <artifactId>lcfserver</artifactId>
-        <version>1.2.0-testframework-SNAPSHOT</version>
+        <version>lcf-${lcf.schema.version}_server-2.1-testframework</version>
     </parent>  
     <artifactId>lcfserver-resources</artifactId>
     <packaging>jar</packaging>

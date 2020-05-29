@@ -46,39 +46,39 @@ public abstract class AbstractResourceManager<E extends LcfEntity> implements Ab
     
     @Override
     public String Create(List<AuthenticationToken> authTokens, LcfEntity parent, E entity, List<CreationQualifier> qualifiers) {
-        Authenticator.getAuthenticator().authenticate(getType(), Operation.POST, authTokens, parent);
+        Authenticator.getAuthenticator().authenticate(getType(), Operation.CREATE, authTokens, parent);
         
         String test = entity.getIdentifier();
         if (test != null) {
-            if (Database.getDatabase().get(getType(), test) != null) {
+            if (Database.getDatabase().read(getType(), test) != null) {
                 throw new EXC06_InvalidDataInElement("Entity already exists with that identifier", "", "", null);
             }
         } else {
             entity.setIdentifier(UUID.randomUUID().toString());
         }
        
-        Database.getDatabase().put(getType(), entity.getIdentifier(), entity);
+        Database.getDatabase().write(getType(), entity.getIdentifier(), entity);
         return entity.getIdentifier();
     }
 
     @Override
     public E Retrieve(List<AuthenticationToken> authTokens, String identifier) {
-        E response = (E)Database.getDatabase().get(getType(), identifier);
+        E response = (E)Database.getDatabase().read(getType(), identifier);
 
-        Authenticator.getAuthenticator().authenticate(getType(), Operation.GET, authTokens, response);
+        Authenticator.getAuthenticator().authenticate(getType(), Operation.READ, authTokens, response);
         
         return response;
     }
 
     @Override
     public E Modify(List<AuthenticationToken> authTokens, String identifier, E entity) {
-        Object original = Database.getDatabase().get(getType(), identifier);
+        Object original = Database.getDatabase().read(getType(), identifier);
 
         if (original == null) {
             return null; // This will trigger a 404 not found error         
         }
 
-        Authenticator.getAuthenticator().authenticate(getType(), Operation.PUT, authTokens, original);
+        Authenticator.getAuthenticator().authenticate(getType(), Operation.WRITE, authTokens, original);
         
         if (entity.getIdentifier() != null && !identifier.equals(entity.getIdentifier())) {
             throw new EXC06_InvalidDataInElement("Change of identifier not permitted", "", "", null);
@@ -86,7 +86,7 @@ public abstract class AbstractResourceManager<E extends LcfEntity> implements Ab
             entity.setIdentifier(identifier);
         }
        
-        return (E)Database.getDatabase().put(getType(), entity.getIdentifier(), entity);
+        return (E)Database.getDatabase().write(getType(), entity.getIdentifier(), entity);
     }
 
     @Override
@@ -96,7 +96,7 @@ public abstract class AbstractResourceManager<E extends LcfEntity> implements Ab
 
     @Override
     public boolean Delete(List<AuthenticationToken> authTokens, String identifier) {
-        Object original = Database.getDatabase().get(getType(), identifier);
+        Object original = Database.getDatabase().read(getType(), identifier);
  
         Authenticator.getAuthenticator().authenticate(getType(), Operation.DELETE, authTokens, original);
         

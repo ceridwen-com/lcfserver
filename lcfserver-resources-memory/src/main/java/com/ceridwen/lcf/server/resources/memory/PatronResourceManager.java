@@ -32,7 +32,7 @@ public class PatronResourceManager extends AbstractResourceManager<Patron> imple
 
     @Override
     public boolean DirectValueUpdate(List<AuthenticationToken> authTokens, String identifier, DirectUpdatePath path, String value) {
-        Patron patron = (Patron)Database.getDatabase().get(getType(), identifier);
+        Patron patron = (Patron)Database.getDatabase().read(getType(), identifier);
         if (patron == null) {
             return false;
         }
