@@ -16,7 +16,6 @@
 package com.ceridwen.lcf.server.webservice.templates;
 
 import javax.ws.rs.HeaderParam;
-import javax.ws.rs.Path;
 
 /**
  *

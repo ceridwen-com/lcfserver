@@ -63,14 +63,13 @@ public class Authenticator {
         updateSuperUserPassword("root", "password");
         
         addACL(Operation.DELETE, AuthenticationCategory.TERMINAL);
-        addACL(Operation.POST, AuthenticationCategory.TERMINAL);
-        addACL(Operation.PUT, AuthenticationCategory.TERMINAL);
-        removeACL(EntityType.PATRONS, Operation.PUT, AuthenticationCategory.TERMINAL);
+        addACL(Operation.CREATE, AuthenticationCategory.TERMINAL);
+        addACL(Operation.WRITE, AuthenticationCategory.TERMINAL);
+        removeACL(EntityType.PATRONS, Operation.WRITE, AuthenticationCategory.TERMINAL);
         removeACL(EntityType.LOANS, AuthenticationCategory.TERMINAL);
         removeACL(EntityType.RESERVATIONS, AuthenticationCategory.TERMINAL);
-        addACL(EntityType.PATRONS, Operation.PUT, AuthenticationCategory.USER);
-        addACL(EntityType.PATRONS, Operation.GET, AuthenticationCategory.USER);
-        addACL(EntityType.PATRONS, Operation.UPDATE, AuthenticationCategory.USER);
+        addACL(EntityType.PATRONS, Operation.WRITE, AuthenticationCategory.USER);
+        addACL(EntityType.PATRONS, Operation.READ, AuthenticationCategory.USER);
         addACL(EntityType.LOANS, AuthenticationCategory.USER);
         addACL(EntityType.RESERVATIONS, AuthenticationCategory.USER);
         addACL(EntityType.CHARGES, AuthenticationCategory.USER);
@@ -161,7 +160,7 @@ public class Authenticator {
             Class returnType = method.getReturnType();
             if (returnType.equals(String.class)) {
                 String ref = (String)method.invoke(entity);
-                Patron patron = (Patron)Database.getDatabase().get(EntityType.PATRONS, ref);
+                Patron patron = (Patron)Database.getDatabase().read(EntityType.PATRONS, ref);
                 return patron.getBarcodeId();
             }
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {

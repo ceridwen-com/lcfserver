@@ -15,7 +15,6 @@
  */
 package com.ceridwen.lcf.server.handlers;
 
-import com.ceridwen.lcf.model.LcfConstants;
 import com.ceridwen.lcf.model.exceptions.EXC00_LCF_Exception;
 import com.ceridwen.lcf.model.exceptions.EXC01_ServiceUnavailable;
 import javax.ws.rs.core.Response;
