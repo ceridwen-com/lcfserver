@@ -21,7 +21,7 @@ limitations under the License.
     <parent>
         <groupId>com.ceridwen.lcf</groupId>
         <artifactId>lcfserver</artifactId>
-        <version>lcf-1.2.0_server-2.1</version>
+        <version>lcf_1.2.0_server_2.1</version>
     </parent>  
     <artifactId>lcfserver-server</artifactId>
     <packaging>war</packaging>
