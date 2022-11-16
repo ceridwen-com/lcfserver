@@ -64,7 +64,7 @@ limitations under the License.
         <jakarta.ws-rs-api.version>2.1.6</jakarta.ws-rs-api.version>
         <jakarta.jaxb-api.version>3.0.0-RC3</jakarta.jaxb-api.version>
         <openapi.swagger.version>2.1.2</openapi.swagger.version>      
-        <jackson.fasterxml.version>2.11.0</jackson.fasterxml.version>
+        <jackson.fasterxml.version>2.12.7.1</jackson.fasterxml.version>
         <glassfish.jersey.version>2.30.1</glassfish.jersey.version>
         <glassfish.jaxb-runtime.version>3.0.0-M3</glassfish.jaxb-runtime.version> 
         <string.template.version>4.0.2</string.template.version>  
